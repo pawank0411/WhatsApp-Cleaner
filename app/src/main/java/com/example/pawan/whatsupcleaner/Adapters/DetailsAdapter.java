@@ -47,7 +47,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
         detailsViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent;
+               // Intent intent;
                 switch (positions){
                     case 0:
                         //differnt activites for differnt cards
@@ -56,6 +56,8 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
                                 + "/WhatsApp/Media/WhatsApp Images");
                         intent.setDataAndType(uri, "image/jpg");
                         ctx.startActivity(Intent.createChooser(intent, "Open folder"));
+                      /* intent =new Intent(ctx,InnerData.class);
+                       ctx.startActivity(intent);*/
                         Toast.makeText(ctx, "Activity 1 for images", Toast.LENGTH_SHORT).show();
 
 

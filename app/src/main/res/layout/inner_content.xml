@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view1"
@@ -11,7 +12,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/img_name"
@@ -20,6 +22,8 @@
                 android:layout_marginStart="7dp"
                 android:layout_marginLeft="7dp"
                 android:gravity="center"
+                android:textColor="@color/black"
+                android:background="@color/white"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="7dp"
                 android:text="Title" />
