@@ -73,25 +73,33 @@ public class MainActivity extends AppCompatActivity {
         datalist.add(
                 new Details(
                         "Audio files",
-                        400
+                        400,
+                        R.drawable.ic_image,
+                        R.color.green
                 )
         );
         datalist.add(
                 new Details(
                         "Voice messages",
-                        1
+                        1,
+                        R.drawable.ic_image,
+                        R.color.green
                 )
         );
         datalist.add(
                 new Details(
                         "Wallpapers",
-                        5
+                        5,
+                        R.drawable.ic_image,
+                        R.color.green
                 )
         );
         datalist.add(
                 new Details(
                         "GIFs",
-                        5
+                        5,
+                        R.drawable.ic_image,
+                        R.color.green
                 )
         );
 

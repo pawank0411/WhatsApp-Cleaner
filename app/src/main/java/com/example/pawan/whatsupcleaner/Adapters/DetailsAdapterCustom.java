@@ -3,10 +3,13 @@ package com.example.pawan.whatsupcleaner.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pawan.whatsupcleaner.Datas.Details;
@@ -14,6 +17,8 @@ import com.example.pawan.whatsupcleaner.InnnerData.InnerData;
 import com.example.pawan.whatsupcleaner.R;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCustom.DetailsCustomViewHolder> {
     private Context ctx;
@@ -39,6 +44,13 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
         Details details = datalist.get(positions);
 
         detailsCustomViewHolder.title.setText(details.getTitle());
+        detailsCustomViewHolder.data.setText(String.valueOf(details.getData() + "MB"));
+
+        //detailsCustomViewHolder.image.setCircleBackgroundColor(ContextCompat.getColor(detailsCustomViewHolder.image.getContext(), details.getColor()));
+        detailsCustomViewHolder.image.setBorderColor(ContextCompat.getColor(detailsCustomViewHolder.image.getContext(), details.getColor()));
+        detailsCustomViewHolder.image.setImageResource(details.getImage());
+
+        final int pos = positions;
         //detailsCustomViewHolder.data.setText(details.getData());
     }
 
@@ -51,13 +63,16 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
     class DetailsCustomViewHolder extends RecyclerView.ViewHolder {
 
         TextView title, data;
-
+        CircleImageView image;
+        CardView cardView;
 
         public DetailsCustomViewHolder(View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.title);
             data = itemView.findViewById(R.id.data);
+            image = itemView.findViewById(R.id.image);
+            cardView = itemView.findViewById(R.id.card_view1);
 
 
         }
