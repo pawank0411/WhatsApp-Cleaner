@@ -2,7 +2,14 @@ package com.example.pawan.whatsupcleaner.Datas;
 
 public class Details {
 
-    public Details(String title, int data){
+    public Details(String title, int data, int image, int color){
+        this.title = title;
+        this.data = data;
+        this.image = image;
+        this.color = color;
+    }
+
+    public Details(String title, int data) {
         this.title = title;
         this.data = data;
     }
@@ -22,6 +29,24 @@ public class Details {
         this.data = data;
     }
 
+    public void setImage(int image) {
+        this.image = image;
+    }
+
+    public int getImage() {
+        return image;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
     private String title;
     private int data;
+    private int image;
+    private int color;
 }

@@ -26,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RelativeLayout relativeLayout = findViewById(R.id.main_details);
-        relativeLayout.setVisibility(View.VISIBLE);
         //For Images,documents and Videos
         recyclerView = findViewById(R.id.recycle1);
         recyclerView.setHasFixedSize(true);
@@ -38,19 +36,25 @@ public class MainActivity extends AppCompatActivity {
         datalist1.add(
                 new Details(
                         "Images",
-                        400
+                        400,
+                        R.drawable.ic_image,
+                        R.color.green
                 )
         );
         datalist1.add(
                 new Details(
                         "Documents",
-                        1
+                        1,
+                        R.drawable.ic_folder,
+                        R.color.orange
                 )
         );
         datalist1.add(
                 new Details(
                         "Videos",
-                        5
+                        5,
+                        R.drawable.ic_video,
+                        R.color.blue
                 )
         );
 

@@ -20,7 +20,7 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
 
     private List<Details> datalist;
 
-    public DetailsAdapterCustom(Context ctx,List<Details> datalist){
+    public DetailsAdapterCustom(Context ctx, List<Details> datalist) {
         this.ctx = ctx;
         this.datalist = datalist;
     }
@@ -43,7 +43,6 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
     }
 
 
-
     @Override
     public int getItemCount() {
         return datalist.size();
@@ -51,7 +50,7 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
 
     class DetailsCustomViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title,data;
+        TextView title, data;
 
 
         public DetailsCustomViewHolder(View itemView) {
@@ -61,10 +60,9 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
             data = itemView.findViewById(R.id.data);
 
 
-
-        }
         }
     }
+}
 
 
 
