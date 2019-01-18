@@ -46,7 +46,7 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
         detailsCustomViewHolder.title.setText(details.getTitle());
         detailsCustomViewHolder.data.setText(String.valueOf(details.getData() + "MB"));
 
-        //detailsCustomViewHolder.image.setCircleBackgroundColor(ContextCompat.getColor(detailsCustomViewHolder.image.getContext(), details.getColor()));
+        detailsCustomViewHolder.image.setCircleBackgroundColor(ContextCompat.getColor(detailsCustomViewHolder.image.getContext(), details.getColor()));
         detailsCustomViewHolder.image.setBorderColor(ContextCompat.getColor(detailsCustomViewHolder.image.getContext(), details.getColor()));
         detailsCustomViewHolder.image.setImageResource(details.getImage());
 

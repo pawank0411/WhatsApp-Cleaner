@@ -8,5 +8,9 @@
     <color name="white">#ffffff</color>
     <color name="black">#FF161616</color>
     <color name="orange">#f5ab0b</color>
-    <color name="blue">#0c7cfc</color>
+    <color name="blue">#3F51B5</color>
+    <color name="purple">#FF9C27B0</color>
+    <color name="maroon">#FFE44D1D</color>
+    <color name="lightblue">#FF009688</color>
+    <color name="lightpink">#DD336F</color>
 </resources>

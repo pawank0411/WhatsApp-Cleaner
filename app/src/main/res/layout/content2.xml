@@ -51,6 +51,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:textSize="13sp"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title"

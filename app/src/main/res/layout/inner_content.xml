@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/gray">
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    card_view:cardCornerRadius="0dp">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view1"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        card_view:cardCornerRadius="0dp">
-
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="0dp"
+                android:layout_height="84dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                card_view:layout_constraintBottom_toTopOf="@+id/img_name"/>
 
             <TextView
                 android:id="@+id/img_name"
@@ -24,11 +32,12 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:background="@color/white"
-                android:layout_centerInParent="true"
                 android:layout_marginTop="7dp"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintBottom_toBottomOf="@+id/image"
                 android:text="Title" />
 
-        </RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
-</RelativeLayout>

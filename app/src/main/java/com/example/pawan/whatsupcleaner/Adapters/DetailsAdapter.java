@@ -27,9 +27,12 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
 
     private List<Details> datalist;
 
-    public DetailsAdapter(Context ctx, List<Details> datalist) {
+    private OnItemClickListener listener;
+
+    public DetailsAdapter(Context ctx, List<Details> datalist, OnItemClickListener listener) {
         this.ctx = ctx;
         this.datalist = datalist;
+        this.listener = listener;
     }
 
     @NonNull
@@ -60,7 +63,9 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
                 // Intent intent;
                 switch (pos) {
                     case 0:
-                        //differnt activites for differnt cards
+                        /*//differnt activites for differnt cards
+                        // TODO: 1/13/19 First we need to rector this into the mainActivity.java  class
+                        // I Dont wnat this file manager ,want to fetch the images from here and show it in recycler view.
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
                                 + "/WhatsApp/Media/WhatsApp Images");
@@ -68,7 +73,9 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
                         ctx.startActivity(Intent.createChooser(intent, "Open folder"));
                       /* intent =new Intent(ctx,InnerData.class);
                        ctx.startActivity(intent);*/
-                        Toast.makeText(ctx, "Activity 1 for images", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(ctx, "Activity 1 for images", Toast.LENGTH_SHORT).show();
+                        if (listener != null)
+                            listener.onImagesClicked();
 
 
                         /*Need help*/
@@ -102,5 +109,12 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
         }
     }
 
+    // TODO: 1/13/19 So we create an interface that calls main Activity when the user clicks on any item
+    public interface OnItemClickListener {
+        void onImagesClicked();
+        void onDocumentsClicked();
+        void onVideosClicked();
+        //We will add more to this as the need arises for now w have to modify the constructor to provide an instance of this interface
+    }
 
 }

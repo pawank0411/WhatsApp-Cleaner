@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pawan.whatsupcleaner.Datas.Details;
@@ -17,7 +18,6 @@ import java.util.zip.Inflater;
 public class InnerDetailsAdapter extends RecyclerView.Adapter<InnerDetailsAdapter.InnerDataViewHolder> {
 
     private Context ctx;
-
     List<Details> innerDataList;
 
     public InnerDetailsAdapter (Context ctx,List<Details> innerDataList){
@@ -25,11 +25,10 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<InnerDetailsAdapte
         this.innerDataList = innerDataList;
     }
 
-    @NonNull
     @Override
-    public InnerDetailsAdapter.InnerDataViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater layoutInflater = LayoutInflater.from(ctx);
-        View view = layoutInflater.inflate(R.layout.inner_content, null);
+    public InnerDetailsAdapter.InnerDataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(ctx);
+        View view = inflater.inflate(R.layout.inner_content, parent, false);
 
         return new InnerDataViewHolder(view);
     }
@@ -40,6 +39,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<InnerDetailsAdapte
         Details details = innerDataList.get(positions);
 
         innerDataViewHolder.image_name.setText(details.getTitle());
+        innerDataViewHolder.imageView.setImageResource(details.getImage());
     }
 
     @Override
@@ -51,11 +51,13 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<InnerDetailsAdapte
     public class InnerDataViewHolder extends RecyclerView.ViewHolder {
 
         TextView image_name;
+        ImageView imageView;
 
         public InnerDataViewHolder(View itemView) {
             super(itemView);
 
             image_name = itemView.findViewById(R.id.img_name);
+            imageView  = itemView.findViewById(R.id.image);
         }
     }
 }
