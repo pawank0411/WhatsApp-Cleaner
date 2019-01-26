@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pawan.whatsupcleaner">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,7 +19,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InnnerData.InnerData"/>
+        <activity android:name=".tabs.Documents.AndroidTabLayoutActivity_doc" />
+        <activity android:name=".tabs.Images.AndroidTabLayoutActivity_img" />
+        <activity android:name=".tabs.Videos.AndroidTabLayoutActivity_video" />
+        <activity android:name=".tabs.Documents.Doc_sent" />
+        <activity android:name=".tabs.Documents.Doc_rec" />
+        <activity android:name=".tabs.Images.Images_rec" />
+        <activity android:name=".tabs.Images.Images_sent" />
+        <activity android:name=".tabs.Videos.Videos_rec" />
+        <activity android:name=".tabs.Videos.Videos_sent" />
+        <activity android:name=".innerdata.Audio" />
+
+        <provider
+            android:name=".model.GenericFileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.pawan.whatsupcleaner.Datas;
+package com.example.pawan.whatsupcleaner.datas;
 
 public class Details {
 

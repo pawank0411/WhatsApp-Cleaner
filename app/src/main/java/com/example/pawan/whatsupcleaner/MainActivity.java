@@ -1,11 +1,11 @@
 package com.example.pawan.whatsupcleaner;
 
 import android.Manifest;
-import android.content.ContentProvider;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,32 +13,50 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
-import com.example.pawan.whatsupcleaner.Adapters.DetailsAdapter;
-import com.example.pawan.whatsupcleaner.Adapters.DetailsAdapterCustom;
-import com.example.pawan.whatsupcleaner.Datas.Details;
-import com.example.pawan.whatsupcleaner.InnnerData.InnerData;
+import com.example.pawan.whatsupcleaner.adapters.DetailsAdapter;
+import com.example.pawan.whatsupcleaner.adapters.DetailsAdapterCustom;
+import com.example.pawan.whatsupcleaner.datas.Details;
+import com.example.pawan.whatsupcleaner.innerdata.Audio;
+import com.example.pawan.whatsupcleaner.tabs.Documents.AndroidTabLayoutActivity_doc;
 
-import java.io.File;
+import com.example.pawan.whatsupcleaner.tabs.Images.AndroidTabLayoutActivity_img;
+import com.example.pawan.whatsupcleaner.tabs.Videos.AndroidTabLayoutActivity_video;
+
 import java.util.ArrayList;
 import java.util.List;
 
 // TODO: 1/13/19 We imoplement the interface here
-public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
     private static final int READ_EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
+
     List<Details> datalist1;
     List<Details> datalist;
     RecyclerView recyclerView,recyclerView1;
+
+    DetailsAdapterCustom detailsAdapter;
+
+    ProgressDialog pr;
+    public static Toast transitionToast;
+
+    RelativeLayout loading;
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+        loading = findViewById(R.id.loading);
+
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             //ask for permission
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
@@ -46,9 +64,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         //For Images,documents and Videos
         recyclerView = findViewById(R.id.recycle1);
         recyclerView.setHasFixedSize(true);
+
+        recyclerView1 = findViewById(R.id.recycle);
+        recyclerView1.setHasFixedSize(true);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         datalist1 = new ArrayList<>();
+
 
         datalist1.add(
                 new Details(
@@ -76,13 +99,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         );
 
         //Add implemented listener to constructor
-        DetailsAdapter detailsAdapter1 = new DetailsAdapter(this,datalist1, this);
+        DetailsAdapter detailsAdapter1 = new DetailsAdapter(this, datalist1, this);
         recyclerView.setAdapter(detailsAdapter1);
 
-
-        //for Audios,Voice,Wallpapers,Gifs
-        recyclerView1 = findViewById(R.id.recycle);
-        recyclerView1.setHasFixedSize(true);
 
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         recyclerView1.setLayoutManager(mGridLayoutManager);
@@ -99,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         );
         datalist.add(
                 new Details(
-                        "Voice messages",
-                        1,
+                        "Voice files",
+                        112,
                         R.drawable.ic_queue_music_black,
                         R.color.lightblue
                 )
@@ -122,10 +141,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 )
         );
 
-
-//check for
-        DetailsAdapterCustom detailsAdapter = new DetailsAdapterCustom(this,datalist);
+        detailsAdapter = new DetailsAdapterCustom(this, datalist, this);
         recyclerView1.setAdapter(detailsAdapter);
+
 
     }
 
@@ -138,52 +156,54 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             }
         }
     }
-
     @Override
     public void onImagesClicked() {
         // TODO: 1/13/19 Let's try this on a device with whatsapp images
         //We still need to verify permission here too
-
-
-
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            //Need to ask permission again or close the app
-        } else {
-            String path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images";
-
-
-            File directory = new File(path);
-            ArrayList<File> fileList = new ArrayList<>();
-            File[] results = directory.listFiles();
-            if (results != null) {
-                for(File file : results) {
-                    //Check if it is a file or a folder
-                    if (file.isDirectory()) {
-                        //For now we skip it
-                    } else {
-                        //Still verify if the file is an image in whatsapp preferred format(jpg)
-                        if (file.getName().endsWith(".jpg"))
-                            fileList.add(file);
-                    }
-                }
-                Log.e("Files", "files found: " + fileList.toString());
-            } else {
-                Log.e("Files", "No files found in " + directory.getName());
-            }
-        }
-        Intent intent = new Intent(this,InnerData.class);
-        //Doubt
-        intent.putExtra("Images",fileList());
+        Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_img.class);
         startActivity(intent);
+
     }
 
     @Override
     public void onDocumentsClicked() {
 
+        Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_doc.class);
+        startActivity(intent);
     }
 
     @Override
     public void onVideosClicked() {
 
+        Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_video.class);
+        startActivity(intent);
     }
+    @Override
+    public void onAudiosClicked() {
+
+        Intent intent = new Intent(MainActivity.this, Audio.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onGifsClicked() {
+
+        Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_video.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onWallpapersClicked() {
+
+        Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_img.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onVoiceClicked() {
+
+        Toast.makeText(this, "Need to be Implemented", Toast.LENGTH_SHORT).show();
+    }
+
 }
+
