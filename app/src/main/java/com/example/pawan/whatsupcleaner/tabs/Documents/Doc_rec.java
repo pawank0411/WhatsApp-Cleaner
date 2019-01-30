@@ -37,6 +37,8 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
     private static final long GiB = 1024 * 1024 * 1024;
     private static final long MiB = 1024 * 1024;
     private static final long KiB = 1024;
+    private double len;
+    private String byteMake;
 
     String path;
     int position = 0;
@@ -134,18 +136,22 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
 
         if (file.isFile()) {
             if (length > GiB) {
-
-                return format.format(length / GiB);// + " GB";
+                len=length/GiB;
+                byteMake="GB";
+                return format.format(length / GiB) + " GB";
             } else if (length > MiB) {
-
-                return format.format(length / MiB);// + " MB";
+                len=length/MiB;
+                 byteMake="MB";
+                return format.format(length / MiB) + " MB";
             } else if (length > KiB) {
-                return format.format(length / KiB);// + " KB";
+                len=length/KiB;
+                byteMake="KB";
+                return format.format(length / KiB) + " KB";
             }
 
-            return format.format(length) ;//+ " B";
+            return format.format(length) + " B";
         } else {
-
+                len=0;
         }
         return "";
     }
@@ -165,16 +171,17 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
         if (checked){
                 File file = new File(details.getPath());
                 size = getFileSize(file);
-                sizeChecked = sizeChecked + Double.parseDouble(size);
+                sizeChecked = sizeChecked + len;
                 Log.e("Deleted Amount",Double.toString(sizeChecked));
-                button.setText("Delete Selected Items" + " (" + size + ")");
+                sizeChecked=Math.floor(sizeChecked*100)/100;
+                button.setText("Delete Selected Items" + " (" +sizeChecked+byteMake+ ")");
                 button.setTextColor(Color.parseColor("#C103A9F4"));
          }
-        /*else{
+        else{
             button.setText("Delete Selected Items (0B)");
             button.setTextColor(Color.parseColor("#A9A9A9"));
 
-        }*/
+        }
 
 
 
