@@ -31,7 +31,8 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
     RecyclerView recyclerView;
     Button button;
     ArrayList<FileDetails> innerdatalist = new ArrayList<>();
-
+    boolean checkClick=false;
+    double sizeChecked=0;
     InnerDetailsAdapter_doc innerDetailsAdapterDoc;
     private static final long GiB = 1024 * 1024 * 1024;
     private static final long MiB = 1024 * 1024;
@@ -54,6 +55,8 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+              checkClick=true;
+              sizeChecked=0;
 //          File a = new File(path);
 //          if (a.exists()) {
 ////              for (int i = 0; i < innerDetailsAdapterDoc.getItemCount(); i++){
@@ -132,15 +135,15 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
         if (file.isFile()) {
             if (length > GiB) {
 
-                return format.format(length / GiB) + " GB";
+                return format.format(length / GiB);// + " GB";
             } else if (length > MiB) {
 
-                return format.format(length / MiB) + " MB";
+                return format.format(length / MiB);// + " MB";
             } else if (length > KiB) {
-                return format.format(length / KiB) + " KB";
+                return format.format(length / KiB);// + " KB";
             }
 
-            return format.format(length) + " B";
+            return format.format(length) ;//+ " B";
         } else {
 
         }
@@ -150,8 +153,9 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
 
     @Override
     public void onCheckboxClicked(View view, int pos) {
-
+        boolean checkedBox[]=new boolean[innerdatalist.size()];
         boolean checked = ((CheckBox) view).isChecked();
+        checkedBox[pos]=true;
         // CheckBox checkBox = (CheckBox)view;
         String  size;
         final FileDetails details = innerdatalist.get(pos);
@@ -159,16 +163,18 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
         // FIXME: 1/26/19
 
         if (checked){
-            File file  = new File(details.getPath());
-            size = getFileSize(file);
-            button.setText("Delete Selected Items"+" ("+ size +")");
-            button.setTextColor(Color.parseColor("#C103A9F4"));
-        }
-        else{
+                File file = new File(details.getPath());
+                size = getFileSize(file);
+                sizeChecked = sizeChecked + Double.parseDouble(size);
+                Log.e("Deleted Amount",Double.toString(sizeChecked));
+                button.setText("Delete Selected Items" + " (" + size + ")");
+                button.setTextColor(Color.parseColor("#C103A9F4"));
+         }
+        /*else{
             button.setText("Delete Selected Items (0B)");
             button.setTextColor(Color.parseColor("#A9A9A9"));
 
-        }
+        }*/
 
 
 
