@@ -133,7 +133,6 @@ public class Videos_rec extends AppCompatActivity implements InnerDetailsAdapter
         InnerDetailsAdapter_video innerDetailsAdapterVideo = new InnerDetailsAdapter_video(this, innerdatalist,this);
         recyclerView.setAdapter(innerDetailsAdapterVideo);
 
-
     }
 
     private String getFileSize(File file) {
@@ -164,7 +163,6 @@ public class Videos_rec extends AppCompatActivity implements InnerDetailsAdapter
         return "";
     }
 
-
     @Override
     public void onCheckboxClicked(View view, int pos) {
 
@@ -181,16 +179,27 @@ public class Videos_rec extends AppCompatActivity implements InnerDetailsAdapter
             sizeChecked = sizeChecked + len;
             Log.e("Deleted Amount",Double.toString(sizeChecked));
             sizeChecked=Math.floor(sizeChecked*100)/100;
+            sizeChecked=sizeCal(sizeChecked);
             button.setText("Delete Selected Items" + " (" +sizeChecked+byteMake + ")");
             button.setTextColor(Color.parseColor("#C103A9F4"));
 
         } else {
             button.setText("Delete Selected Items (0B)");
             button.setTextColor(Color.parseColor("#A9A9A9"));
-
         }
-
     }
-
-
+    private double sizeCal(double sizeChecked)
+    {
+        if (sizeChecked > GiB) {
+            sizeChecked=sizeChecked/GiB;
+            byteMake="GB";
+        } else if (sizeChecked > MiB) {
+            sizeChecked=sizeChecked/MiB;
+            byteMake="MB";
+        } else if (sizeChecked> KiB) {
+            sizeChecked=sizeChecked/KiB;
+            byteMake="KB";
+        }
+        return sizeChecked;
+    }
 }

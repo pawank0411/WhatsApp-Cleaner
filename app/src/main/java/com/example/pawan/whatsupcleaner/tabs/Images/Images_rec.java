@@ -174,10 +174,11 @@ public class Images_rec extends AppCompatActivity implements InnerDetailsAdapter
 
         if (checked) {
             File file = new File(details.getPath());
-            //size = getFileSize(file);
+            size = getFileSize(file);
             sizeChecked = sizeChecked + len;
             sizeChecked=Math.floor(sizeChecked*100)/100;
-            button.setText("Delete Selected Items" + " (" +sizeChecked+byteMake + ")");
+            sizeChecked=sizeCal(sizeChecked);
+            button.setText("Delete Selected Items" + " (" +sizeChecked+byteMake+ ")");
             button.setTextColor(Color.parseColor("#C103A9F4"));
 
         } else {
@@ -185,8 +186,19 @@ public class Images_rec extends AppCompatActivity implements InnerDetailsAdapter
             button.setTextColor(Color.parseColor("#A9A9A9"));
 
         }
-
     }
-
-
+    private double sizeCal(double sizeChecked)
+    {
+        if (sizeChecked > GiB) {
+            sizeChecked=sizeChecked/GiB;
+            byteMake="GB";
+        } else if (sizeChecked > MiB) {
+            sizeChecked=sizeChecked/MiB;
+            byteMake="MB";
+        } else if (sizeChecked> KiB) {
+            sizeChecked=sizeChecked/KiB;
+            byteMake="KB";
+        }
+        return sizeChecked;
+    }
 }
