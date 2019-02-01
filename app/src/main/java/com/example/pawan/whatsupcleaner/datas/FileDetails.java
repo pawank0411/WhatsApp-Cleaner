@@ -51,6 +51,11 @@ public class FileDetails {
     public void setSelected(boolean selected) {
         isclicked = selected;
     }
+
+    public boolean isSelected()
+    {
+        return isclicked;
+    }
     @Override
     public String toString() {
         return "FileDetails{" +

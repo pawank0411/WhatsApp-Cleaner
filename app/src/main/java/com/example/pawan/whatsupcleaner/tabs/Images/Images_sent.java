@@ -34,11 +34,15 @@ public class Images_sent extends AppCompatActivity implements InnerDetailsAdapte
     Button button;
     InnerDetailsAdapter_image innerDetailsAdapterImage;
     ArrayList<FileDetails> innerdatalist = new ArrayList<>();
+    boolean checkClick=false;
+    double sizeChecked=0;
 
     InnerDetailsAdapter_doc innerDetailsAdapterDoc;
     private static final long GiB = 1024 * 1024 * 1024;
     private static final long MiB = 1024 * 1024;
     private static final long KiB = 1024;
+    private double len;
+    private String byteMake;
 
     String path;
     int position = 0;
@@ -57,6 +61,8 @@ public class Images_sent extends AppCompatActivity implements InnerDetailsAdapte
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkClick=true;
+                sizeChecked=0;
 //          File a = new File(path);
 //          if (a.exists()) {
 ////              for (int i = 0; i < innerDetailsAdapterDoc.getItemCount(); i++){
@@ -139,18 +145,22 @@ public class Images_sent extends AppCompatActivity implements InnerDetailsAdapte
 
         if (file.isFile()) {
             if (length > GiB) {
-
+                len=length/GiB;
+                byteMake="GB";
                 return format.format(length / GiB) + " GB";
             } else if (length > MiB) {
-
+                len=length/MiB;
+                byteMake="MB";
                 return format.format(length / MiB) + " MB";
             } else if (length > KiB) {
+                len=length/KiB;
+                byteMake="KB";
                 return format.format(length / KiB) + " KB";
             }
 
             return format.format(length) + " B";
         } else {
-
+            len=0;
         }
         return "";
     }
@@ -169,16 +179,30 @@ public class Images_sent extends AppCompatActivity implements InnerDetailsAdapte
         if (checked) {
             File file = new File(details.getPath());
             size = getFileSize(file);
-            button.setText("Delete Selected Items" + " (" + size + ")");
+            sizeChecked = sizeChecked + len;
+            Log.e("Deleted Amount",Double.toString(sizeChecked));
+            sizeChecked=Math.floor(sizeChecked*100)/100;
+            sizeChecked=sizeCal(sizeChecked);
+            button.setText("Delete Selected Items" + " (" +sizeChecked+byteMake+ ")");
             button.setTextColor(Color.parseColor("#C103A9F4"));
 
         } else {
             button.setText("Delete Selected Items (0B)");
             button.setTextColor(Color.parseColor("#A9A9A9"));
-
         }
-
     }
-
-
+    private double sizeCal(double sizeChecked)
+    {
+        if (sizeChecked > GiB) {
+            sizeChecked=sizeChecked/GiB;
+            byteMake="GB";
+        } else if (sizeChecked > MiB) {
+            sizeChecked=sizeChecked/MiB;
+            byteMake="MB";
+        } else if (sizeChecked> KiB) {
+            sizeChecked=sizeChecked/KiB;
+            byteMake="KB";
+        }
+        return sizeChecked;
+    }
 }
