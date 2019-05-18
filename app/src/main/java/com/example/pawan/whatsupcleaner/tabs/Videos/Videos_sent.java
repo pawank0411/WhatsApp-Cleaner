@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,11 +21,13 @@ import com.example.pawan.whatsupcleaner.adapters.innerAdapeters.InnerDetailsAdap
 import com.example.pawan.whatsupcleaner.adapters.innerAdapeters.InnerDetailsAdapter_video;
 import com.example.pawan.whatsupcleaner.datas.FileDetails;
 import com.example.pawan.whatsupcleaner.R;
+import com.example.pawan.whatsupcleaner.tabs.Images.Images_rec;
 
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Videos_sent extends AppCompatActivity implements InnerDetailsAdapter_video.OnCheckboxlistener {
@@ -165,9 +168,34 @@ public class Videos_sent extends AppCompatActivity implements InnerDetailsAdapte
 
 
     @Override
-    public void onCheckboxClicked(View view, int pos) {
+    public void onCheckboxClicked(View view, List<FileDetails> pos) {
 
-        boolean checked = ((CheckBox) view).isChecked();
+        ArrayList<FileDetails> filesToDelete = new ArrayList<>();
+
+        for (FileDetails details : pos) {
+            if (details.isSelected()) {
+                filesToDelete.add(details);
+            }
+        }
+
+        if (filesToDelete.size() > 0) {
+
+            long totalFileSize = 0;
+
+            for (FileDetails details : filesToDelete) {
+                File file = new File(details.getPath());
+                totalFileSize += file.length();
+            }
+
+            String size = Formatter.formatShortFileSize(Videos_sent.this, totalFileSize);
+            button.setText("Delete Selected Items (" + size + ")");
+            button.setTextColor(Color.parseColor("#C103A9F4"));
+        } else {
+            button.setText("Delete Selected Items (0B)");
+            button.setTextColor(Color.parseColor("#A9A9A9"));
+        }
+
+        /*boolean checked = ((CheckBox) view).isChecked();
 
         String size;
         final FileDetails details = innerdatalist.get(pos);
@@ -188,7 +216,7 @@ public class Videos_sent extends AppCompatActivity implements InnerDetailsAdapte
             button.setText("Delete Selected Items (0B)");
             button.setTextColor(Color.parseColor("#A9A9A9"));
 
-        }
+        }*/
 
     }
     private double sizeCal(double sizeChecked)

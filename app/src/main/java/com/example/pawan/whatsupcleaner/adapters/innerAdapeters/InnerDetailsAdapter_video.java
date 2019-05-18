@@ -21,6 +21,7 @@ import com.example.pawan.whatsupcleaner.R;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class InnerDetailsAdapter_video extends RecyclerView.Adapter<InnerDetailsAdapter_video.InnerDataViewHolder> {
@@ -71,7 +72,7 @@ public class InnerDetailsAdapter_video extends RecyclerView.Adapter<InnerDetails
             }
         });
 
-        if (details.isclicked) {
+        if (details.isSelected()) {
             innerDataViewHolder.checkBox.setChecked(true);
         } else {
             innerDataViewHolder.checkBox.setChecked(false);
@@ -82,8 +83,11 @@ public class InnerDetailsAdapter_video extends RecyclerView.Adapter<InnerDetails
         innerDataViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                innerDataList.get(innerDataViewHolder.getAdapterPosition()).setSelected(isChecked);
+
                 if (onCheckboxlistener != null) {
-                    onCheckboxlistener.onCheckboxClicked(buttonView,innerDataViewHolder.getAdapterPosition());
+                    onCheckboxlistener.onCheckboxClicked(buttonView,innerDataList);
                 }
 
             }
@@ -114,6 +118,6 @@ public class InnerDetailsAdapter_video extends RecyclerView.Adapter<InnerDetails
     }
 
     public interface OnCheckboxlistener{
-        void onCheckboxClicked(View view, int pos);
+        void onCheckboxClicked(View view, List<FileDetails> fileDetails);
     }
 }

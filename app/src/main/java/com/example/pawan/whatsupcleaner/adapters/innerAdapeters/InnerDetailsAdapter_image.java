@@ -21,17 +21,18 @@ import com.example.pawan.whatsupcleaner.R;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetailsAdapter_image.InnerDataViewHolder> {
 
     private Context ctx;
     ArrayList<FileDetails> innerDataList;
-    private OnCheckboxlistener onCheckboxlistener;
+    private OnCheckboxListener onCheckboxlistener;
 
     private static final int PICKFILE_RESULT_CODE = 8778;
 
-    public InnerDetailsAdapter_image(Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxlistener onCheckboxlistener){
+    public InnerDetailsAdapter_image(Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxlistener){
         this.ctx = ctx;
         this.innerDataList = innerDataList;
         this.onCheckboxlistener = onCheckboxlistener;
@@ -46,7 +47,7 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetails
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final InnerDetailsAdapter_image.InnerDataViewHolder innerDataViewHolder, int positions) {
+    public void onBindViewHolder(@NonNull final InnerDetailsAdapter_image.InnerDataViewHolder innerDataViewHolder, final int positions) {
 
         final FileDetails details = innerDataList.get(positions);
 
@@ -54,7 +55,6 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetails
 
         //Log.e("size ", "Size" + details.getSize());
 
-        final int pos = positions;
 
         // FIXME: 1/26/19
 
@@ -62,18 +62,18 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetails
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                details.setSelected(isChecked);
+
+                innerDataList.get(innerDataViewHolder.getAdapterPosition()).setSelected(isChecked);
 
                 if (onCheckboxlistener != null) {
-                    onCheckboxlistener.onCheckboxClicked(buttonView,
-                            innerDataViewHolder.getAdapterPosition());
+                    onCheckboxlistener.onCheckboxClicked(buttonView, innerDataList);
                 }
 
 
             }
         });
 
-        if (details.isclicked) {
+        if (details.isSelected()) {
             innerDataViewHolder.checkBox.setChecked(true);
         } else {
             innerDataViewHolder.checkBox.setChecked(false);
@@ -121,7 +121,7 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetails
 
         }
     }
-    public interface OnCheckboxlistener{
-        void onCheckboxClicked(View view, int pos);
+    public interface OnCheckboxListener {
+        void onCheckboxClicked(View view, List<FileDetails> updatedFiles);
     }
 }

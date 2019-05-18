@@ -68,7 +68,7 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
             }
         });
 
-        if (details.isclicked) {
+        if (details.isSelected()) {
             innerDataViewHolder.checkBox.setChecked(true);
         } else {
             innerDataViewHolder.checkBox.setChecked(false);
