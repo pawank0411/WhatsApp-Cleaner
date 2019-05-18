@@ -68,6 +68,12 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
             }
         });
 
+        if (details.isclicked) {
+            innerDataViewHolder.checkBox.setChecked(true);
+        } else {
+            innerDataViewHolder.checkBox.setChecked(false);
+        }
+
         innerDataViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

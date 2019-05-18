@@ -71,6 +71,12 @@ public class InnerDetailsAdapter_video extends RecyclerView.Adapter<InnerDetails
             }
         });
 
+        if (details.isclicked) {
+            innerDataViewHolder.checkBox.setChecked(true);
+        } else {
+            innerDataViewHolder.checkBox.setChecked(false);
+        }
+
         // FIXME: 1/26/19
 
         innerDataViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

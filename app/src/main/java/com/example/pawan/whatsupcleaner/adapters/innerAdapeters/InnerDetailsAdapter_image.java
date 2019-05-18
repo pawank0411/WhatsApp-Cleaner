@@ -73,7 +73,11 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetails
             }
         });
 
-
+        if (details.isclicked) {
+            innerDataViewHolder.checkBox.setChecked(true);
+        } else {
+            innerDataViewHolder.checkBox.setChecked(false);
+        }
 
         innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
