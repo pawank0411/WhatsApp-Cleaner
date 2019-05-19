@@ -89,7 +89,7 @@ public class Aud_sent extends AppCompatActivity implements InnerDetailsAdapter_a
                 innerDetailsAdapter_audio.notifyDataSetChanged();
                 if (success == 0) {
                     Toast.makeText(Aud_sent.this, "Couldn't delete some files", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (success == 1){
                     Toast.makeText(Aud_sent.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                 }
                 button.setText("Delete Selected Items (0B)");

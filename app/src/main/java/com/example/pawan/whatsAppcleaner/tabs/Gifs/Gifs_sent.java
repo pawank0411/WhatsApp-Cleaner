@@ -91,7 +91,7 @@ public class Gifs_sent extends AppCompatActivity implements InnerDetailsAdapter_
                 innerDetailsAdapterImage.notifyDataSetChanged();
                 if (success == 0) {
                     Toast.makeText(Gifs_sent.this, "Couldn't delete some files", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (success == 1){
                     Toast.makeText(Gifs_sent.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                 }
                 button.setText("Delete Selected Items (0B)");

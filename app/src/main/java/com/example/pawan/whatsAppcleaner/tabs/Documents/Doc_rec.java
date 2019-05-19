@@ -91,7 +91,7 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
                 innerDetailsAdapterDoc.notifyDataSetChanged();
                 if (success == 0) {
                     Toast.makeText(Doc_rec.this, "Couldn't delete some files", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (success == 1){
                     Toast.makeText(Doc_rec.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                 }
                 button.setText("Delete Selected Items (0B)");
