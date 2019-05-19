@@ -84,7 +84,7 @@ public class Gifs_rec extends AppCompatActivity implements InnerDetailsAdapter_v
                         success = 0;
                     }
                 }
-
+                filesToDelete.clear();
                 for (FileDetails deletedFile : deletedFiles) {
                     innerdatalist.remove(deletedFile);
                 }

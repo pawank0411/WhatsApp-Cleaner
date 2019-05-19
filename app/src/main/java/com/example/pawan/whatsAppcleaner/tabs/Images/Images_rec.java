@@ -85,6 +85,8 @@ public class Images_rec extends AppCompatActivity implements InnerDetailsAdapter
                     }
                 }
 
+                filesToDelete.clear();
+
                 for (FileDetails deletedFile : deletedFiles) {
                     innerdatalist.remove(deletedFile);
                 }

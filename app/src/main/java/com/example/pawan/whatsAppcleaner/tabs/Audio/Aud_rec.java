@@ -82,7 +82,7 @@ public class Aud_rec extends AppCompatActivity implements InnerDetailsAdapter_au
                         success = 0;
                     }
                 }
-
+                filesToDelete.clear();
                 for (FileDetails deletedFile : deletedFiles) {
                     innerdatalist.remove(deletedFile);
                 }
