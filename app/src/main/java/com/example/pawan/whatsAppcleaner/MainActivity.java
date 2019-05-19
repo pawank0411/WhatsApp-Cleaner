@@ -55,10 +55,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     TextView total_data;
     RecyclerView recyclerView, recyclerView1;
     DetailsAdapterCustom detailsAdaptercustom;
-    ProgressDialog pr;
-    private double len;
-    private String byteMake, path;
-    private File directory;
+
+    private String  path;
     private String data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, tot_dat;
     private long sum, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice;
     private static final long GiB = 1024 * 1024 * 1024;
@@ -109,9 +107,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         /*Size for Documents folder*/
 
         path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Documents";
-
-        directory = new File(path);
-
 
         size_doc =  FileUtils.sizeOfDirectory(new File(path));
         data_doc = Formatter.formatShortFileSize(MainActivity.this, size_doc);
@@ -244,25 +239,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             }
         }
     }
-    public static long getFileFolderSize(File dir) {
-        long size = 0;
-        File[] results = dir.listFiles();
-        if (results != null) {
-            if (dir.isDirectory()) {
-                for (File file : results) {
-                    if (file.isFile()) {
-                        size += file.length();
-                    } else
-                        size += getFileFolderSize(file);
-                }
-            }
-            else if (dir.isFile()) {
-                size += dir.length();
-            }
-        }
-        return size;
-    }
-
 
     @Override
     public void onImagesClicked() {

@@ -84,7 +84,7 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
                         success = 0;
                     }
                 }
-
+                filesToDelete.clear();
                 for (FileDetails deletedFile : deletedFiles) {
                     innerdatalist.remove(deletedFile);
                 }

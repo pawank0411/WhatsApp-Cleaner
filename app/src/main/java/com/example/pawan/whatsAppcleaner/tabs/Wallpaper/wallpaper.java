@@ -84,7 +84,7 @@ public class wallpaper extends AppCompatActivity implements InnerDetailsAdapter_
                         success = 0;
                     }
                 }
-
+                filesToDelete.clear();
                 for (FileDetails deletedFile : deletedFiles) {
                     innerdatalist.remove(deletedFile);
                 }
