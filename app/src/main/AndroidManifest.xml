@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pawan.whatsupcleaner">
+    package="com.example.pawan.whatsAppcleaner">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,33 +12,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.pawan.whatsAppcleaner.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".tabs.Documents.AndroidTabLayoutActivity_doc" />
-        <activity android:name=".tabs.Images.AndroidTabLayoutActivity_img" />
-        <activity android:name=".tabs.Videos.AndroidTabLayoutActivity_video" />
-        <activity android:name=".tabs.Documents.Doc_sent" />
-        <activity android:name=".tabs.Documents.Doc_rec" />
-        <activity android:name=".tabs.Images.Images_rec" />
-        <activity android:name=".tabs.Images.Images_sent" />
-        <activity android:name=".tabs.Videos.Videos_rec" />
-        <activity android:name=".tabs.Videos.Videos_sent" />
-        <activity android:name=".innerdata.Audio" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.AndroidTabLayoutActivity_doc" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.AndroidTabLayoutActivity_img" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.AndroidTabLayoutActivity_video" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Audio.AndroidTabLayoutActivity_aud" />
+        <activity android:name=".tabs.Gifs.AndroidTabLayoutActivity_gifs"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_sent" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_rec" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.Images_rec" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.Images_sent" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_rec" />
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_sent" />
+        <activity android:name=".tabs.Audio.Aud_rec"/>
+        <activity android:name=".tabs.Audio.Aud_sent"/>
+        <activity android:name=".tabs.Gifs.Gifs_rec"/>
+        <activity android:name=".tabs.Gifs.Gifs_sent"/>
+        <activity android:name=".tabs.Wallpaper.wallpaper"/>
 
-        <provider
-            android:name=".model.GenericFileProvider"
-            android:authorities="${applicationId}.my.package.name.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
+
+        -<provider android:name=".model.GenericFileProvider" android:grantUriPermissions="true" android:exported="false" android:authorities="${applicationId}.my.package.name.provider">
+
+        <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
+
+    </provider>
     </application>
 
 </manifest>
