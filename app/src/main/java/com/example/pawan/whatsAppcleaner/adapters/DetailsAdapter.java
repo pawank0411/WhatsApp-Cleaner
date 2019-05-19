@@ -46,7 +46,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
 
         Details details = datalist.get(positions);
         detailsViewHolder.title.setText(details.getTitle());
-        detailsViewHolder.data.setText(String.valueOf(details.getData() + "MB"));
+        detailsViewHolder.data.setText(String.valueOf(details.getData()));
         detailsViewHolder.image.setCircleBackgroundColor(ContextCompat.getColor(detailsViewHolder.image.getContext(), details.getColor()));
         detailsViewHolder.image.setBorderColor(ContextCompat.getColor(detailsViewHolder.image.getContext(), details.getColor()));
         detailsViewHolder.image.setImageResource(details.getImage());

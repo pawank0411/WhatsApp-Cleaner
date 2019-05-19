@@ -2,6 +2,7 @@ package com.example.pawan.whatsAppcleaner.tabs.Documents;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -45,8 +46,7 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
     private double len;
     private String byteMake;
 
-    String path;
-    int position = 0;
+
     private ArrayList<FileDetails> filesToDelete = new ArrayList<>();
 
     //    private String[] Path = new String[149];
@@ -104,16 +104,17 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Intent intent = getIntent();
-        String b = intent.getStringExtra("Flag");
+//        Intent intent = getIntent();
+//        String b = intent.getStringExtra("Flag");
+//
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             //Need to ask permission again or close the app
         } else {
             String path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Documents";
 
+        File directory = new File(path);
 
-            File directory = new File(path);
             ArrayList<FileDetails> fileList1 = new ArrayList<>();
             File[] results = directory.listFiles();
             if (results != null) {
@@ -121,15 +122,17 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
                     //Check if it is a file or a folder
                     if (file.isDirectory()) {
                         //For now we skip it
-                        //getFileSize(file);
+
                     } else {
                         //Still verify if the file is an image in whatsapp preferred format(jpg)
-                        if (file.getName().endsWith(".doc") || file.getName().endsWith(".pdf")) {
+                        if (file.getName().endsWith(".doc") || file.getName().endsWith(".pdf")
+                                || file.getName().endsWith(".docx") || file.getName().endsWith(".enc") || file.getName().endsWith(".java")) {
                             FileDetails fileDetails = new FileDetails();
                             fileDetails.setName(file.getName());
                             fileDetails.setPath(file.getPath());
                             fileDetails.setSize("" + getFileSize(file));
                             fileList1.add(fileDetails);
+
                         }
                     }
                 }
@@ -149,9 +152,9 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
     }
 
     private String getFileSize(File file) {
-        NumberFormat format = new DecimalFormat("#.##");
-        format.setMaximumFractionDigits(2);
-        format.setMinimumFractionDigits(2);
+        NumberFormat format = new DecimalFormat("#.###");
+        format.setMaximumFractionDigits(3);
+        format.setMinimumFractionDigits(3);
         final double length = file.length();
 
         if (file.isFile()) {
@@ -168,14 +171,11 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
                 byteMake = "KB";
                 return format.format(length / KiB) + " KB";
             }
-
-            return format.format(length) + " B";
         } else {
             len = 0;
         }
         return "";
     }
-
 
     @Override
     public void onCheckboxClicked(View view, List<FileDetails> pos) {

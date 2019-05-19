@@ -28,6 +28,7 @@ public class InnerDetailsAdapter_doc extends RecyclerView.Adapter<InnerDetailsAd
     ArrayList<FileDetails> innerDataList;
     private OnCheckboxListener onCheckboxlistener;
 
+    long tot_size;
     public InnerDetailsAdapter_doc(Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxlistener){
         this.ctx = ctx;
         this.innerDataList = innerDataList;
@@ -49,7 +50,8 @@ public class InnerDetailsAdapter_doc extends RecyclerView.Adapter<InnerDetailsAd
         final FileDetails details = innerDataList.get(positions);
         innerDataViewHolder.tittle_name.setText(details.getName());
         innerDataViewHolder.data.setText(String.valueOf(details.getSize()));
-       // Log.e("size ", "Size" + details.getSize());
+
+
 
         final int pos = positions;
 

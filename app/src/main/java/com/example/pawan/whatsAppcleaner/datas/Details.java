@@ -2,17 +2,13 @@ package com.example.pawan.whatsAppcleaner.datas;
 
 public class Details {
 
-    public Details(String title, int data, int image, int color){
+    public Details(String title, String  data, int image, int color){
         this.title = title;
         this.data = data;
         this.image = image;
         this.color = color;
     }
 
-    public Details(String title, int data) {
-        this.title = title;
-        this.data = data;
-    }
     public String getTitle() {
         return title;
     }
@@ -21,11 +17,11 @@ public class Details {
         this.title = title;
     }
 
-    public int getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(int data) {
+    public void setData(String data) {
         this.data = data;
     }
 
@@ -46,7 +42,7 @@ public class Details {
     }
 
     private String title;
-    private int data;
+    private String data;
     private int image;
     private int color;
 }

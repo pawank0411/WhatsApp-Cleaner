@@ -3,9 +3,11 @@ package com.example.pawan.whatsAppcleaner;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -18,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -32,6 +35,9 @@ import com.example.pawan.whatsAppcleaner.tabs.Images.AndroidTabLayoutActivity_im
 import com.example.pawan.whatsAppcleaner.tabs.Videos.AndroidTabLayoutActivity_video;
 import com.example.pawan.whatsAppcleaner.tabs.Wallpaper.wallpaper;
 
+import java.io.File;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +48,18 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public static Toast transitionToast;
     List<Details> datalist1;
     List<Details> datalist;
+    TextView total_data;
     RecyclerView recyclerView, recyclerView1;
     DetailsAdapterCustom detailsAdaptercustom;
     ProgressDialog pr;
+    private double len;
+    private String byteMake, path;
+    private File directory;
+    private String data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, tot_dat;
+    private long sum, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice;
+    private static final long GiB = 1024 * 1024 * 1024;
+    private static final long MiB = 1024 * 1024;
+    private static final long KiB = 1024;
     RelativeLayout loading;
 
     @Override
@@ -55,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         loading = findViewById(R.id.loading);
 
+        total_data = findViewById(R.id.data);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
 
         boolean hasPermission =
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
@@ -78,6 +96,201 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         }
 
+        /*Size for Images folder*/
+        NumberFormat format_img = new DecimalFormat("#.##");
+        format_img.setMaximumFractionDigits(2);
+        format_img.setMinimumFractionDigits(2);
+        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images";
+
+        directory = new File(path);
+
+        size_img = getFileFolderSize(directory);
+
+//        double size_img = (double) size / 1024 / 1024 / 1024;
+//        String s = "GB";
+//        if (size_img < 1) {
+//            size_img = (double) size / 1024 /1024;
+//            s = " MB";
+//        }if (size_img < 1){
+//            size_img = (double) size / 1024;
+//            s = "KB" ;
+//        }
+
+        if (size_img > GiB) {
+            len = size_img / GiB;
+            byteMake = "GB";
+             data_img = format_img.format(size_img / GiB) + " GB";
+        } else if (size_img > MiB) {
+            len = size_img / MiB;
+            byteMake = "MB";
+            data_img  = format_img.format(size_img / MiB) + " MB";
+        } else if (size_img > KiB) {
+            len = size_img/ KiB;
+            byteMake = "KB";
+            data_img = format_img.format(size_img / KiB) + " KB";
+        }
+
+        /*Size for Documents folder*/
+        NumberFormat format_doc = new DecimalFormat("#.##");
+        format_doc.setMaximumFractionDigits(2);
+        format_doc.setMinimumFractionDigits(2);
+        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Documents";
+
+        directory = new File(path);
+
+        size_doc = getFileFolderSize(directory);
+
+        if (size_doc > GiB) {
+            len = size_doc / GiB;
+            byteMake = "GB";
+            data_doc = format_img.format(size_doc / GiB) + " GB";
+        } else if (size_doc > MiB) {
+            len = size_doc / MiB;
+            byteMake = "MB";
+            data_doc  = format_img.format(size_doc / MiB) + " MB";
+        } else if (size_doc > KiB) {
+            len = size_doc / KiB;
+            byteMake = "KB";
+            data_doc = format_img.format(size_doc / KiB) + " KB";
+        }
+
+        /*Size for Videos folder*/
+        NumberFormat format_vid = new DecimalFormat("#.##");
+        format_vid.setMaximumFractionDigits(2);
+        format_vid.setMinimumFractionDigits(2);
+        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Video";
+
+        directory = new File(path);
+
+        size_vid = getFileFolderSize(directory);
+
+        if (size_vid > GiB) {
+            len = size_vid / GiB;
+            byteMake = "GB";
+            data_vid = format_img.format(size_vid / GiB) + " GB";
+        } else if (size_vid > MiB) {
+            len = size_vid / MiB;
+            byteMake = "MB";
+            data_vid  = format_img.format(size_vid / MiB) + " MB";
+        } else if (size_vid > KiB) {
+            len = size_vid / KiB;
+            byteMake = "KB";
+            data_vid = format_img.format(size_vid / KiB) + " KB";
+        }
+
+        /*Size for Audios folder*/
+        NumberFormat format_aud = new DecimalFormat("#.##");
+        format_aud.setMaximumFractionDigits(2);
+        format_aud.setMinimumFractionDigits(2);
+        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Audio";
+
+        directory = new File(path);
+
+        size_aud = getFileFolderSize(directory);
+
+        if (size_aud > GiB) {
+            len = size_aud / GiB;
+            byteMake = "GB";
+            data_aud = format_img.format(size_aud / GiB) + " GB";
+        } else if (size_aud > MiB) {
+            len = size_aud / MiB;
+            byteMake = "MB";
+            data_aud  = format_img.format(size_aud / MiB) + " MB";
+        } else if (size_aud > KiB) {
+            len = size_aud / KiB;
+            byteMake = "KB";
+            data_aud = format_img.format(size_aud / KiB) + " KB";
+        }
+
+        /*Size for Wallpaper folder*/
+        NumberFormat format_wal = new DecimalFormat("#.##");
+        format_wal.setMaximumFractionDigits(2);
+        format_wal.setMinimumFractionDigits(2);
+        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WallPaper";
+
+        directory = new File(path);
+
+        size_wall = getFileFolderSize(directory);
+
+        if (size_wall > GiB) {
+            len = size_wall / GiB;
+            byteMake = "GB";
+            data_wall = format_img.format(size_wall / GiB) + " GB";
+        } else if (size_wall > MiB) {
+            len = size_wall / MiB;
+            byteMake = "MB";
+            data_wall  = format_img.format(size_wall / MiB) + " MB";
+        } else if (size_wall > KiB) {
+            len = size_wall / KiB;
+            byteMake = "KB";
+            data_wall = format_img.format(size_wall / KiB) + " KB";
+        }
+
+        /*Size for Gifs folder*/
+        NumberFormat format_gif = new DecimalFormat("#.##");
+        format_gif.setMaximumFractionDigits(2);
+        format_gif.setMinimumFractionDigits(2);
+        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Animated Gifs";
+
+        directory = new File(path);
+
+        size_gif = getFileFolderSize(directory);
+
+        if (size_gif > GiB) {
+            len = size_gif / GiB;
+            byteMake = "GB";
+            data_gif = format_img.format(size_gif / GiB) + " GB";
+        } else if (size_gif > MiB) {
+            len = size_gif / MiB;
+            byteMake = "MB";
+            data_gif  = format_img.format(size_gif / MiB) + " MB";
+        } else if (size_gif > KiB) {
+            len = size_gif / KiB;
+            byteMake = "KB";
+            data_gif = format_img.format(size_gif / KiB) + " KB";
+        }
+
+        /*Size for Voice Notes folder*/
+        NumberFormat format_voi = new DecimalFormat("#.##");
+        format_voi.setMaximumFractionDigits(2);
+        format_voi.setMinimumFractionDigits(2);
+        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes";
+
+        directory = new File(path);
+
+        size_voice = getFileFolderSize(directory);
+
+        if (size_voice > GiB) {
+            len = size_voice / GiB;
+            byteMake = "GB";
+            data_voice = format_img.format(size_voice / GiB) + " GB";
+        } else if (size_voice > MiB) {
+            len = size_voice / MiB;
+            byteMake = "MB";
+            data_voice  = format_img.format(size_voice / MiB) + " MB";
+        } else if (size_voice > KiB) {
+            len = size_voice / KiB;
+            byteMake = "KB";
+            data_voice = format_img.format(size_voice / KiB) + " KB";
+        }
+
+        sum = size_img + size_doc + size_vid + size_voice + size_gif + size_wall + size_aud;
+
+        if (sum > GiB) {
+            len = sum / GiB;
+            byteMake = "GB";
+            tot_dat = format_img.format(sum / GiB) + " GB";
+        } else if (sum > MiB) {
+            len = sum / MiB;
+            byteMake = "MB";
+            tot_dat  = format_img.format(sum / MiB) + " MB";
+        } else if (sum > KiB) {
+            len = sum / KiB;
+            byteMake = "KB";
+            tot_dat = format_img.format(sum / KiB) + " KB";
+        }
+
+        total_data.setText(tot_dat);
         //For Images,documents and Videos
         recyclerView = findViewById(R.id.recycle1);
         recyclerView.setHasFixedSize(true);
@@ -92,17 +305,17 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         datalist1.add(new Details(
                 "Images",
-                400,
+              data_img,
                 R.drawable.ic_image,
                 R.color.green));
         datalist1.add(new Details(
                 "Documents",
-                1,
+              data_doc,
                 R.drawable.ic_folder,
                 R.color.orange));
         datalist1.add(new Details(
                 "Videos",
-                5,
+                data_vid,
                 R.drawable.ic_video,
                 R.color.blue));
 
@@ -118,22 +331,22 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         datalist.add(new Details(
                 "Audio files",
-                400,
+                data_aud,
                 R.drawable.ic_library_music_black,
                 R.color.purple));
         datalist.add(new Details(
                 "Voice files",
-                112,
+                data_voice,
                 R.drawable.ic_queue_music_black,
                 R.color.lightblue));
         datalist.add(new Details(
                 "Wallpapers",
-                5,
+                data_wall,
                 R.drawable.ic_image,
                 R.color.maroon));
         datalist.add(new Details(
                 "GIFs",
-                5,
+                data_gif,
                 R.drawable.ic_image,
                 R.color.lightpink));
 
@@ -165,6 +378,21 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             }
         }
     }
+    public static long getFileFolderSize(File dir) {
+        long size = 0;
+        if (dir.isDirectory()) {
+            for (File file : dir.listFiles()) {
+                if (file.isFile()) {
+                    size += file.length();
+                } else
+                    size += getFileFolderSize(file);
+            }
+        } else if (dir.isFile()) {
+            size += dir.length();
+        }
+        return size;
+    }
+
 
     @Override
     public void onImagesClicked() {

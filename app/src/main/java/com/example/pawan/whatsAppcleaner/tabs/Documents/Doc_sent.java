@@ -2,6 +2,7 @@ package com.example.pawan.whatsAppcleaner.tabs.Documents;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -43,8 +44,7 @@ public class Doc_sent extends AppCompatActivity implements InnerDetailsAdapter_d
     private double len;
     private String byteMake;
 
-    String path;
-    int position = 0;
+    long tot = 0;
     private ArrayList<FileDetails> filesToDelete = new ArrayList<>();
     //    private String[] Path = new String[149];
 //    private int [] Pos=new int[149];
@@ -55,6 +55,7 @@ public class Doc_sent extends AppCompatActivity implements InnerDetailsAdapter_d
 
         recyclerView = findViewById(R.id.recycle1);
         button = findViewById(R.id.delete);
+
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -100,9 +101,9 @@ public class Doc_sent extends AppCompatActivity implements InnerDetailsAdapter_d
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        Intent intent = getIntent();
-        String b = intent.getStringExtra("Flag");
+//
+//        Intent intent = getIntent();
+//        String b = intent.getStringExtra("Flag");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             //Need to ask permission again or close the app
@@ -121,21 +122,26 @@ public class Doc_sent extends AppCompatActivity implements InnerDetailsAdapter_d
                         //getFileSize(file);
                     } else {
                         //Still verify if the file is an image in whatsapp preferred format(jpg)
-                        if (file.getName().endsWith(".pdf") || file.getName().endsWith(".doc")) {
+                        if (file.getName().endsWith(".doc") || file.getName().endsWith(".pdf")
+                                || file.getName().endsWith(".docx") || file.getName().endsWith(".enc") || file.getName().endsWith(".java")) {
                             FileDetails fileDetails = new FileDetails();
                             fileDetails.setName(file.getName());
                             fileDetails.setPath(file.getPath());
                             fileDetails.setSize("" + getFileSize(file));
                             fileList1.add(fileDetails);
                         }
+                        tot += file.length();
                     }
                 }
+
+
                 Log.e("Files", "files found: " + fileList1.toString());
                 innerdatalist = fileList1;
             } else {
                 Log.e("Files", "No files found in " + directory.getName());
             }
         }
+
 
         innerDetailsAdapterDoc = new InnerDetailsAdapter_doc(this, innerdatalist, this);
         recyclerView.setAdapter(innerDetailsAdapterDoc);
