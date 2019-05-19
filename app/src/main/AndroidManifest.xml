@@ -37,7 +37,7 @@
         <activity android:name=".tabs.Wallpaper.wallpaper"/>
 
 
-        -<provider android:name=".model.GenericFileProvider" android:grantUriPermissions="true" android:exported="false" android:authorities="${applicationId}.my.package.name.provider">
+        <provider android:name=".model.GenericFileProvider" android:grantUriPermissions="true" android:exported="false" android:authorities="${applicationId}.my.package.name.provider">
 
         <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
 

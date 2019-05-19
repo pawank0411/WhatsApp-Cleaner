@@ -85,13 +85,14 @@ public class Images_sent extends AppCompatActivity implements InnerDetailsAdapte
                     }
                 }
 
+                filesToDelete.clear();
                 for (FileDetails deletedFile : deletedFiles) {
                     innerdatalist.remove(deletedFile);
                 }
                 innerDetailsAdapterImage.notifyDataSetChanged();
                 if (success == 0) {
                     Toast.makeText(Images_sent.this, "Couldn't delete some files", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (success == 1){
                     Toast.makeText(Images_sent.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                 }
                 button.setText("Delete Selected Items (0B)");

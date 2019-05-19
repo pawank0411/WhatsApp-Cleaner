@@ -85,7 +85,7 @@ public class Videos_rec extends AppCompatActivity implements InnerDetailsAdapter
                         success = 0;
                     }
                 }
-
+                filesToDelete.clear();
                 for (FileDetails deletedFile : deletedFiles) {
                     innerdatalist.remove(deletedFile);
                 }
