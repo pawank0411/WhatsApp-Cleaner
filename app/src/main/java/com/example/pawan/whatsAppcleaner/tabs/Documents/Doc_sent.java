@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -101,12 +104,11 @@ public class Doc_sent extends AppCompatActivity implements InnerDetailsAdapter_d
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        Intent intent = getIntent();
-//        String b = intent.getStringExtra("Flag");
+
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            //Need to ask permission again or close the app
+           //Need to ask permission again or close the app
         } else {
             String path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Documents/Sent";
 
