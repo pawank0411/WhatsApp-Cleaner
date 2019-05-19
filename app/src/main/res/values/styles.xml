@@ -15,5 +15,14 @@
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--<style name="scrollbar">-->
+    <!--<item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>-->
+    <!--<item name="android:scrollbarStyle">outsideOverlay</item>-->
+    <!--<item name="android:scrollbars">vertical</item>-->
+    <!--<item name="android:fadeScrollbars">false</item>-->
+    <!--<item name="android:scrollbarThumbVertical">@drawable/scroller_thumb</item>-->
+    <!--</style>-->
+
+
 </resources>

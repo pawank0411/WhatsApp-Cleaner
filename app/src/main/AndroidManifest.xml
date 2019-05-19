@@ -12,29 +12,46 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name="com.example.pawan.whatsAppcleaner.MainActivity">
+        <activity android:name="com.example.pawan.whatsAppcleaner.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.AndroidTabLayoutActivity_doc" />
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.AndroidTabLayoutActivity_img" />
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.AndroidTabLayoutActivity_video" />
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Audio.AndroidTabLayoutActivity_aud" />
-        <activity android:name=".tabs.Gifs.AndroidTabLayoutActivity_gifs"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_sent" />
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_rec" />
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.Images_rec" />
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.Images_sent" />
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_rec" />
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_sent" />
-        <activity android:name=".tabs.Audio.Aud_rec"/>
-        <activity android:name=".tabs.Audio.Aud_sent"/>
-        <activity android:name=".tabs.Gifs.Gifs_rec"/>
-        <activity android:name=".tabs.Gifs.Gifs_sent"/>
-        <activity android:name=".tabs.Wallpaper.wallpaper"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.AndroidTabLayoutActivity_doc"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.AndroidTabLayoutActivity_img"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.AndroidTabLayoutActivity_video"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Audio.AndroidTabLayoutActivity_aud"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.Gifs.AndroidTabLayoutActivity_gifs"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_sent"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_rec"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.Images_rec"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.Images_sent"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_rec"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_sent"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.Audio.Aud_rec"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.Audio.Aud_sent"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.Gifs.Gifs_rec"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.Gifs.Gifs_sent"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.Wallpaper.wallpaper"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
 
 
         <provider android:name=".model.GenericFileProvider" android:grantUriPermissions="true" android:exported="false" android:authorities="${applicationId}.my.package.name.provider">
