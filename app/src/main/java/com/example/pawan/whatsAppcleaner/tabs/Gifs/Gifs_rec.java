@@ -88,6 +88,7 @@ public class Gifs_rec extends AppCompatActivity implements InnerDetailsAdapter_v
                 for (FileDetails deletedFile : deletedFiles) {
                     innerdatalist.remove(deletedFile);
                 }
+
                 innerDetailsAdapterVideo.notifyDataSetChanged();
                 if (success == 0) {
                     Toast.makeText(Gifs_rec.this, "Couldn't delete some files", Toast.LENGTH_SHORT).show();

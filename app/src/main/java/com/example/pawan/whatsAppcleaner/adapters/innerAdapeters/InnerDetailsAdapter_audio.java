@@ -48,12 +48,34 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
     public void onBindViewHolder(@NonNull final InnerDetailsAdapter_audio.InnerDataViewHolder innerDataViewHolder, int positions) {
 
         final FileDetails details = innerDataList.get(positions);
-
         innerDataViewHolder.tittle_name.setText(details.getName());
         innerDataViewHolder.data.setText(String.valueOf(details.getSize()));
         // Log.e("size ", "Size" + details.getSize());
 
         final int pos = positions;
+
+
+        innerDataViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                innerDataList.get(innerDataViewHolder.getAdapterPosition()).setSelected(isChecked);
+
+                if (onCheckboxlistener != null) {
+                    onCheckboxlistener.onCheckboxClicked(buttonView, innerDataList);
+                }
+
+
+            }
+        });
+
+
+        if (details.isSelected()) {
+            innerDataViewHolder.checkBox.setChecked(true);
+        } else {
+            innerDataViewHolder.checkBox.setChecked(false);
+        }
 
         innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,25 +87,9 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
                 intent.setDataAndType(file, "audio/*");
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 ctx.startActivity(intent);
-
             }
         });
 
-        if (details.isSelected()) {
-            innerDataViewHolder.checkBox.setChecked(true);
-        } else {
-            innerDataViewHolder.checkBox.setChecked(false);
-        }
-
-        innerDataViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (onCheckboxlistener != null) {
-                    onCheckboxlistener.onCheckboxClicked(buttonView,innerDataList);
-                }
-
-            }
-        });
 
     }
 
