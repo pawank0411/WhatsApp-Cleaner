@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.format.Formatter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
     ArrayList<Details> dataList1 = new ArrayList<>();
     ArrayList<Details> dataList = new ArrayList<>();
-    TextView total_data;
+    TextView total_data, files;
     RecyclerView recyclerView, recyclerView1;
     DetailsAdapterCustom detailsAdaptercustom;
     DetailsAdapter detailsAdapter1;
@@ -66,9 +67,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         loading = findViewById(R.id.loading);
         total_data = findViewById(R.id.data);
+        files = findViewById(R.id.files);
         recyclerView = findViewById(R.id.recycle1);
         recyclerView1 = findViewById(R.id.recycle);
 
+
+        files.setText(Html.fromHtml("<sub><small>Files</small></sub>"));
         detailsAdapter1 = new DetailsAdapter(this, dataList1, this);
         detailsAdaptercustom = new DetailsAdapterCustom(this, dataList, this);
 

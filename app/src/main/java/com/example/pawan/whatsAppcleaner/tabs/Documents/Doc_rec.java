@@ -130,6 +130,8 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
                             FileDetails fileDetails = new FileDetails();
                             fileDetails.setName(file.getName());
                             fileDetails.setPath(file.getPath());
+                            fileDetails.setImage(R.drawable.ic_doc);
+                            fileDetails.setColor(R.color.red);
                             fileDetails.setSize("" + getFileSize(file));
                             fileList1.add(fileDetails);
 
@@ -152,9 +154,9 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
     }
 
     private String getFileSize(File file) {
-        NumberFormat format = new DecimalFormat("#.###");
-        format.setMaximumFractionDigits(3);
-        format.setMinimumFractionDigits(3);
+        NumberFormat format = new DecimalFormat("#.##");
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
         final double length = file.length();
 
         if (file.isFile()) {
@@ -170,7 +172,8 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
                 len = length / KiB;
                 byteMake = "KB";
                 return format.format(length / KiB) + " KB";
-            }
+            }else
+                return  format.format(length) + "B";
         } else {
             len = 0;
         }

@@ -129,6 +129,8 @@ public class Doc_sent extends AppCompatActivity implements InnerDetailsAdapter_d
                             FileDetails fileDetails = new FileDetails();
                             fileDetails.setName(file.getName());
                             fileDetails.setPath(file.getPath());
+                            fileDetails.setImage(R.drawable.ic_doc);
+                            fileDetails.setColor(R.color.red);
                             fileDetails.setSize("" + getFileSize(file));
                             fileList1.add(fileDetails);
                         }
@@ -168,9 +170,9 @@ public class Doc_sent extends AppCompatActivity implements InnerDetailsAdapter_d
                 len = length / KiB;
                 byteMake = "KB";
                 return format.format(length / KiB) + " KB";
-            }
+            }else
+                return  format.format(length) + "B";
 
-            return format.format(length) + " B";
         } else {
             len = 0;
         }

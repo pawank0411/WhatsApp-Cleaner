@@ -166,9 +166,9 @@ public class Gifs_rec extends AppCompatActivity implements InnerDetailsAdapter_v
                 len = length / KiB;
                 byteMake = "KB";
                 return format.format(length / KiB) + " KB";
-            }
+            }else
+                return  format.format(length) + "B";
 
-            return format.format(length) + " B";
         } else {
             len = 0;
         }

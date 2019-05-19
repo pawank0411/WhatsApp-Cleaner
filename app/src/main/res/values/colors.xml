@@ -3,14 +3,15 @@
     <color name="colorPrimary">#0aea21</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#008577</color>
-    <color name="green">#0aea21</color>
+    <color name="green">#12921F</color>
     <color name="gray">#ece4e4</color>
     <color name="white">#ffffff</color>
     <color name="black">#FF161616</color>
     <color name="orange">#f5ab0b</color>
     <color name="blue">#3F51B5</color>
     <color name="purple">#FF9C27B0</color>
-    <color name="maroon">#FFE44D1D</color>
+    <color name="maroon">#F12323</color>
+    <color name="red">#E2E6250B</color>
     <color name="lightblue">#FF009688</color>
     <color name="lightpink">#DD336F</color>
 </resources>

@@ -126,6 +126,8 @@ public class Aud_sent extends AppCompatActivity implements InnerDetailsAdapter_a
                             FileDetails fileDetails = new FileDetails();
                             fileDetails.setName(file.getName());
                             fileDetails.setPath(file.getPath());
+                            fileDetails.setImage(R.drawable.ic_audio);
+                            fileDetails.setColor(R.color.blue);
                             fileDetails.setSize("" + getFileSize(file));
                             fileList1.add(fileDetails);
                         }

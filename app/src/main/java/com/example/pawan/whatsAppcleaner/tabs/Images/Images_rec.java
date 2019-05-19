@@ -166,9 +166,9 @@ public class Images_rec extends AppCompatActivity implements InnerDetailsAdapter
                 len = length / KiB;
                 byteMake = "KB";
                 return format.format(length / KiB) + " KB";
-            }
+            }else
+                return  format.format(length) + "B";
 
-            return format.format(length) + " B";
         } else {
             len = 0;
         }

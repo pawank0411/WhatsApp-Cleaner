@@ -165,9 +165,8 @@ public class wallpaper extends AppCompatActivity implements InnerDetailsAdapter_
                 len = length / KiB;
                 byteMake = "KB";
                 return format.format(length / KiB) + " KB";
-            }
-
-            return format.format(length) + " B";
+            }else
+                return format.format(length) + " B";
         } else {
             len = 0;
         }

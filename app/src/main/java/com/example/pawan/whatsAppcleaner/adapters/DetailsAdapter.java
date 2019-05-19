@@ -110,14 +110,6 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
         void onImagesClicked();
         void onDocumentsClicked();
         void onVideosClicked();
-//        void onAudiosClicked();
-//        void onGifsClicked();
-//        void onWallpapersClicked();
-//        void onVoiceClicked();
-
-
-
-        //We will add more to this as the need arises for now w have to modify the constructor to provide an instance of this interface
     }
 
 }
