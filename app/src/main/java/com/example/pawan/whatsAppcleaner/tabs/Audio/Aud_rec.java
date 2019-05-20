@@ -54,7 +54,7 @@ public class Aud_rec extends AppCompatActivity implements InnerDetailsAdapter_au
         super.onCreate(savedInstanceState);
         setContentView(R.layout.doc_activity);
 
-        recyclerView = findViewById(R.id.recycle1);
+        recyclerView = findViewById(R.id.recycler_view);
         button = findViewById(R.id.delete);
 
 

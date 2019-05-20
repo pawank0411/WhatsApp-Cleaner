@@ -56,7 +56,7 @@ public class Gifs_rec extends AppCompatActivity implements InnerDetailsAdapter_v
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_wallpaper_activity);
 
-        recyclerView = findViewById(R.id.card_view1);
+        recyclerView = findViewById(R.id.recycler_view);
         button = findViewById(R.id.delete);
 
 

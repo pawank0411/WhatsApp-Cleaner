@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter_doc;
-import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter_image;
 import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter_video;
 import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 import com.example.pawan.whatsAppcleaner.R;
@@ -57,7 +56,7 @@ public class Videos_rec extends AppCompatActivity implements InnerDetailsAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_wallpaper_activity);
 
-        recyclerView = findViewById(R.id.card_view1);
+        recyclerView = findViewById(R.id.recycler_view);
         button = findViewById(R.id.delete);
 
 

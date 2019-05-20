@@ -43,7 +43,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle1"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/data_layout"
@@ -57,7 +57,7 @@
         android:id="@+id/recycle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/recycle1"
+        android:layout_below="@+id/recycler_view"
         android:layout_marginTop="5dp">
 
     </android.support.v7.widget.RecyclerView>

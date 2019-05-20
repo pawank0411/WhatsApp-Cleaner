@@ -4,23 +4,23 @@ public class FileDetails {
 
 
     // TODO: 1/19/19 Values we are interested in: Name, Path, Size for now
-    public String name;
+    private String name;
     public String path;
-    public static int color;
+    public int color;
     public int image;
     public String size;
-    public boolean isclicked=false;
+    public boolean selected =false;
 
     public FileDetails() {
 
 
     }
 
-    public FileDetails(String name, String path, String size, boolean isclicked, int image, int color) {
+    public FileDetails(String name, String path, String size, boolean isSelected, int image, int color) {
         this.name = name;
         this.path = path;
         this.size = size;
-        this.isclicked = isclicked;
+        this.selected = isSelected;
         this.image = image;
         this.color = color;
     }
@@ -50,13 +50,14 @@ public class FileDetails {
     }
 
     public void setSelected(boolean selected) {
-        isclicked = selected;
+        this.selected = selected;
     }
 
     public boolean isSelected()
     {
-        return isclicked;
+        return selected;
     }
+
     public void setImage(int image) {
         this.image = image;
     }
@@ -69,7 +70,7 @@ public class FileDetails {
         this.color = color;
     }
 
-    public static int getColor() {
+    public int getColor() {
         return color;
     }
 

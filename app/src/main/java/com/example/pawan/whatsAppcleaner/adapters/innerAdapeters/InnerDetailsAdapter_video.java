@@ -57,8 +57,6 @@ public class InnerDetailsAdapter_video extends RecyclerView.Adapter<InnerDetails
 
         Glide.with(ctx).load(details.getPath()).into(innerDataViewHolder.imageView );
 
-         final int pos = positions;
-
         innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +110,7 @@ public class InnerDetailsAdapter_video extends RecyclerView.Adapter<InnerDetails
 
 //            image_name = itemView.findViewById(R.id.img_name);
             imageView  = itemView.findViewById(R.id.image);
-            cardView = itemView.findViewById(R.id.card_view1);
+            cardView = itemView.findViewById(R.id.recycler_view);
             checkBox = itemView.findViewById(R.id.checkbox);
 
         }

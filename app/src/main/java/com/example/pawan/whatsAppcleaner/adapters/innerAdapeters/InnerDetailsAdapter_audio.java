@@ -28,10 +28,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetailsAdapter_audio.InnerDataViewHolder> {
 
     private Context ctx;
-    ArrayList<FileDetails> innerDataList;
+    private ArrayList<FileDetails> innerDataList;
 
     private  OnCheckboxListener onCheckboxlistener;
-
 
     public InnerDetailsAdapter_audio(Context ctx, ArrayList<FileDetails> innerDataList , OnCheckboxListener onCheckboxlistener){
         this.ctx = ctx;
@@ -39,11 +38,11 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
         this.onCheckboxlistener = onCheckboxlistener;
     }
 
+    @NonNull
     @Override
-    public InnerDetailsAdapter_audio.InnerDataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public InnerDetailsAdapter_audio.InnerDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(ctx);
         View view = inflater.inflate(R.layout.doc_content, parent, false);
-
         return new InnerDataViewHolder(view);
     }
 
@@ -55,29 +54,22 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
         innerDataViewHolder.data.setText(String.valueOf(details.getSize()));
         innerDataViewHolder.data.setText(String.valueOf(details.getSize()));
         innerDataViewHolder.imageView.setCircleBackgroundColor(ContextCompat.getColor(innerDataViewHolder.imageView.getContext(),
-                FileDetails.getColor()));
+                details.getColor()));
         innerDataViewHolder.imageView.setBorderColor(ContextCompat.getColor(innerDataViewHolder.imageView.getContext(),
-                FileDetails.getColor()));
+                details.getColor()));
         innerDataViewHolder.imageView.setImageResource(details.getImage());
-
-        final int pos = positions;
-
 
         innerDataViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
 
                 innerDataList.get(innerDataViewHolder.getAdapterPosition()).setSelected(isChecked);
 
                 if (onCheckboxlistener != null) {
                     onCheckboxlistener.onCheckboxClicked(buttonView, innerDataList);
                 }
-
-
             }
         });
-
 
         if (details.isSelected()) {
             innerDataViewHolder.checkBox.setChecked(true);
@@ -97,8 +89,6 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
                 ctx.startActivity(intent);
             }
         });
-
-
     }
 
     @Override
@@ -106,24 +96,22 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
         return innerDataList.size();
     }
 
-
-    public class InnerDataViewHolder extends RecyclerView.ViewHolder {
+    class InnerDataViewHolder extends RecyclerView.ViewHolder {
 
         TextView tittle_name, data;
         CardView cardView;
         CheckBox checkBox;
         CircleImageView imageView;
-        public InnerDataViewHolder(View itemView) {
+        InnerDataViewHolder(View itemView) {
             super(itemView);
 
             tittle_name = itemView.findViewById(R.id.title);
             data = itemView.findViewById(R.id.data);
-            cardView = itemView.findViewById(R.id.card_view1);
+            cardView = itemView.findViewById(R.id.recycler_view);
             checkBox = itemView.findViewById(R.id.checkbox);
             imageView = itemView.findViewById(R.id.image);
         }
     }
-
 
     public interface OnCheckboxListener {
         void onCheckboxClicked(View view, List<FileDetails> updatedFiles);
