@@ -16,13 +16,12 @@
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
-    <!--<style name="scrollbar">-->
-    <!--<item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>-->
-    <!--<item name="android:scrollbarStyle">outsideOverlay</item>-->
-    <!--<item name="android:scrollbars">vertical</item>-->
-    <!--<item name="android:fadeScrollbars">false</item>-->
-    <!--<item name="android:scrollbarThumbVertical">@drawable/scroller_thumb</item>-->
-    <!--</style>-->
-
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
 </resources>
