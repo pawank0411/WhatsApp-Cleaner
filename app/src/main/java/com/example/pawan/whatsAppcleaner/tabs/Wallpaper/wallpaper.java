@@ -17,8 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.pawan.whatsAppcleaner.R;
-import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter_doc;
-import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter_image;
+import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter;
 import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 
 import java.io.File;
@@ -28,17 +27,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class wallpaper extends AppCompatActivity implements InnerDetailsAdapter_image.OnCheckboxListener {
+public class wallpaper extends AppCompatActivity implements InnerDetailsAdapter.OnCheckboxListener {
 
     //List<Details>  innerdatalist;
     RecyclerView recyclerView;
     Button button;
-    InnerDetailsAdapter_image innerDetailsAdapterImage;
+    InnerDetailsAdapter innerDetailsAdapterImage;
     ArrayList<FileDetails> innerdatalist = new ArrayList<>();
 
     boolean checkClick = false;
     double sizeChecked = 0;
-    InnerDetailsAdapter_doc innerDetailsAdapterDoc;
     private static final long GiB = 1024 * 1024 * 1024;
     private static final long MiB = 1024 * 1024;
     private static final long KiB = 1024;
@@ -142,7 +140,7 @@ public class wallpaper extends AppCompatActivity implements InnerDetailsAdapter_
 //            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
 //        }
 
-        //innerDetailsAdapterImage = new InnerDetailsAdapter_image(this, innerdatalist, this);
+        //innerDetailsAdapterImage = new InnerDetailsAdapter(this, innerdatalist, this);
         recyclerView.setAdapter(innerDetailsAdapterImage);
     }
 

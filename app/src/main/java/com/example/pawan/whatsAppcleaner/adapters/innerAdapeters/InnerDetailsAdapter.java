@@ -28,16 +28,18 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class InnerDetailsAdapter_image extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context ctx;
     ArrayList<FileDetails> innerDataList;
     private OnCheckboxListener onCheckboxlistener;
     private int type;
-    private final int MULTIMEDIA = 1;
-    private final int FILE = 2;
+    private final int IMAGES = 1;
+    private final int VIDEOS = 2;
+    private final int AUDIOS = 3;
+    private final int FILE = 4;
 
-    public InnerDetailsAdapter_image(int type, Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxlistener){
+    public InnerDetailsAdapter(int type, Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxlistener){
         this.type = type;
         this.ctx = ctx;
         this.innerDataList = innerDataList;
@@ -48,8 +50,12 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<RecyclerView
     public int getItemViewType(int position) {
         switch (type) {
             default:
-            case MULTIMEDIA:
-                return MULTIMEDIA;
+            case IMAGES:
+                return IMAGES;
+            case VIDEOS:
+                return VIDEOS;
+            case AUDIOS:
+                return AUDIOS;
             case FILE:
                 return FILE;
         }
@@ -58,9 +64,15 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<RecyclerView
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == MULTIMEDIA) {
+        if (viewType == IMAGES) {
             View view = LayoutInflater.from(ctx).inflate(R.layout.image_wallpaper_content, parent, false);
             return new InnerDataViewHolderMultimedia(view);
+        } else if (viewType == VIDEOS) {
+            View view = LayoutInflater.from(ctx).inflate(R.layout.image_wallpaper_content, parent, false);
+            return new InnerDataViewHolderMultimedia(view);
+        } else if (viewType == FILE) {
+            View view = LayoutInflater.from(ctx).inflate(R.layout.doc_content, parent, false);
+            return new InnerDataViewHolderDoc(view);
         } else {
             View view = LayoutInflater.from(ctx).inflate(R.layout.doc_content, parent, false);
             return new InnerDataViewHolderDoc(view);
@@ -70,7 +82,7 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int positions) {
 
-        if (getItemViewType(positions) == MULTIMEDIA) {
+        if (getItemViewType(positions) == IMAGES) {
             final InnerDataViewHolderMultimedia innerDataViewHolderMultimedia = (InnerDataViewHolderMultimedia) viewHolder;
 
             final FileDetails details = innerDataList.get(positions);
@@ -111,7 +123,96 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<RecyclerView
 
                 }
             });
-        } else {
+        }
+        else if (getItemViewType(positions) == VIDEOS) {
+            final InnerDataViewHolderMultimedia innerDataViewHolderMultimedia = (InnerDataViewHolderMultimedia) viewHolder;
+
+            final FileDetails details = innerDataList.get(positions);
+
+            Glide.with(ctx).load(details.getPath()).into(innerDataViewHolderMultimedia.imageView);
+
+            innerDataViewHolderMultimedia.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                    innerDataList.get(innerDataViewHolderMultimedia.getAdapterPosition()).setSelected(isChecked);
+
+                    if (onCheckboxlistener != null) {
+                        onCheckboxlistener.onCheckboxClicked(buttonView, innerDataList);
+                    }
+
+
+                }
+            });
+
+            if (details.isSelected()) {
+                innerDataViewHolderMultimedia.checkBox.setChecked(true);
+            } else {
+                innerDataViewHolderMultimedia.checkBox.setChecked(false);
+            }
+
+            innerDataViewHolderMultimedia.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    File a = new File(String.valueOf(Uri.parse(details.getPath())));
+                    Uri file = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() +
+                            ".my.package.name.provider", a);
+                    intent.setDataAndType(file, "video/*");
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    ctx.startActivity(intent);
+
+                }
+            });
+        }
+        else if (getItemViewType(positions) == AUDIOS) {
+            final InnerDataViewHolderDoc innerDataViewHolder = (InnerDataViewHolderDoc) viewHolder;
+            final FileDetails details = innerDataList.get(positions);
+            innerDataViewHolder.tittle_name.setText(details.getName());
+            innerDataViewHolder.data.setText(String.valueOf(details.getSize()));
+            innerDataViewHolder.imageView.setCircleBackgroundColor(ContextCompat.getColor(innerDataViewHolder.imageView.getContext(),
+                    details.getColor()));
+            innerDataViewHolder.imageView.setBorderColor(ContextCompat.getColor(innerDataViewHolder.imageView.getContext(),
+                    details.getColor()));
+            innerDataViewHolder.imageView.setImageResource(details.getImage());
+
+            innerDataViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                    innerDataList.get(innerDataViewHolder.getAdapterPosition()).setSelected(isChecked);
+
+                    if (onCheckboxlistener != null) {
+                        onCheckboxlistener.onCheckboxClicked(buttonView, innerDataList);
+                    }
+
+
+                }
+            });
+
+            if (details.isSelected()) {
+                innerDataViewHolder.checkBox.setChecked(true);
+            } else {
+                innerDataViewHolder.checkBox.setChecked(false);
+            }
+
+            innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    File a = new File (String.valueOf(Uri.parse(details.getPath())));
+                    Uri file = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() +
+                            ".my.package.name.provider",a);
+                    intent.setDataAndType(file, "audio/*");
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    ctx.startActivity(intent);
+
+                }
+            });
+        }
+        else if (getItemViewType(positions) == FILE){
             final InnerDataViewHolderDoc innerDataViewHolder = (InnerDataViewHolderDoc) viewHolder;
             final FileDetails details = innerDataList.get(positions);
             innerDataViewHolder.tittle_name.setText(details.getName());
