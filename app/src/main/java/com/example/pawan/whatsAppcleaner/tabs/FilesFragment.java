@@ -120,7 +120,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter_image
                                     fileDetails.setPath(file.getPath());
                                     fileDetails.setImage(R.drawable.ic_doc);
                                     fileDetails.setColor(R.color.red);
-                                    fileDetails.setSize("" + getFileSize(file));
+                                    fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
                                     innerDataList.add(fileDetails);
                                 }
                                 break;
