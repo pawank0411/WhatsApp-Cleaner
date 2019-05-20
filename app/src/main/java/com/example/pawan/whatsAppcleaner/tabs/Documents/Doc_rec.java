@@ -1,8 +1,6 @@
 package com.example.pawan.whatsAppcleaner.tabs.Documents;
 
 import android.Manifest;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter_doc;
-import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter_image;
 import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 import com.example.pawan.whatsAppcleaner.R;
 
@@ -56,7 +53,7 @@ public class Doc_rec extends AppCompatActivity implements InnerDetailsAdapter_do
         super.onCreate(savedInstanceState);
         setContentView(R.layout.doc_activity);
 
-        recyclerView = findViewById(R.id.recycle1);
+        recyclerView = findViewById(R.id.recycler_view);
         button = findViewById(R.id.delete);
 
 

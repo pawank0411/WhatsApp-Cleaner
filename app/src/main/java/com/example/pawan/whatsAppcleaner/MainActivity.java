@@ -27,12 +27,7 @@ import android.widget.Toast;
 import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapter;
 import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapterCustom;
 import com.example.pawan.whatsAppcleaner.datas.Details;
-import com.example.pawan.whatsAppcleaner.tabs.Audio.AndroidTabLayoutActivity_aud;
-import com.example.pawan.whatsAppcleaner.tabs.Documents.AndroidTabLayoutActivity_doc;
-
-import com.example.pawan.whatsAppcleaner.tabs.Gifs.AndroidTabLayoutActivity_gifs;
-import com.example.pawan.whatsAppcleaner.tabs.Images.AndroidTabLayoutActivity_img;
-import com.example.pawan.whatsAppcleaner.tabs.Videos.AndroidTabLayoutActivity_video;
+import com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity;
 import com.example.pawan.whatsAppcleaner.tabs.Wallpaper.wallpaper;
 
 import org.apache.commons.io.FileUtils;
@@ -68,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         loading = findViewById(R.id.loading);
         total_data = findViewById(R.id.data);
         files = findViewById(R.id.files);
-        recyclerView = findViewById(R.id.recycle1);
+        recyclerView = findViewById(R.id.recycler_view);
         recyclerView1 = findViewById(R.id.recycle);
 
 
@@ -297,9 +292,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onImagesClicked() {
-        // TODO: 1/13/19 Let's try this on a device with whatsapp images
         if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_img.class);
+            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+            intent.putExtra("category", DataHolder.IMAGE);
             startActivity(intent);
         } else {
             askPermission();
@@ -309,7 +304,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @Override
     public void onDocumentsClicked() {
         if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_doc.class);
+            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+            intent.putExtra("category", DataHolder.DOCUMENT);
             startActivity(intent);
         } else {
             askPermission();
@@ -319,7 +315,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @Override
     public void onVideosClicked() {
         if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_video.class);
+            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+            intent.putExtra("category", DataHolder.VIDEO);
             startActivity(intent);
         } else {
             askPermission();
@@ -329,7 +326,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @Override
     public void onAudiosClicked() {
         if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_aud.class);
+            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+            intent.putExtra("category", DataHolder.AUDIO);
             startActivity(intent);
         } else {
             askPermission();
@@ -339,7 +337,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @Override
     public void onGifsClicked() {
         if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, AndroidTabLayoutActivity_gifs.class);
+            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+            intent.putExtra("category", DataHolder.GIF);
             startActivity(intent);
         } else {
             askPermission();

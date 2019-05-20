@@ -56,7 +56,7 @@ public class Videos_sent extends AppCompatActivity implements InnerDetailsAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_wallpaper_activity);
 
-        recyclerView = findViewById(R.id.card_view1);
+        recyclerView = findViewById(R.id.recycler_view);
         button = findViewById(R.id.delete);
 
 
@@ -141,7 +141,7 @@ public class Videos_sent extends AppCompatActivity implements InnerDetailsAdapte
 //            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
 //        }
 
-        innerDetailsAdapterImage = new InnerDetailsAdapter_image(this, innerdatalist, this);
+        //innerDetailsAdapterImage = new InnerDetailsAdapter_image(this, innerdatalist, this);
         recyclerView.setAdapter(innerDetailsAdapterImage);
     }
 

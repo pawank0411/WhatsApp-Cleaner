@@ -8,7 +8,7 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/card_view1"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
@@ -17,8 +17,9 @@
         android:layout_marginBottom="54dp"
         tools:listitem="@layout/image_wallpaper_content">
     </android.support.v7.widget.RecyclerView>
+
+
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/layout_del"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -49,8 +50,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
     </android.support.constraint.ConstraintLayout>
-
 
 </RelativeLayout>

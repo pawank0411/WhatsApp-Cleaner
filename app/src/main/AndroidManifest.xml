@@ -22,7 +22,7 @@
         </activity>
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.AndroidTabLayoutActivity_doc"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.AndroidTabLayoutActivity_img"
+        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.AndroidTabLayoutActivity_video"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
@@ -33,10 +33,6 @@
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_sent"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.Images_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Images.Images_sent"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_rec"
             android:configChanges="orientation|screenSize|keyboardHidden"/>

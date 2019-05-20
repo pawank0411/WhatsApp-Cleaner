@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pawan.whatsAppcleaner.datas.FileDetails;
@@ -30,7 +29,6 @@ public class InnerDetailsAdapter_doc extends RecyclerView.Adapter<InnerDetailsAd
     ArrayList<FileDetails> innerDataList;
     private OnCheckboxListener onCheckboxlistener;
 
-    long tot_size;
     public InnerDetailsAdapter_doc(Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxlistener){
         this.ctx = ctx;
         this.innerDataList = innerDataList;
@@ -53,9 +51,9 @@ public class InnerDetailsAdapter_doc extends RecyclerView.Adapter<InnerDetailsAd
         innerDataViewHolder.tittle_name.setText(details.getName());
         innerDataViewHolder.data.setText(String.valueOf(details.getSize()));
         innerDataViewHolder.imageView.setCircleBackgroundColor(ContextCompat.getColor(innerDataViewHolder.imageView.getContext(),
-                FileDetails.getColor()));
+                details.getColor()));
         innerDataViewHolder.imageView.setBorderColor(ContextCompat.getColor(innerDataViewHolder.imageView.getContext(),
-                FileDetails.getColor()));
+                details.getColor()));
         innerDataViewHolder.imageView.setImageResource(details.getImage());
 
 
@@ -121,7 +119,7 @@ public class InnerDetailsAdapter_doc extends RecyclerView.Adapter<InnerDetailsAd
 
             tittle_name = itemView.findViewById(R.id.title);
             data = itemView.findViewById(R.id.data);
-            cardView = itemView.findViewById(R.id.card_view1);
+            cardView = itemView.findViewById(R.id.recycler_view);
             checkBox = itemView.findViewById(R.id.checkbox);
             imageView = itemView.findViewById(R.id.image);
         }

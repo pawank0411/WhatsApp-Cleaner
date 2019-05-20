@@ -117,7 +117,7 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
             title = itemView.findViewById(R.id.title);
             data = itemView.findViewById(R.id.data);
             image = itemView.findViewById(R.id.image);
-            cardView = itemView.findViewById(R.id.card_view1);
+            cardView = itemView.findViewById(R.id.recycler_view);
         }
     }
 

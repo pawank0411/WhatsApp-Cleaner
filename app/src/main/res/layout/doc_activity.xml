@@ -8,11 +8,11 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle1"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/data_layout"
         android:layout_marginBottom="54dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:background="@color/gray"
         tools:listitem="@layout/doc_content">
     </android.support.v7.widget.RecyclerView>
