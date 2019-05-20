@@ -129,7 +129,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter_image
                                     FileDetails fileDetails = new FileDetails();
                                     fileDetails.setName(file.getName());
                                     fileDetails.setPath(file.getPath());
-                                    fileDetails.setSize("" + getFileSize(file));
+                                    fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
                                     innerDataList.add(fileDetails);
                                 }
                                 break;
@@ -140,7 +140,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter_image
                                     fileDetails.setPath(file.getPath());
                                     fileDetails.setImage(R.drawable.ic_audio);
                                     fileDetails.setColor(R.color.blue);
-                                    fileDetails.setSize("" + getFileSize(file));
+                                    fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
                                     innerDataList.add(fileDetails);
                                 }
                                 break;
@@ -149,7 +149,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter_image
                                     FileDetails fileDetails = new FileDetails();
                                     fileDetails.setName(file.getName());
                                     fileDetails.setPath(file.getPath());
-                                    fileDetails.setSize("" + getFileSize(file));
+                                    fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
                                     innerDataList.add(fileDetails);
                                 }
                                 break;
