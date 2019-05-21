@@ -1,7 +1,11 @@
 package com.example.pawan.whatsAppcleaner.tabs;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +29,7 @@ import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +45,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
     private final int VIDEOS = 2;
     private final int AUDIOS = 3;
     private final int FILE = 4;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     public static FilesFragment newInstance(String category, String path) {
         FilesFragment filesFragment = new FilesFragment();
@@ -109,153 +114,76 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
         Log.e("TEST", "" + path);
 
-
-
-//        new FetchFiles(category).execute(path);
-
-        if (path != null) {
-            File directory = new File(path);
-            File[] results = directory.listFiles();
-            if (results != null) {
-                    switch (category) {
-                            case DataHolder.IMAGE:
-                                for (int i = 0; i < results.length; i++){
-                                    if (results[i].isFile()) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(results[i].getName());
-                                        fileDetails.setPath(results[i].getPath());
-                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(results[i])));
-                                        innerDataList.add(fileDetails);
-                                    }
-                                    Log.e("Files", "files found: " + innerDataList.toString());
-                                    innerDetailsAdapterImage.notifyDataSetChanged();
-                                }
-                                break;
-                            case DataHolder.DOCUMENT:
-                                for (File file : results) {
-                                    //Check if it is a file or a folder
-                                    if (file.isFile()) {
-                                        //Still verify if the file is an image in whatsapp preferred format(jpg)
-                                        if (file.getName().endsWith(".doc") || file.getName().endsWith(".pdf")
-                                                || file.getName().endsWith(".docx") || file.getName().endsWith(".enc") || file.getName().endsWith(".java")) {
-                                            FileDetails fileDetails = new FileDetails();
-                                            fileDetails.setName(file.getName());
-                                            fileDetails.setPath(file.getPath());
-                                            fileDetails.setImage(R.drawable.ic_doc);
-                                            fileDetails.setColor(R.color.red);
-                                            fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
-                                            innerDataList.add(fileDetails);
-                                        }
-                                    }else {
-                                        Log.e("Files", "No files found in " + directory.getName());
-                                    }
-                                    Log.e("Files", "files found: " + innerDataList.toString());
-                                    innerDetailsAdapterImage.notifyDataSetChanged();
-                                }
-                                break;
-                            case DataHolder.VIDEO:
-                                for (int i = 0; i < results.length; i++){
-
-                                    if (results[i].isFile()) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(results[i].getName());
-                                        fileDetails.setPath(results[i].getPath());
-                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(results[i])));
-                                        innerDataList.add(fileDetails);
-                                    }
-                                    Log.e("Files", "files found: " + innerDataList.toString());
-                                    innerDetailsAdapterImage.notifyDataSetChanged();
-                                }
-                                break;
-                            case DataHolder.AUDIO:
-                                for (int i = 0; i < results.length; i++){
-
-                                    if (results[i].isFile()) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(results[i].getName());
-                                        fileDetails.setPath(results[i].getPath());
-                                        fileDetails.setImage(R.drawable.ic_audio);
-                                        fileDetails.setColor(R.color.blue);
-                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(results[i])));
-                                        innerDataList.add(fileDetails);
-                                    }
-                                    Log.e("Files", "files found: " + innerDataList.toString());
-                                    innerDetailsAdapterImage.notifyDataSetChanged();
-                                }
-                                break;
-                            case DataHolder.GIF:
-                                for (int i = 0; i < results.length; i++){
-                                    if (results[i].isFile()) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(results[i].getName());
-                                        fileDetails.setPath(results[i].getPath());
-                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(results[i])));
-                                        innerDataList.add(fileDetails);
-                                    }
-                                    Log.e("Files", "files found: " + innerDataList.toString());
-                                    innerDetailsAdapterImage.notifyDataSetChanged();
-                                }
-                                break;
-                        }
-
-                    } else {
-                Log.e("Files", "No files found in " + directory.getName());
+        new FetchFiles(this, category, new FetchFiles.OnFilesFetched() {
+            @Override
+            public void onFilesFetched(List<FileDetails> fileDetails) {
+                if (fileDetails != null) {
+                    innerDataList.addAll(fileDetails);
+                    innerDetailsAdapterImage.notifyDataSetChanged();
+                    progressDialog.dismiss();
+                }
             }
-        }
-        else {
-                Log.e("Files", "Path is empty");
-        }
-
-
-
+        }).execute(path);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new AlertDialog.Builder(getContext())
+                        .setMessage("Are you sure you want to delete selected files?")
+                        .setCancelable(true)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int success = -1;
+                                ArrayList<FileDetails> deletedFiles = new ArrayList<>();
 
-                int success = -1;
-                ArrayList<FileDetails> deletedFiles = new ArrayList<>();
+                                for (FileDetails details : filesToDelete) {
+                                    File file = new File(details.getPath());
+                                    if (file.exists()) {
+                                        if (file.delete()) {
+                                            deletedFiles.add(details);
+                                            if (success == 0) {
+                                                return;
+                                            }
+                                            success = 1;
+                                        } else {
+                                            Log.e("TEST", "" + file.getName() + " delete failed");
+                                            success = 0;
+                                        }
+                                    } else {
+                                        Log.e("TEST", "" + file.getName() + " doesn't exists");
+                                        success = 0;
+                                    }
+                                }
 
-                for (FileDetails details : filesToDelete) {
-                    File file = new File(details.getPath());
-                    if (file.exists()) {
-                        if (file.delete()) {
-                            deletedFiles.add(details);
-                            if (success == 0) {
-                                return;
+                                filesToDelete.clear();
+
+                                for (FileDetails deletedFile : deletedFiles) {
+                                    innerDataList.remove(deletedFile);
+                                }
+                                innerDetailsAdapterImage.notifyDataSetChanged();
+                                if (success == 0) {
+                                    Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
+                                } else if (success == 1) {
+                                    Toast.makeText(getContext(), "Deleted successfully", Toast.LENGTH_SHORT).show();
+                                }
+                                button.setText("Delete Selected Items (0B)");
+                                button.setTextColor(Color.parseColor("#A9A9A9"));
                             }
-                            success = 1;
-                        } else {
-                            Log.e("TEST", "" + file.getName() + " delete failed");
-                            success = 0;
-                        }
-                    } else {
-                        Log.e("TEST", "" + file.getName() + " doesn't exists");
-                        success = 0;
-                    }
-                }
-
-                filesToDelete.clear();
-
-                for (FileDetails deletedFile : deletedFiles) {
-                    innerDataList.remove(deletedFile);
-                }
-                innerDetailsAdapterImage.notifyDataSetChanged();
-                if (success == 0) {
-                    Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
-                } else if (success == 1) {
-                    Toast.makeText(getContext(), "Deleted successfully", Toast.LENGTH_SHORT).show();
-                }
-                button.setText("Delete Selected Items (0B)");
-                button.setTextColor(Color.parseColor("#A9A9A9"));
-
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
             }
         });
 
         return rootView;
     }
 
-    private long getFileSize(File file) {
+    private static long getFileSize(File file) {
         if (file != null && file.isFile()) {
             return file.length();
         }
@@ -290,114 +218,123 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         }
     }
 
-//    private class FetchFiles extends AsyncTask<String, Void, Object>{
-//
-//        private String category;
-//
-//        public FetchFiles (String category){
-//            this.category = category;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            // display a progress dialog for good user experiance
-////         progressDialog = new ProgressDialog(FilesFragment.this);
-////            progressDialog.setMessage("Please Wait");
-////            progressDialog.setCancelable(false);
-////            progressDialog.show();
-//        }
-//        @Override
-//        protected Object doInBackground(String... strings) {
-//
-//            String path = strings[0];
-//
-//            ArrayList<FileDetails> files = new ArrayList<>();
-//
-//            if (path != null) {
-//                File directory = new File(path);
-//                File[] results = directory.listFiles();
-//                if (results != null) {
-//                    for (File file : results) {
-//                        //Check if it is a file or a folder
-//                        if (file.isFile()) {
-//                            //Still verify if the file is an image in whatsapp preferred format(jpg)
-//                            switch (category) {
-//                                case DataHolder.IMAGE:
-//                                    if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
-//                                        FileDetails fileDetails = new FileDetails();
-//                                        fileDetails.setName(file.getName());
-//                                        fileDetails.setPath(file.getPath());
-//                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
-//                                        files.add(fileDetails);
-//                                    }
-//                                    break;
-//                                case DataHolder.DOCUMENT:
-//                                    if (file.getName().endsWith(".doc") || file.getName().endsWith(".pdf")
-//                                            || file.getName().endsWith(".docx") || file.getName().endsWith(".enc") || file.getName().endsWith(".java")) {
-//                                        FileDetails fileDetails = new FileDetails();
-//                                        fileDetails.setName(file.getName());
-//                                        fileDetails.setPath(file.getPath());
-//                                        fileDetails.setImage(R.drawable.ic_doc);
-//                                        fileDetails.setColor(R.color.red);
-//                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
-//                                        files.add(fileDetails);
-//                                    }
-//                                    break;
-//                                case DataHolder.VIDEO:
-//                                    if (file.getName().endsWith(".mp4")) {
-//                                        FileDetails fileDetails = new FileDetails();
-//                                        fileDetails.setName(file.getName());
-//                                        fileDetails.setPath(file.getPath());
-//                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
-//                                        files.add(fileDetails);
-//                                    }
-//                                    break;
-//                                case DataHolder.AUDIO:
-//                                    if (file.getName().endsWith(".mp3") || file.getName().endsWith(".wav")) {
-//                                        FileDetails fileDetails = new FileDetails();
-//                                        fileDetails.setName(file.getName());
-//                                        fileDetails.setPath(file.getPath());
-//                                        fileDetails.setImage(R.drawable.ic_audio);
-//                                        fileDetails.setColor(R.color.blue);
-//                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
-//                                        files.add(fileDetails);
-//                                    }
-//                                    break;
-//                                case DataHolder.GIF:
-//                                    if (file.getName().endsWith(".mp4")) {
-//                                        FileDetails fileDetails = new FileDetails();
-//                                        fileDetails.setName(file.getName());
-//                                        fileDetails.setPath(file.getPath());
-//                                        fileDetails.setSize(Formatter.formatShortFileSize(getActivity(), getFileSize(file)));
-//                                        files.add(fileDetails);
-//                                    }
-//                                    break;
-//                            }
-//
-//                        } else {
-//                            //For now we skip it
-//                            //getFileSize(file);
-//                        }
-//                    }
-//                } else {
-//                    Log.e("Files", "No files found in " + directory.getName());
-//                }
-//            } else {
-//                Log.e("Files", "Path is empty");
-//            }
-//
-//
-//            return files;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Object o) {
-//
-//            List<FileDetails> files;
-//            files = (List<FileDetails>) o;
-//        }
-//
-//
-//    }
+    private static class FetchFiles extends AsyncTask<String, Void, Object> {
+
+        private String category;
+        private OnFilesFetched onFilesFetched;
+        private WeakReference<FilesFragment> filesFragmentWeakReference;
+
+        FetchFiles(FilesFragment filesFragment, String category, OnFilesFetched onFilesFetched){
+            filesFragmentWeakReference = new WeakReference<>(filesFragment);
+            this.category = category;
+            this.onFilesFetched = onFilesFetched;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // display a progress dialog for good user experiance
+            filesFragmentWeakReference.get().progressDialog = new ProgressDialog(filesFragmentWeakReference.get().getContext());
+            filesFragmentWeakReference.get().progressDialog.setMessage("Please Wait");
+            filesFragmentWeakReference.get().progressDialog.setCancelable(false);
+            if (!filesFragmentWeakReference.get().progressDialog.isShowing()) {
+                filesFragmentWeakReference.get().progressDialog.show();
+            }
+        }
+        @Override
+        protected Object doInBackground(String... strings) {
+
+            String path = strings[0];
+
+            ArrayList<FileDetails> files = new ArrayList<>();
+
+            if (path != null) {
+               File directory = new File(path);
+                File[] results = directory.listFiles();
+                if (results != null) {
+                    for (File file : results) {
+                        //Check if it is a file or a folder
+                        if (file.isFile()) {
+                            //Still verify if the file is an image in whatsapp preferred format(jpg)
+                            switch (category) {
+                                case DataHolder.IMAGE:
+                                    if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
+                                        FileDetails fileDetails = new FileDetails();
+                                        fileDetails.setName(file.getName());
+                                        fileDetails.setPath(file.getPath());
+                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
+                                        files.add(fileDetails);
+                                    }
+                                    break;
+                                case DataHolder.DOCUMENT:
+                                    if (file.getName().endsWith(".doc") || file.getName().endsWith(".pdf")
+                                            || file.getName().endsWith(".docx") || file.getName().endsWith(".enc") || file.getName().endsWith(".java")) {
+                                        FileDetails fileDetails = new FileDetails();
+                                        fileDetails.setName(file.getName());
+                                        fileDetails.setPath(file.getPath());
+                                        fileDetails.setImage(R.drawable.ic_doc);
+                                        fileDetails.setColor(R.color.red);
+                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
+                                        files.add(fileDetails);
+                                    }
+                                    break;
+                                case DataHolder.VIDEO:
+                                    if (file.getName().endsWith(".mp4")) {
+                                        FileDetails fileDetails = new FileDetails();
+                                        fileDetails.setName(file.getName());
+                                        fileDetails.setPath(file.getPath());
+                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
+                                        files.add(fileDetails);
+                                    }
+                                    break;
+                                case DataHolder.AUDIO:
+                                    if (file.getName().endsWith(".mp3") || file.getName().endsWith(".wav")) {
+                                        FileDetails fileDetails = new FileDetails();
+                                        fileDetails.setName(file.getName());
+                                        fileDetails.setPath(file.getPath());
+                                        fileDetails.setImage(R.drawable.ic_audio);
+                                        fileDetails.setColor(R.color.blue);
+                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
+                                        files.add(fileDetails);
+                                    }
+                                    break;
+                                case DataHolder.GIF:
+                                    if (file.getName().endsWith(".mp4")) {
+                                        FileDetails fileDetails = new FileDetails();
+                                        fileDetails.setName(file.getName());
+                                        fileDetails.setPath(file.getPath());
+                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
+                                        files.add(fileDetails);
+                                    }
+                                    break;
+                            }
+
+                        } else {
+                            //For now we skip it
+                            //getFileSize(file);
+                        }
+                    }
+                } else {
+                    Log.e("Files", "No files found in " + directory.getName());
+                }
+            } else {
+                Log.e("Files", "Path is empty");
+            }
+
+
+            return files;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            List<FileDetails> files = (List<FileDetails>) o;
+            if (onFilesFetched != null) {
+                onFilesFetched.onFilesFetched(files);
+            }
+        }
+
+        public interface OnFilesFetched {
+            void onFilesFetched(List<FileDetails> fileDetails);
+        }
+    }
+
 }

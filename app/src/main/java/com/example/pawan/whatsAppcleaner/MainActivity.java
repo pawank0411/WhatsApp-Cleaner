@@ -1,10 +1,12 @@
 package com.example.pawan.whatsAppcleaner;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
@@ -33,18 +35,20 @@ import com.example.pawan.whatsAppcleaner.tabs.Wallpaper.wallpaper;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 // TODO: 1/13/19 We implement the interface here
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
     private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
-    ArrayList<Details> dataList1 = new ArrayList<>();
-    ArrayList<Details> dataList = new ArrayList<>();
-    TextView total_data, files;
-    RecyclerView recyclerView, recyclerView1;
-    DetailsAdapterCustom detailsAdaptercustom;
-    DetailsAdapter detailsAdapter1;
+    private ArrayList<Details> dataList1 = new ArrayList<>();
+    private ArrayList<Details> dataList = new ArrayList<>();
+    private TextView total_data, files;
+    private RecyclerView recyclerView, recyclerView1;
+    private DetailsAdapterCustom detailsAdaptercustom;
+    private DetailsAdapter detailsAdapter1;
+    private ProgressDialog progressDialog;
 
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private String data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, tot_dat;
     @SuppressWarnings("FieldCanBeLocal")
     private long sum, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice;
-    RelativeLayout loading;
+    private RelativeLayout loading;
 
     @Override
 
@@ -82,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         recyclerView1.setLayoutManager(mGridLayoutManager);
 
         askPermission();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         fetchFiles();
     }
@@ -119,104 +128,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     }
 
     private void fetchFiles() {
-        /*Size for Images folder*/
-        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images";
-
-        size_img = FileUtils.sizeOfDirectory(new File(path));
-        data_img = Formatter.formatShortFileSize(MainActivity.this, size_img);
-
-        /*Size for Documents folder*/
-
-        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Documents";
-
-        size_doc = FileUtils.sizeOfDirectory(new File(path));
-        data_doc = Formatter.formatShortFileSize(MainActivity.this, size_doc);
-
-
-        /*Size for Videos folder*/
-        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Video";
-
-        size_vid = FileUtils.sizeOfDirectory(new File(path));
-        data_vid = Formatter.formatShortFileSize(MainActivity.this, size_vid);
-
-        /*Size for Audios folder*/
-        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Audio";
-
-
-        size_aud = FileUtils.sizeOfDirectory(new File(path));
-        data_aud = Formatter.formatShortFileSize(MainActivity.this, size_aud);
-
-
-        /*Size for Wallpaper folder*/
-        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WallPaper";
-
-
-        size_wall = FileUtils.sizeOfDirectory(new File(path));
-        data_wall = Formatter.formatShortFileSize(MainActivity.this, size_wall);
-
-        /*Size for Gifs folder*/
-        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Animated Gifs";
-
-
-        size_gif = FileUtils.sizeOfDirectory(new File(path));
-        data_gif = Formatter.formatShortFileSize(MainActivity.this, size_gif);
-
-        /*Size for Voice Notes folder*/
-        path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes";
-
-
-        size_voice = FileUtils.sizeOfDirectory(new File(path));
-        data_voice = Formatter.formatShortFileSize(MainActivity.this, size_voice);
-
-
-        sum = size_img + size_doc + size_vid + size_voice + size_gif + size_wall + size_aud;
-        tot_dat = Formatter.formatShortFileSize(MainActivity.this, sum);
-
-
-        total_data.setText(tot_dat);
-        //For Images,documents and Videos
-
-        dataList1.clear();
-        dataList1.add(new Details(
-                "Images",
-                data_img,
-                R.drawable.ic_image,
-                R.color.green));
-        dataList1.add(new Details(
-                "Documents",
-                data_doc,
-                R.drawable.ic_folder,
-                R.color.orange));
-        dataList1.add(new Details(
-                "Videos",
-                data_vid,
-                R.drawable.ic_video,
-                R.color.blue));
-
-        dataList.clear();
-        dataList.add(new Details(
-                "Audio files",
-                data_aud,
-                R.drawable.ic_library_music_black,
-                R.color.purple));
-        dataList.add(new Details(
-                "Voice files",
-                data_voice,
-                R.drawable.ic_queue_music_black,
-                R.color.lightblue));
-        dataList.add(new Details(
-                "Wallpapers",
-                data_wall,
-                R.drawable.ic_image,
-                R.color.maroon));
-        dataList.add(new Details(
-                "GIFs",
-                data_gif,
-                R.drawable.ic_image,
-                R.color.lightpink));
-
-        detailsAdapter1.notifyDataSetChanged();
-        detailsAdaptercustom.notifyDataSetChanged();
+        new FetchFiles(this).execute();
     }
 
     @Override
@@ -288,6 +200,117 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private boolean hasPermission() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private static class FetchFiles extends AsyncTask<Void, Void, String> {
+
+        private WeakReference<MainActivity> mainActivityWeakReference;
+
+        public FetchFiles(MainActivity mainActivity) {
+            this.mainActivityWeakReference = new WeakReference<>(mainActivity);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            /*Size for Images folder*/
+
+            mainActivityWeakReference.get().size_img = FileUtils.sizeOfDirectory(new File(DataHolder.imagesReceivedPath));
+            mainActivityWeakReference.get().data_img = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_img);
+
+            /*Size for Documents folder*/
+
+            mainActivityWeakReference.get().size_doc = FileUtils.sizeOfDirectory(new File(DataHolder.documentsReceivedPath));
+            mainActivityWeakReference.get().data_doc = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_doc);
+
+
+            /*Size for Videos folder*/
+
+            mainActivityWeakReference.get().size_vid = FileUtils.sizeOfDirectory(new File(DataHolder.videosReceivedPath));
+            mainActivityWeakReference.get().data_vid = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_vid);
+
+            /*Size for Audios folder*/
+
+            mainActivityWeakReference.get().size_aud = FileUtils.sizeOfDirectory(new File(DataHolder.audiosReceivedPath));
+            mainActivityWeakReference.get().data_aud = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_aud);
+
+
+            /*Size for Wallpaper folder*/
+            mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WallPaper";
+
+
+            mainActivityWeakReference.get().size_wall = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
+            mainActivityWeakReference.get().data_wall = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_wall);
+
+            /*Size for Gifs folder*/
+
+            mainActivityWeakReference.get().size_gif = FileUtils.sizeOfDirectory(new File(DataHolder.gifReceivedPath));
+            mainActivityWeakReference.get().data_gif = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_gif);
+
+            /*Size for Voice Notes folder*/
+            mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes";
+
+
+            mainActivityWeakReference.get().size_voice = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
+            mainActivityWeakReference.get().data_voice = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_voice);
+
+
+            mainActivityWeakReference.get().sum = mainActivityWeakReference.get().size_img + mainActivityWeakReference.get().size_doc +
+                    mainActivityWeakReference.get().size_vid + mainActivityWeakReference.get().size_voice + mainActivityWeakReference.get().size_gif +
+                    mainActivityWeakReference.get().size_wall + mainActivityWeakReference.get().size_aud;
+            mainActivityWeakReference.get().tot_dat = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().sum);
+
+
+            //For Images,documents and Videos
+
+            mainActivityWeakReference.get().dataList1.clear();
+            mainActivityWeakReference.get().dataList1.add(new Details(
+                    "Images",
+                    mainActivityWeakReference.get().data_img,
+                    R.drawable.ic_image,
+                    R.color.green));
+            mainActivityWeakReference.get().dataList1.add(new Details(
+                    "Documents",
+                    mainActivityWeakReference.get().data_doc,
+                    R.drawable.ic_folder,
+                    R.color.orange));
+            mainActivityWeakReference.get().dataList1.add(new Details(
+                    "Videos",
+                    mainActivityWeakReference.get().data_vid,
+                    R.drawable.ic_video,
+                    R.color.blue));
+
+            mainActivityWeakReference.get().dataList.clear();
+            mainActivityWeakReference.get().dataList.add(new Details(
+                    "Audio files",
+                    mainActivityWeakReference.get().data_aud,
+                    R.drawable.ic_library_music_black,
+                    R.color.purple));
+            mainActivityWeakReference.get().dataList.add(new Details(
+                    "Voice files",
+                    mainActivityWeakReference.get().data_voice,
+                    R.drawable.ic_queue_music_black,
+                    R.color.lightblue));
+            mainActivityWeakReference.get().dataList.add(new Details(
+                    "Wallpapers",
+                    mainActivityWeakReference.get().data_wall,
+                    R.drawable.ic_image,
+                    R.color.maroon));
+            mainActivityWeakReference.get().dataList.add(new Details(
+                    "GIFs",
+                    mainActivityWeakReference.get().data_gif,
+                    R.drawable.ic_image,
+                    R.color.lightpink));
+
+            return mainActivityWeakReference.get().tot_dat;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            mainActivityWeakReference.get().total_data.setText(s);
+            mainActivityWeakReference.get().detailsAdapter1.notifyDataSetChanged();
+            mainActivityWeakReference.get().detailsAdaptercustom.notifyDataSetChanged();
+            mainActivityWeakReference.get().progressDialog.dismiss();
+        }
     }
 
     @Override
