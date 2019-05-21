@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,11 @@ import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapterCustom;
 import com.example.pawan.whatsAppcleaner.datas.Details;
 import com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity;
 import com.example.pawan.whatsAppcleaner.tabs.Wallpaper.wallpaper;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 
 import org.apache.commons.io.FileUtils;
 
@@ -49,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private DetailsAdapterCustom detailsAdaptercustom;
     private DetailsAdapter detailsAdapter1;
     private ProgressDialog progressDialog;
+
+    Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
+
+    private InterstitialAd mInterstitialAd;
+    private static final String AD_UNIT_ID = "ca-app-pub-7255339257613393/6137674653";
 
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
@@ -69,6 +80,48 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         files = findViewById(R.id.files);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView1 = findViewById(R.id.recycle);
+
+        /** Initializing*/
+        MobileAds.initialize(this,AD_UNIT_ID);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(AD_UNIT_ID);
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                if (intenttoimages){
+                    intenttoimages = false;
+                    onImagesClicked();
+                }else if (intenttodocuments){
+                    intenttodocuments = false;
+                    onDocumentsClicked();
+                }else if (intenttoaudios){
+                    intenttoaudios = false;
+                    onAudiosClicked();
+                }else if (intenttovideos){
+                    intenttovoice = false;
+                    onVoiceClicked();
+                }else if (intenttowall){
+                    intenttowall = false;
+                    onWallpapersClicked();
+                }else if (intenttogifs){
+                    intenttogifs = false;
+                    onGifsClicked();
+                }else if (intenttovoice){
+                    intenttovoice = false;
+                    onVoiceClicked();
+                }
+            }
+        });
+
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdFailedToLoad(int i) {
+
+            }
+        });
 
 
         files.setText(Html.fromHtml("<sub><small>Files</small></sub>"));
@@ -94,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         fetchFiles();
     }
+
 
     private void askPermission() {
         if (!hasPermission()) {
@@ -315,28 +369,47 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onImagesClicked() {
-        if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.IMAGE);
-            startActivity(intent);
-        } else {
-            askPermission();
+        if (mInterstitialAd.isLoaded()){
+            intenttoimages = true;
+            mInterstitialAd.show();
+        }else{
+            Log.e("TAG","Not loaded");
+            if (hasPermission()) {
+                Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+                intent.putExtra("category", DataHolder.IMAGE);
+                startActivity(intent);
+            } else {
+                askPermission();
+            }
+
         }
     }
 
     @Override
     public void onDocumentsClicked() {
-        if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.DOCUMENT);
-            startActivity(intent);
-        } else {
-            askPermission();
+        if (mInterstitialAd.isLoaded()){
+            intenttodocuments = true;
+            mInterstitialAd.show();
+        }else{
+            Log.e("Tag", "Not Loaded");
+            if (hasPermission()) {
+                Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+                intent.putExtra("category", DataHolder.DOCUMENT);
+                startActivity(intent);
+            } else {
+                askPermission();
+            }
+
         }
     }
 
     @Override
     public void onVideosClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttovideos = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("TAG","Not Loaded");
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
             intent.putExtra("category", DataHolder.VIDEO);
@@ -348,6 +421,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onAudiosClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttoaudios = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("TAG", "Not loaded");
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
             intent.putExtra("category", DataHolder.AUDIO);
@@ -359,6 +437,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onGifsClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttogifs = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("Tag", "NotLoaded");
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
             intent.putExtra("category", DataHolder.GIF);
@@ -370,6 +453,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onWallpapersClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttowall = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("TAG","Not loaded");
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, wallpaper.class);
             startActivity(intent);
@@ -380,6 +468,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onVoiceClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttovoice = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("TAG", "Not loaded");
         if (hasPermission()) {
             Toast.makeText(this, "Need to be Implemented", Toast.LENGTH_SHORT).show();
         } else {

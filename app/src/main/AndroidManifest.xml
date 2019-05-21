@@ -20,31 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.AndroidTabLayoutActivity_doc"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.AndroidTabLayoutActivity_video"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Audio.AndroidTabLayoutActivity_aud"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Gifs.AndroidTabLayoutActivity_gifs"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_sent"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_sent"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Audio.Aud_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Audio.Aud_sent"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Gifs.Gifs_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Gifs.Gifs_sent"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name=".tabs.Wallpaper.wallpaper"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
@@ -55,6 +31,11 @@
         <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
 
     </provider>
+        <!--AdMob App ID: ca-app-pub-7255339257613393/6137674653 -->
+
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"/>
     </application>
 
 </manifest>
