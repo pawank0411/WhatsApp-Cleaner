@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pawan.whatsAppcleaner.DataHolder;
@@ -70,7 +71,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (viewType == VIDEOS) {
             View view = LayoutInflater.from(ctx).inflate(R.layout.image_wallpaper_content, parent, false);
             return new InnerDataViewHolderMultimedia(view);
-        } else if (viewType == FILE) {
+        } else if (viewType == AUDIOS) {
             View view = LayoutInflater.from(ctx).inflate(R.layout.doc_content, parent, false);
             return new InnerDataViewHolderDoc(view);
         } else {
@@ -201,13 +202,14 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    File a = new File (String.valueOf(Uri.parse(details.getPath())));
-                    Uri file = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() +
-                            ".my.package.name.provider",a);
-                    intent.setDataAndType(file, "audio/*");
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    ctx.startActivity(intent);
+                    Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                    File file = new File(details.getPath());
+                    String extension =
+                            android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
+                    String mimetype =
+                            android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                    myIntent.setDataAndType(Uri.fromFile(file),mimetype);
+                    ctx.startActivity(myIntent);
 
                 }
             });

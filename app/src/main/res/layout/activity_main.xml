@@ -23,7 +23,7 @@
             android:id="@+id/data"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Total Data"
+            android:text="0B"
             android:textAlignment="center"
             android:layout_gravity="center"
             android:gravity="center"
