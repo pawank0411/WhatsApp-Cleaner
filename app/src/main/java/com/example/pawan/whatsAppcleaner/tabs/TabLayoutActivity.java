@@ -17,6 +17,7 @@ public class TabLayoutActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         ViewPager viewPager = findViewById(R.id.viewpager);
+        tabLayout.setSelectedTabIndicatorHeight(0);
 
         String category = getIntent().getStringExtra("category");
         TabsAdapter tabsAdapter;

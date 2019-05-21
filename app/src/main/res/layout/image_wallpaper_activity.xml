@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
         app:spanCount="3"
-        android:background="@color/gray"
+        android:background="@color/white"
         android:layout_marginBottom="54dp"
         tools:listitem="@layout/image_wallpaper_content">
     </android.support.v7.widget.RecyclerView>
