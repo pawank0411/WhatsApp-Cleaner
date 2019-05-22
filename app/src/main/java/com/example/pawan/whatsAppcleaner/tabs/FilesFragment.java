@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +38,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
     private RecyclerView recyclerView;
     private Button button;
-    private TextView no_files;
-    private InnerDetailsAdapter innerDetailsAdapterImage;
+    private ImageView no_files;
+    private InnerDetailsAdapter innerDetailsAdapter;
     private ArrayList<FileDetails> innerDataList = new ArrayList<>();
     private ArrayList<FileDetails> filesToDelete = new ArrayList<>();
     private final int IMAGES = 1;
@@ -81,46 +82,56 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
         switch (category) {
             default:
+            case DataHolder.WALLPAPER:
             case DataHolder.IMAGE:
                 rootView = inflater.inflate(R.layout.image_wallpaper_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                innerDetailsAdapterImage = new InnerDetailsAdapter(IMAGES, getActivity(), innerDataList, this);
+                innerDetailsAdapter = new InnerDetailsAdapter(IMAGES, getActivity(), innerDataList, this);
                 break;
             case DataHolder.GIF:
             case DataHolder.VIDEO:
                 rootView = inflater.inflate(R.layout.image_wallpaper_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                innerDetailsAdapterImage = new InnerDetailsAdapter(VIDEOS, getActivity(), innerDataList, this);
+                innerDetailsAdapter = new InnerDetailsAdapter(VIDEOS, getActivity(), innerDataList, this);
                 break;
             case DataHolder.AUDIO:
+            case DataHolder.VOICE:
                 rootView = inflater.inflate(R.layout.doc_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                innerDetailsAdapterImage = new InnerDetailsAdapter(AUDIOS, getActivity(), innerDataList, this);
+                innerDetailsAdapter = new InnerDetailsAdapter(AUDIOS, getActivity(), innerDataList, this);
+                break;
             case DataHolder.DOCUMENT:
                 rootView = inflater.inflate(R.layout.doc_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                innerDetailsAdapterImage = new InnerDetailsAdapter(FILE, getActivity(), innerDataList, this);
+                innerDetailsAdapter = new InnerDetailsAdapter(FILE, getActivity(), innerDataList, this);
+                break;
         }
 
         button = rootView.findViewById(R.id.delete);
-
+        no_files = rootView.findViewById(R.id.nofiles);
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(innerDetailsAdapterImage);
+        recyclerView.setAdapter(innerDetailsAdapter);
 
         Log.e("TEST", "" + path);
 
         new FetchFiles(this, category, new FetchFiles.OnFilesFetched() {
             @Override
             public void onFilesFetched(List<FileDetails> fileDetails) {
-                if (fileDetails != null) {
+                if (fileDetails != null && !fileDetails.isEmpty()) {
                     innerDataList.addAll(fileDetails);
-                    innerDetailsAdapterImage.notifyDataSetChanged();
+                    innerDetailsAdapter.notifyDataSetChanged();
                     progressDialog.dismiss();
+                    no_files.setVisibility(View.INVISIBLE);
+                }else{
+                    progressDialog.dismiss();
+                    Log.e("Nofiles","NO Files Found");
+                    no_files.setVisibility(View.VISIBLE);
+                    no_files.setImageResource(R.drawable.file);
                 }
             }
         }).execute(path);
@@ -161,7 +172,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 for (FileDetails deletedFile : deletedFiles) {
                                     innerDataList.remove(deletedFile);
                                 }
-                                innerDetailsAdapterImage.notifyDataSetChanged();
+                                innerDetailsAdapter.notifyDataSetChanged();
                                 if (success == 0) {
                                     Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
                                 } else if (success == 1) {
@@ -249,9 +260,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
             if (path != null) {
                File directory = new File(path);
-                File[] results = directory.listFiles();
-                String size = Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),results.length);
-               Log.e("length", String.valueOf(size));
+                    File[] results = directory.listFiles();
                 if (results != null) {
 
                             //Still verify if the file is an image in whatsapp preferred format(jpg)
@@ -264,7 +273,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                                 FileDetails fileDetails = new FileDetails();
                                                 fileDetails.setName(results[i].getName());
                                                 fileDetails.setPath(results[i].getPath());
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().
+                                                                getContext(),
                                                         getFileSize(results[i])));
                                                 files.add(fileDetails);
                                             }
@@ -295,7 +305,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                                 FileDetails fileDetails = new FileDetails();
                                                 fileDetails.setName(results[i].getName());
                                                 fileDetails.setPath(results[i].getPath());
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get()
+                                                                .getContext(),
                                                         getFileSize(results[i])));
                                                 files.add(fileDetails);
                                             }
@@ -311,7 +322,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                                 fileDetails.setPath(results[i].getPath());
                                                 fileDetails.setImage(R.drawable.ic_audio);
                                                 fileDetails.setColor(R.color.blue);
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get()
+                                                                .getContext(),
                                                         getFileSize(results[i])));
                                                 files.add(fileDetails);
                                             }
@@ -321,6 +333,34 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 case DataHolder.GIF:
                                     for (int i = 0; i < results.length; i++) {
                                         if (results[i].isFile()) {
+                                            if (!results[i].getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(results[i].getName());
+                                                fileDetails.setPath(results[i].getPath());
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                        getFileSize(results[i])));
+                                                files.add(fileDetails);
+                                            }
+                                        }
+                                    }
+                                    break;
+//                                case DataHolder.WALLPAPER:
+//                                    for (int i = 0; i < results.length; i++) {
+//                                        if (results[i].isFile()) {
+//                                            if (!results[i].getName().endsWith(".nomedia")) {
+//                                                FileDetails fileDetails = new FileDetails();
+//                                                fileDetails.setName(results[i].getName());
+//                                                fileDetails.setPath(results[i].getPath());
+//                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+//                                                        getFileSize(results[i])));
+//                                                files.add(fileDetails);
+//                                            }
+//                                        }
+//                                    }
+//                                    break;
+                                case DataHolder.VOICE:
+                                    for (int i = 0; i < results.length; i++) {
+                                        if (results[i].isDirectory()) {
                                             if (!results[i].getName().endsWith(".nomedia")) {
                                                 FileDetails fileDetails = new FileDetails();
                                                 fileDetails.setName(results[i].getName());

@@ -31,6 +31,7 @@ import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapter;
 import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapterCustom;
 import com.example.pawan.whatsAppcleaner.datas.Details;
 import com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity;
+import com.example.pawan.whatsAppcleaner.tabs.Voice.voice;
 import com.example.pawan.whatsAppcleaner.tabs.Wallpaper.wallpaper;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
 
     private InterstitialAd mInterstitialAd;
-    private static final String AD_UNIT_ID = "ca-app-pub-7255339257613393/6137674653";
+    private static final String AD_ID = "ca-app-pub-7255339257613393~8837303265";
 
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
@@ -82,15 +83,22 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         recyclerView1 = findViewById(R.id.recycle);
 
         /** Initializing*/
-        MobileAds.initialize(this,AD_UNIT_ID);
+
+
+        MobileAds.initialize(this,
+                AD_ID);
 
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(AD_UNIT_ID);
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
 
         mInterstitialAd.setAdListener(new AdListener(){
             @Override
             public void onAdClosed() {
+                if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
+                    mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+
+                }
                 if (intenttoimages){
                     intenttoimages = false;
                     onImagesClicked();
@@ -119,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd.setAdListener(new AdListener(){
             @Override
             public void onAdFailedToLoad(int i) {
-
+                    Log.e("error code", String.valueOf(i));
             }
         });
 
@@ -402,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         }
     }
-
+/**Use AdRequest.Builder.addTestDevice("7341F6CF29732E7EF535478585141848")*/
     @Override
     public void onVideosClicked() {
         if (mInterstitialAd.isLoaded()){
@@ -461,6 +469,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, wallpaper.class);
             startActivity(intent);
+//            Toast.makeText(this, "Need to be implemented", Toast.LENGTH_SHORT).show();
         } else {
             askPermission();
         }
@@ -474,7 +483,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         }else
             Log.e("TAG", "Not loaded");
         if (hasPermission()) {
-            Toast.makeText(this, "Need to be Implemented", Toast.LENGTH_SHORT).show();
+          Intent intent = new Intent(MainActivity.this, voice.class);
+          startActivity(intent);
+//            Toast.makeText(this, "Need to be implemented", Toast.LENGTH_SHORT).show();
         } else {
             askPermission();
         }

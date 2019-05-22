@@ -39,6 +39,12 @@ public class TabLayoutActivity extends AppCompatActivity {
             case DataHolder.GIF:
                 tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.GIF, DataHolder.gifReceivedPath, DataHolder.gifSentPath);
                 break;
+//            case DataHolder.WALLPAPER:
+//                tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.WALLPAPER, DataHolder.wallperReceivedPath, DataHolder.wallperSentPath);
+//                break;
+            case DataHolder.VOICE:
+                tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.VOICE,DataHolder.voiceRecievedPath, DataHolder.voiceSentPath);
+                break;
         }
         viewPager.setAdapter(tabsAdapter);
         tabLayout.setupWithViewPager(viewPager);

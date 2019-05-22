@@ -39,6 +39,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final int VIDEOS = 2;
     private final int AUDIOS = 3;
     private final int FILE = 4;
+    private final int VOICE = 6;
 
     public InnerDetailsAdapter(int type, Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxlistener){
         this.type = type;
@@ -59,6 +60,8 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return AUDIOS;
             case FILE:
                 return FILE;
+            case VOICE:
+                return VOICE;
         }
     }
 
@@ -199,21 +202,20 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 innerDataViewHolder.checkBox.setChecked(false);
             }
 
+
             innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                    File file = new File(details.getPath());
-                    String extension =
-                            android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
-                    String mimetype =
-                            android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-                    myIntent.setDataAndType(Uri.fromFile(file),mimetype);
-                    ctx.startActivity(myIntent);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    File a = new File (String.valueOf(Uri.parse(details.getPath())));
+                    Uri file = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() +
+                            ".my.package.name.provider",a);
+                    intent.setDataAndType(file, "audio/*");
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    ctx.startActivity(intent);
 
                 }
-            });
-        }
+            });        }
         else if (getItemViewType(positions) == FILE){
             final InnerDataViewHolderDoc innerDataViewHolder = (InnerDataViewHolderDoc) viewHolder;
             final FileDetails details = innerDataList.get(positions);

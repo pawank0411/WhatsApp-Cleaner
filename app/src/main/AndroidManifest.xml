@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -13,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
         <activity android:name="com.example.pawan.whatsAppcleaner.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,6 +26,8 @@
             android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name=".tabs.Wallpaper.wallpaper"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.Voice.voice"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
 
 
         <provider android:name=".model.GenericFileProvider" android:grantUriPermissions="true" android:exported="false" android:authorities="${applicationId}.my.package.name.provider">
@@ -31,11 +35,10 @@
         <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
 
     </provider>
-        <!--AdMob App ID: ca-app-pub-7255339257613393/6137674653 -->
-
         <meta-data
-            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true"/>
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7255339257613393~8837303265"/>
+
     </application>
 
 </manifest>
