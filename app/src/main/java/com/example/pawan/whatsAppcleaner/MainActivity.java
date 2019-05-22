@@ -23,12 +23,15 @@ import android.text.Html;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapter;
 import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapterCustom;
 import com.example.pawan.whatsAppcleaner.datas.Details;
@@ -37,10 +40,14 @@ import com.example.pawan.whatsAppcleaner.tabs.Voice.voice;
 import com.example.pawan.whatsAppcleaner.tabs.Wallpaper.wallpaper;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.dynamic.IFragmentWrapper;
+import com.google.firebase.crash.FirebaseCrash;
 
+import io.fabric.sdk.android.Fabric;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -63,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
 
     private InterstitialAd mInterstitialAd;
+    private AdView mAdView;
+
     private static final String AD_ID = "ca-app-pub-7255339257613393~8837303265";
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -77,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         loading = findViewById(R.id.loading);
@@ -87,10 +97,33 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         logo = findViewById(R.id.logo);
 
         /** Initializing*/
-
-
         MobileAds.initialize(this,
                 AD_ID);
+
+        mAdView = new AdView(this);
+        mAdView.setAdSize(AdSize.BANNER);
+        mAdView.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+
+        mAdView = findViewById(R.id.adView);
+        mAdView.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+
+        mAdView.setAdListener(new AdListener(){
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Bannercode", String.valueOf(i));
+            }
+        });
+
+        mAdView.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                if (mAdView.isLoading()){
+                    mAdView.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+                }
+
+            }
+        });
+
 
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
@@ -281,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         protected String doInBackground(Void... voids) {
             /*Size for Images folder*/
 
-            
+
             mainActivityWeakReference.get().size_img = FileUtils.sizeOfDirectory(new File(DataHolder.imagesReceivedPath));
             mainActivityWeakReference.get().data_img = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_img);
 

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "386091474133",
+    "firebase_url": "https://whatsapp-cleaner-ed3a0.firebaseio.com",
+    "project_id": "whatsapp-cleaner-ed3a0",
+    "storage_bucket": "whatsapp-cleaner-ed3a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386091474133:android:f32c47b5df307bc6",
+        "android_client_info": {
+          "package_name": "com.example.pawan.whatsAppcleaner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386091474133-t0sgg8qo27tjo992hutrtdmvttlug6d7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pawan.whatsAppcleaner",
+            "certificate_hash": "d2ae27f7f73d255326f098483d850b7f8fa5eed1"
+          }
+        },
+        {
+          "client_id": "386091474133-m7ojkulk4hdeolhnclm1td36lcf2hd0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-YnYDmnaM12AQeyXWtwbwUktFLvyxfPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "386091474133-m7ojkulk4hdeolhnclm1td36lcf2hd0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

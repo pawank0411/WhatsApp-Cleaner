@@ -1,9 +1,24 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.pawan.whatsupcleaner"
+        applicationId "com.example.pawan.whatsAppcleaner"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
@@ -34,10 +49,18 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.google.android.gms:play-services-ads:17.2.0'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation ('com.android.support.test.espresso:espresso-core:3.0.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation 'com.google.firebase:firebase-crash:10.2.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+
     implementation 'com.android.support:gridlayout-v7:28.0.0'
 
 }
+apply plugin: 'com.google.gms.google-services'
+

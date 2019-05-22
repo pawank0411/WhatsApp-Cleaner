@@ -17,6 +17,12 @@
         tools:listitem="@layout/doc_content">
     </android.support.v7.widget.RecyclerView>
 
+    <ImageView
+        android:id="@+id/nofiles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"/>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -51,10 +57,5 @@
 
 
     </android.support.constraint.ConstraintLayout>
-    <ImageView
-        android:id="@+id/nofiles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:visibility="gone"/>
+
 </RelativeLayout>
