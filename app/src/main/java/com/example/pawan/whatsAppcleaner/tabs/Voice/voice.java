@@ -142,12 +142,12 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
                         Log.e("Files", String.valueOf(res.length));
 
                         for (int j = 0; j < res.length; j++) {
-                              Log.e("Filename",res[j].getName());
-                            Log.e("Filename",res[j].getPath());
-                            Log.e("Filename",getFileSize(res[j]));
+
                             FileDetails fileDetails = new FileDetails();
                               fileDetails.setName(res[j].getName());
                               fileDetails.setPath(res[j].getPath());
+                              fileDetails.setImage(R.drawable.voice);
+                              fileDetails.setColor(R.color.orange);
                               fileDetails.setSize("" + getFileSize(res[j]));
                               innerdatalist.add(fileDetails);
                         }
@@ -155,10 +155,11 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
                 }
                /// innerdatalist = fileList1;
                 Log.e("Files", "files found: " + fileList1.toString());
-            } else {
+            } else { Log.e("Files", "No files found in " + directory.getName());
+            }
+            if (innerdatalist.isEmpty()){
                 no_files.setVisibility(View.VISIBLE);
                 no_files.setImageResource(R.drawable.file);
-                Log.e("Files", "No files found in " + directory.getName());
             }
         }
         innerDetailsAdapterAudio = new InnerDetailsAdapter_audio(this, innerdatalist, this);

@@ -46,11 +46,12 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="188dp"
+        android:layout_width="wrap_content"
         android:layout_height="153dp"
         android:layout_alignStart="@+id/data_layout"
         android:layout_alignLeft="@+id/data_layout"
         android:layout_marginEnd="256dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="256dp"
         android:src="@drawable/logo" />
     <android.support.v7.widget.RecyclerView

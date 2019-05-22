@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,8 @@ import com.example.pawan.whatsAppcleaner.R;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetailsAdapter_audio.InnerDataViewHolder> {
@@ -50,6 +53,11 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
 
         innerDataViewHolder.tittle_name.setText(details.getName());
         innerDataViewHolder.data.setText(String.valueOf(details.getSize()));
+        innerDataViewHolder.imageView.setCircleBackgroundColor(ContextCompat.getColor(innerDataViewHolder.imageView.getContext(),
+                details.getColor()));
+        innerDataViewHolder.imageView.setBorderColor(ContextCompat.getColor(innerDataViewHolder.imageView.getContext(),
+                details.getColor()));
+        innerDataViewHolder.imageView.setImageResource(details.getImage());
 
         innerDataViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -85,12 +93,14 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
         TextView tittle_name, data;
         CardView cardView;
         CheckBox checkBox;
+        CircleImageView imageView;
 
         public InnerDataViewHolder(View itemView) {
             super(itemView);
 
             tittle_name = itemView.findViewById(R.id.title);
             data = itemView.findViewById(R.id.data);
+            imageView = itemView.findViewById(R.id.image);
             cardView = itemView.findViewById(R.id.recycler_view);
             checkBox = itemView.findViewById(R.id.checkbox);
 

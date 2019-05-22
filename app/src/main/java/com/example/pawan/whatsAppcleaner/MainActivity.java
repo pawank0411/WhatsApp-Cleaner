@@ -22,6 +22,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private ArrayList<Details> dataList1 = new ArrayList<>();
     private ArrayList<Details> dataList = new ArrayList<>();
     private TextView total_data, files;
+    private ImageView logo;
     private RecyclerView recyclerView, recyclerView1;
     private DetailsAdapterCustom detailsAdaptercustom;
     private DetailsAdapter detailsAdapter1;
@@ -81,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         files = findViewById(R.id.files);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView1 = findViewById(R.id.recycle);
+        logo = findViewById(R.id.logo);
 
         /** Initializing*/
 
@@ -154,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         progressDialog.show();
 
         fetchFiles();
+
     }
 
 
@@ -276,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         protected String doInBackground(Void... voids) {
             /*Size for Images folder*/
 
+            
             mainActivityWeakReference.get().size_img = FileUtils.sizeOfDirectory(new File(DataHolder.imagesReceivedPath));
             mainActivityWeakReference.get().data_img = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_img);
 
@@ -323,7 +329,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
 
             //For Images,documents and Videos
-
             mainActivityWeakReference.get().dataList1.clear();
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Images",

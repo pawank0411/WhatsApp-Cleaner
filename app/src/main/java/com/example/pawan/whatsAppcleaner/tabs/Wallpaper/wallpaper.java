@@ -65,6 +65,7 @@ public class wallpaper extends AppCompatActivity implements  InnerDetailsAdapter
         button = findViewById(R.id.delete);
         no_files = findViewById(R.id.nofiles);
 
+        progressDialog = new ProgressDialog(this);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +122,17 @@ public class wallpaper extends AppCompatActivity implements  InnerDetailsAdapter
             }
         });
 
+//        progressDialog.setMessage("Please Wait");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+
+       fetchfiles();
+
+
+    }
+
+    public void fetchfiles ()
+    {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             //Need to ask permission again or close the app
         } else {
@@ -141,12 +153,10 @@ public class wallpaper extends AppCompatActivity implements  InnerDetailsAdapter
                             fileDetails.setName(results[i].getName());
                             fileDetails.setPath(results[i].getPath());
                             fileDetails.setSize("" + getFileSize(results[i]));
-                            fileList1.add(fileDetails);
+                            innerdatalist.add(fileDetails);
                         }
                     }
                     Log.e("Files", "files found: " + fileList1.toString());
-                    innerdatalist = fileList1;
-                    no_files.setVisibility(View.INVISIBLE);
                 } else {
                     no_files.setVisibility(View.VISIBLE);
                     no_files.setImageResource(R.drawable.file);
@@ -156,13 +166,14 @@ public class wallpaper extends AppCompatActivity implements  InnerDetailsAdapter
             } else {
                 Log.e("Files", "No files found in " + directory.getName());
             }
-
-
+            if (innerdatalist.isEmpty()){
+                no_files.setVisibility(View.VISIBLE);
+                no_files.setImageResource(R.drawable.file);
+            }
+            innerDetailsAdapterImage = new InnerDetailsAdapter_image(this, innerdatalist, this);
+            recyclerView.setAdapter(innerDetailsAdapterImage);
         }
-        innerDetailsAdapterImage = new InnerDetailsAdapter_image(this, innerdatalist, this);
-        recyclerView.setAdapter(innerDetailsAdapterImage);
     }
-
 
     private String getFileSize(File file) {
         NumberFormat format = new DecimalFormat("#.##");
