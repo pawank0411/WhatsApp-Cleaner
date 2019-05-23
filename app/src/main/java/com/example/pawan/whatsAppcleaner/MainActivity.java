@@ -21,17 +21,33 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.Formatter;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapter;
 import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapterCustom;
 import com.example.pawan.whatsAppcleaner.datas.Details;
 import com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity;
+import com.example.pawan.whatsAppcleaner.tabs.Voice.voice;
 import com.example.pawan.whatsAppcleaner.tabs.Wallpaper.wallpaper;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.dynamic.IFragmentWrapper;
+import com.google.firebase.crash.FirebaseCrash;
 
+import io.fabric.sdk.android.Fabric;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -45,10 +61,18 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private ArrayList<Details> dataList1 = new ArrayList<>();
     private ArrayList<Details> dataList = new ArrayList<>();
     private TextView total_data, files;
+    private ImageView logo;
     private RecyclerView recyclerView, recyclerView1;
     private DetailsAdapterCustom detailsAdaptercustom;
     private DetailsAdapter detailsAdapter1;
     private ProgressDialog progressDialog;
+
+    Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
+
+    private InterstitialAd mInterstitialAd;
+    private AdView mAdView;
+
+    private static final String AD_ID = "ca-app-pub-7255339257613393~8837303265";
 
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
@@ -62,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         loading = findViewById(R.id.loading);
@@ -69,6 +94,79 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         files = findViewById(R.id.files);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView1 = findViewById(R.id.recycle);
+        logo = findViewById(R.id.logo);
+
+        /** Initializing*/
+        MobileAds.initialize(this,
+                AD_ID);
+
+        mAdView = new AdView(this);
+        mAdView.setAdSize(AdSize.BANNER);
+        mAdView.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+
+        mAdView = findViewById(R.id.adView);
+        mAdView.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+
+        mAdView.setAdListener(new AdListener(){
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Bannercode", String.valueOf(i));
+            }
+        });
+
+        mAdView.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                if (mAdView.isLoading()){
+                    mAdView.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+                }
+
+            }
+        });
+
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
+                    mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+
+                }
+                if (intenttoimages){
+                    intenttoimages = false;
+                    onImagesClicked();
+                }else if (intenttodocuments){
+                    intenttodocuments = false;
+                    onDocumentsClicked();
+                }else if (intenttoaudios){
+                    intenttoaudios = false;
+                    onAudiosClicked();
+                }else if (intenttovideos){
+                    intenttovoice = false;
+                    onVoiceClicked();
+                }else if (intenttowall){
+                    intenttowall = false;
+                    onWallpapersClicked();
+                }else if (intenttogifs){
+                    intenttogifs = false;
+                    onGifsClicked();
+                }else if (intenttovoice){
+                    intenttovoice = false;
+                    onVoiceClicked();
+                }
+            }
+        });
+
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdFailedToLoad(int i) {
+                    Log.e("error code", String.valueOf(i));
+            }
+        });
 
 
         files.setText(Html.fromHtml("<sub><small>Files</small></sub>"));
@@ -93,7 +191,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         progressDialog.show();
 
         fetchFiles();
+
     }
+
 
     private void askPermission() {
         if (!hasPermission()) {
@@ -214,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         protected String doInBackground(Void... voids) {
             /*Size for Images folder*/
 
+
             mainActivityWeakReference.get().size_img = FileUtils.sizeOfDirectory(new File(DataHolder.imagesReceivedPath));
             mainActivityWeakReference.get().data_img = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_img);
 
@@ -261,7 +362,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
 
             //For Images,documents and Videos
-
             mainActivityWeakReference.get().dataList1.clear();
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Images",
@@ -315,28 +415,47 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onImagesClicked() {
-        if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.IMAGE);
-            startActivity(intent);
-        } else {
-            askPermission();
+        if (mInterstitialAd.isLoaded()){
+            intenttoimages = true;
+            mInterstitialAd.show();
+        }else{
+            Log.e("TAG","Not loaded");
+            if (hasPermission()) {
+                Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+                intent.putExtra("category", DataHolder.IMAGE);
+                startActivity(intent);
+            } else {
+                askPermission();
+            }
+
         }
     }
 
     @Override
     public void onDocumentsClicked() {
-        if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.DOCUMENT);
-            startActivity(intent);
-        } else {
-            askPermission();
+        if (mInterstitialAd.isLoaded()){
+            intenttodocuments = true;
+            mInterstitialAd.show();
+        }else{
+            Log.e("Tag", "Not Loaded");
+            if (hasPermission()) {
+                Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+                intent.putExtra("category", DataHolder.DOCUMENT);
+                startActivity(intent);
+            } else {
+                askPermission();
+            }
+
         }
     }
-
+/**Use AdRequest.Builder.addTestDevice("7341F6CF29732E7EF535478585141848")*/
     @Override
     public void onVideosClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttovideos = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("TAG","Not Loaded");
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
             intent.putExtra("category", DataHolder.VIDEO);
@@ -348,6 +467,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onAudiosClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttoaudios = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("TAG", "Not loaded");
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
             intent.putExtra("category", DataHolder.AUDIO);
@@ -359,6 +483,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onGifsClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttogifs = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("Tag", "NotLoaded");
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
             intent.putExtra("category", DataHolder.GIF);
@@ -370,9 +499,15 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onWallpapersClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttowall = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("TAG","Not loaded");
         if (hasPermission()) {
             Intent intent = new Intent(MainActivity.this, wallpaper.class);
             startActivity(intent);
+//            Toast.makeText(this, "Need to be implemented", Toast.LENGTH_SHORT).show();
         } else {
             askPermission();
         }
@@ -380,8 +515,15 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onVoiceClicked() {
+        if (mInterstitialAd.isLoaded()){
+            intenttovoice = true;
+            mInterstitialAd.show();
+        }else
+            Log.e("TAG", "Not loaded");
         if (hasPermission()) {
-            Toast.makeText(this, "Need to be Implemented", Toast.LENGTH_SHORT).show();
+          Intent intent = new Intent(MainActivity.this, voice.class);
+          startActivity(intent);
+//            Toast.makeText(this, "Need to be implemented", Toast.LENGTH_SHORT).show();
         } else {
             askPermission();
         }

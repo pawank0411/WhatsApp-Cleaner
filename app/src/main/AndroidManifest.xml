@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -13,40 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
         <activity android:name="com.example.pawan.whatsAppcleaner.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.AndroidTabLayoutActivity_doc"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.AndroidTabLayoutActivity_video"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Audio.AndroidTabLayoutActivity_aud"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Gifs.AndroidTabLayoutActivity_gifs"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_sent"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Documents.Doc_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.Videos.Videos_sent"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Audio.Aud_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Audio.Aud_sent"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Gifs.Gifs_rec"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Gifs.Gifs_sent"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name=".tabs.Wallpaper.wallpaper"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.Voice.voice"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
 
 
@@ -55,6 +35,17 @@
         <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
 
     </provider>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7255339257613393~8837303265"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="ee29d83c27554d877c1bf08089bf48fd5ad12464" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

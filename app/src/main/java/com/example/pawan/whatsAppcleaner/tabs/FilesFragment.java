@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +38,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
     private RecyclerView recyclerView;
     private Button button;
-    private TextView no_files;
-    private InnerDetailsAdapter innerDetailsAdapterImage;
+    private ImageView no_files;
+    private InnerDetailsAdapter innerDetailsAdapter;
     private ArrayList<FileDetails> innerDataList = new ArrayList<>();
     private ArrayList<FileDetails> filesToDelete = new ArrayList<>();
     private final int IMAGES = 1;
@@ -81,46 +82,56 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
         switch (category) {
             default:
+            case DataHolder.WALLPAPER:
             case DataHolder.IMAGE:
                 rootView = inflater.inflate(R.layout.image_wallpaper_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                innerDetailsAdapterImage = new InnerDetailsAdapter(IMAGES, getActivity(), innerDataList, this);
+                innerDetailsAdapter = new InnerDetailsAdapter(IMAGES, getActivity(), innerDataList, this);
                 break;
             case DataHolder.GIF:
             case DataHolder.VIDEO:
                 rootView = inflater.inflate(R.layout.image_wallpaper_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                innerDetailsAdapterImage = new InnerDetailsAdapter(VIDEOS, getActivity(), innerDataList, this);
+                innerDetailsAdapter = new InnerDetailsAdapter(VIDEOS, getActivity(), innerDataList, this);
                 break;
             case DataHolder.AUDIO:
+            case DataHolder.VOICE:
                 rootView = inflater.inflate(R.layout.doc_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                innerDetailsAdapterImage = new InnerDetailsAdapter(AUDIOS, getActivity(), innerDataList, this);
+                innerDetailsAdapter = new InnerDetailsAdapter(AUDIOS, getActivity(), innerDataList, this);
+                break;
             case DataHolder.DOCUMENT:
                 rootView = inflater.inflate(R.layout.doc_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                innerDetailsAdapterImage = new InnerDetailsAdapter(FILE, getActivity(), innerDataList, this);
+                innerDetailsAdapter = new InnerDetailsAdapter(FILE, getActivity(), innerDataList, this);
+                break;
         }
 
         button = rootView.findViewById(R.id.delete);
-
+        no_files = rootView.findViewById(R.id.nofiles);
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(innerDetailsAdapterImage);
+        recyclerView.setAdapter(innerDetailsAdapter);
 
         Log.e("TEST", "" + path);
 
         new FetchFiles(this, category, new FetchFiles.OnFilesFetched() {
             @Override
             public void onFilesFetched(List<FileDetails> fileDetails) {
-                if (fileDetails != null) {
+                if (fileDetails != null && !fileDetails.isEmpty()) {
                     innerDataList.addAll(fileDetails);
-                    innerDetailsAdapterImage.notifyDataSetChanged();
+                    innerDetailsAdapter.notifyDataSetChanged();
                     progressDialog.dismiss();
+                    no_files.setVisibility(View.INVISIBLE);
+                }else{
+                    progressDialog.dismiss();
+                    Log.e("Nofiles","NO Files Found");
+                    no_files.setVisibility(View.VISIBLE);
+                    no_files.setImageResource(R.drawable.file);
                 }
             }
         }).execute(path);
@@ -161,7 +172,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 for (FileDetails deletedFile : deletedFiles) {
                                     innerDataList.remove(deletedFile);
                                 }
-                                innerDetailsAdapterImage.notifyDataSetChanged();
+                                innerDetailsAdapter.notifyDataSetChanged();
                                 if (success == 0) {
                                     Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
                                 } else if (success == 1) {
@@ -249,71 +260,120 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
             if (path != null) {
                File directory = new File(path);
-                File[] results = directory.listFiles();
+                    File[] results = directory.listFiles();
                 if (results != null) {
-                    for (File file : results) {
-                        //Check if it is a file or a folder
-                        if (file.isFile()) {
+
                             //Still verify if the file is an image in whatsapp preferred format(jpg)
                             switch (category) {
                                 case DataHolder.IMAGE:
-                                    if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(file.getName());
-                                        fileDetails.setPath(file.getPath());
-                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
-                                        files.add(fileDetails);
+//                                    if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
+                                    for (int i = 0; i < results.length; i++) {
+                                        if (results[i].isFile()) {
+                                            if (!results[i].getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(results[i].getName());
+                                                fileDetails.setPath(results[i].getPath());
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().
+                                                                getContext(),
+                                                        getFileSize(results[i])));
+                                                files.add(fileDetails);
+                                            }
+                                        }
                                     }
                                     break;
                                 case DataHolder.DOCUMENT:
-                                    if (file.getName().endsWith(".doc") || file.getName().endsWith(".pdf")
-                                            || file.getName().endsWith(".docx") || file.getName().endsWith(".enc") || file.getName().endsWith(".java")) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(file.getName());
-                                        fileDetails.setPath(file.getPath());
-                                        fileDetails.setImage(R.drawable.ic_doc);
-                                        fileDetails.setColor(R.color.red);
-                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
-                                        files.add(fileDetails);
+                                    for (File file : results) {
+                                        //Check if it is a file or a folder
+                                        if (file.isFile()) {
+                                            if (file.getName().endsWith(".doc") || file.getName().endsWith(".pdf")
+                                                    || file.getName().endsWith(".docx") || file.getName().endsWith(".enc") || file.getName().endsWith(".java")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(file.getName());
+                                                fileDetails.setPath(file.getPath());
+                                                fileDetails.setImage(R.drawable.ic_doc);
+                                                fileDetails.setColor(R.color.red);
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
+                                                files.add(fileDetails);
+                                            }
+                                        }
                                     }
                                     break;
                                 case DataHolder.VIDEO:
-                                    if (file.getName().endsWith(".mp4")) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(file.getName());
-                                        fileDetails.setPath(file.getPath());
-                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
-                                        files.add(fileDetails);
+                                    for (int i = 0; i < results.length; i++) {
+                                        if (results[i].isFile()) {
+                                            if (!results[i].getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(results[i].getName());
+                                                fileDetails.setPath(results[i].getPath());
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get()
+                                                                .getContext(),
+                                                        getFileSize(results[i])));
+                                                files.add(fileDetails);
+                                            }
+                                        }
                                     }
                                     break;
                                 case DataHolder.AUDIO:
-                                    if (file.getName().endsWith(".mp3") || file.getName().endsWith(".wav")) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(file.getName());
-                                        fileDetails.setPath(file.getPath());
-                                        fileDetails.setImage(R.drawable.ic_audio);
-                                        fileDetails.setColor(R.color.blue);
-                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
-                                        files.add(fileDetails);
+                                    for (int i = 0; i < results.length; i++) {
+                                        if (results[i].isFile()) {
+                                            if (!results[i].getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(results[i].getName());
+                                                fileDetails.setPath(results[i].getPath());
+                                                fileDetails.setImage(R.drawable.ic_audio);
+                                                fileDetails.setColor(R.color.blue);
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get()
+                                                                .getContext(),
+                                                        getFileSize(results[i])));
+                                                files.add(fileDetails);
+                                            }
+                                        }
                                     }
                                     break;
                                 case DataHolder.GIF:
-                                    if (file.getName().endsWith(".mp4")) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(file.getName());
-                                        fileDetails.setPath(file.getPath());
-                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(), getFileSize(file)));
-                                        files.add(fileDetails);
+                                    for (int i = 0; i < results.length; i++) {
+                                        if (results[i].isFile()) {
+                                            if (!results[i].getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(results[i].getName());
+                                                fileDetails.setPath(results[i].getPath());
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                        getFileSize(results[i])));
+                                                files.add(fileDetails);
+                                            }
+                                        }
+                                    }
+                                    break;
+//                                case DataHolder.WALLPAPER:
+//                                    for (int i = 0; i < results.length; i++) {
+//                                        if (results[i].isFile()) {
+//                                            if (!results[i].getName().endsWith(".nomedia")) {
+//                                                FileDetails fileDetails = new FileDetails();
+//                                                fileDetails.setName(results[i].getName());
+//                                                fileDetails.setPath(results[i].getPath());
+//                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+//                                                        getFileSize(results[i])));
+//                                                files.add(fileDetails);
+//                                            }
+//                                        }
+//                                    }
+//                                    break;
+                                case DataHolder.VOICE:
+                                    for (int i = 0; i < results.length; i++) {
+                                        if (results[i].isDirectory()) {
+                                            if (!results[i].getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(results[i].getName());
+                                                fileDetails.setPath(results[i].getPath());
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                        getFileSize(results[i])));
+                                                files.add(fileDetails);
+                                            }
+                                        }
                                     }
                                     break;
                             }
-
-                        } else {
-                            //For now we skip it
-                            //getFileSize(file);
-                        }
-                    }
-                } else {
+                    } else {
                     Log.e("Files", "No files found in " + directory.getName());
                 }
             } else {

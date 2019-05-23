@@ -20,6 +20,52 @@
             android:background="@color/white"
             android:padding="16dp">
 
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="55dp"
+                android:singleLine="true"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Title"
+                app:layout_constraintEnd_toStartOf="@+id/checkbox"
+                android:layout_marginLeft="55dp"
+                android:layout_marginRight="55dp" />
+
+            <TextView
+                android:id="@+id/data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_marginStart="60dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="60dp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:text="578MB"
+                android:layout_marginRight="12dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:button="@drawable/check_box_1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image"
                 android:layout_width="40dp"
@@ -30,47 +76,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:src="@drawable/ic_doc" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Title"
-                android:layout_marginLeft="60dp" />
-
-            <TextView
-                android:id="@+id/data"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:layout_marginStart="60dp"
-                android:layout_marginLeft="60dp"
-                android:layout_marginTop="5dp"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                tools:text="578MB" />
-
-            <CheckBox
-                android:id="@+id/checkbox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginRight="4dp"
-                android:button="@drawable/check_box_1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
 
         </android.support.constraint.ConstraintLayout>
     <View

@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pawan.whatsAppcleaner.DataHolder;
@@ -38,6 +39,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final int VIDEOS = 2;
     private final int AUDIOS = 3;
     private final int FILE = 4;
+    private final int VOICE = 6;
 
     public InnerDetailsAdapter(int type, Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxlistener){
         this.type = type;
@@ -58,6 +60,8 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return AUDIOS;
             case FILE:
                 return FILE;
+            case VOICE:
+                return VOICE;
         }
     }
 
@@ -70,7 +74,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (viewType == VIDEOS) {
             View view = LayoutInflater.from(ctx).inflate(R.layout.image_wallpaper_content, parent, false);
             return new InnerDataViewHolderMultimedia(view);
-        } else if (viewType == FILE) {
+        } else if (viewType == AUDIOS) {
             View view = LayoutInflater.from(ctx).inflate(R.layout.doc_content, parent, false);
             return new InnerDataViewHolderDoc(view);
         } else {
@@ -198,6 +202,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 innerDataViewHolder.checkBox.setChecked(false);
             }
 
+
             innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -210,8 +215,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ctx.startActivity(intent);
 
                 }
-            });
-        }
+            });        }
         else if (getItemViewType(positions) == FILE){
             final InnerDataViewHolderDoc innerDataViewHolder = (InnerDataViewHolderDoc) viewHolder;
             final FileDetails details = innerDataList.get(positions);

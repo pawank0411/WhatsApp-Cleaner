@@ -22,11 +22,12 @@
         <TextView
             android:id="@+id/data"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Total Data"
-            android:textAlignment="center"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/changa_medium"
             android:gravity="center"
+            android:text="0B"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="40sp" />
 
@@ -36,12 +37,25 @@
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:text="files"
+            android:fontFamily="@font/changa_medium"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="30sp" />
 
+
+
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="153dp"
+        android:layout_alignStart="@+id/data_layout"
+        android:layout_alignLeft="@+id/data_layout"
+        android:layout_marginEnd="256dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="256dp"
+        android:src="@drawable/logo" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -79,5 +93,16 @@
             android:fontFamily="sans-serif-light"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-7255339257613393/6137674653">
+    </com.google.android.gms.ads.AdView>
 
 </RelativeLayout>
