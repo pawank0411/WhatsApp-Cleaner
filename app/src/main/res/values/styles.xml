@@ -15,6 +15,20 @@
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="styleSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#C103A9F4</item>
 
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/gray
+        </item>
 
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/gray
+        </item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@xml/background</item>
+    </style>
 </resources>

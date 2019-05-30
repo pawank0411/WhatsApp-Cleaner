@@ -8,9 +8,9 @@ public class DataHolder {
     public static final String VIDEO = "video";
     public static final String AUDIO = "audio";
     public static final String GIF = "gif";
-    public static final String WALLPAPER = "Wallpaper";
-    public static final String VOICE = "Voice";
-/*/WhatsApp/Media/WhatsApp Images**/
+    public static final String WALLPAPER = "wallpaper";
+    public static final String VOICE = "voice";
+
     public static final String imagesReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images";
     public static final String imagesSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images/Sent";
 
@@ -26,9 +26,10 @@ public class DataHolder {
     public static final String gifReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Animated Gifs";
     public static final String gifSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Animated Gifs/Sent";
 
-    public static final String wallperReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp WallPaper";
-    public static final String wallperSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp WallPaper";
+    public static final String wallReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WallPaper";
+    public static final String wallgifSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WallPaper/Sent";
 
-    public static final String voiceRecievedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes";
-    public static final String voiceSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes";
+    public static final String voiceReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes";
+    public static final String voicegifSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes/Sent";
+
 }

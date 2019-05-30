@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.pawan.whatsAppcleaner.DataHolder;
 
@@ -63,7 +65,22 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
                     case 1:
                         return FilesFragment.newInstance(DataHolder.GIF, sentPath);
                 }
-
+            case DataHolder.WALLPAPER:
+                switch (i) {
+                    default:
+                    case 0:
+                        return FilesFragment.newInstance(DataHolder.WALLPAPER, receivedPath);
+                    case 1:
+                        return FilesFragment.newInstance(DataHolder.WALLPAPER, sentPath);
+                }
+            case DataHolder.VOICE:
+                switch (i){
+                    default:
+                    case 0:
+                        return FilesFragment.newInstance(DataHolder.VOICE, receivedPath);
+                    case 1:
+                        return FilesFragment.newInstance(DataHolder.VOICE, sentPath);
+                }
         }
 
     }

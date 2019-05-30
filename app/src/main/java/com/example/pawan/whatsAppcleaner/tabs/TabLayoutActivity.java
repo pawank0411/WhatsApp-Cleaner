@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.example.pawan.whatsAppcleaner.DataHolder;
 import com.example.pawan.whatsAppcleaner.R;
@@ -22,6 +23,7 @@ public class TabLayoutActivity extends AppCompatActivity {
         String category = getIntent().getStringExtra("category");
         TabsAdapter tabsAdapter;
 
+
         switch (category) {
             default:
             case DataHolder.IMAGE:
@@ -39,11 +41,11 @@ public class TabLayoutActivity extends AppCompatActivity {
             case DataHolder.GIF:
                 tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.GIF, DataHolder.gifReceivedPath, DataHolder.gifSentPath);
                 break;
-//            case DataHolder.WALLPAPER:
-//                tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.WALLPAPER, DataHolder.wallperReceivedPath, DataHolder.wallperSentPath);
-//                break;
+            case DataHolder.WALLPAPER:
+                tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.WALLPAPER, DataHolder.wallReceivedPath, DataHolder.wallgifSentPath);
+                break;
             case DataHolder.VOICE:
-                tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.VOICE,DataHolder.voiceRecievedPath, DataHolder.voiceSentPath);
+                tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.VOICE, DataHolder.voiceReceivedPath, DataHolder.voicegifSentPath);
                 break;
         }
         viewPager.setAdapter(tabsAdapter);

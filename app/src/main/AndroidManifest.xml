@@ -5,15 +5,18 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
-        <activity android:name="com.example.pawan.whatsAppcleaner.MainActivity"
+        <activity android:name="com.example.pawan.whatsAppcleaner.SplashScreen"
+                    android:theme="@style/SplashTheme"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -24,10 +27,9 @@
         </activity>
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Wallpaper.wallpaper"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.Voice.voice"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"/>
 
 
         <provider android:name=".model.GenericFileProvider" android:grantUriPermissions="true" android:exported="false" android:authorities="${applicationId}.my.package.name.provider">
@@ -47,5 +49,4 @@
             android:value="ee29d83c27554d877c1bf08089bf48fd5ad12464" />
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

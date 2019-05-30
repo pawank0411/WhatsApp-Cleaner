@@ -2,9 +2,13 @@ package com.example.pawan.whatsAppcleaner;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,6 +23,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.Html;
 import android.text.format.Formatter;
 import android.util.Log;
@@ -70,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
 
     private InterstitialAd mInterstitialAd;
-    private AdView mAdView;
-
     private static final String AD_ID = "ca-app-pub-7255339257613393~8837303265";
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -89,51 +92,32 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        loading = findViewById(R.id.loading);
         total_data = findViewById(R.id.data);
         files = findViewById(R.id.files);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView1 = findViewById(R.id.recycle);
-        logo = findViewById(R.id.logo);
+       // logo = findViewById(R.id.logo);
+
+
+            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Network",0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putBoolean("Status",isNetworkAvailable());
+            editor.commit();
 
         /** Initializing*/
         MobileAds.initialize(this,
                 AD_ID);
 
-        mAdView = new AdView(this);
-        mAdView.setAdSize(AdSize.BANNER);
-        mAdView.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
-
-        mAdView = findViewById(R.id.adView);
-        mAdView.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
-
-        mAdView.setAdListener(new AdListener(){
-            @Override
-            public void onAdFailedToLoad(int i) {
-                Log.e("Bannercode", String.valueOf(i));
-            }
-        });
-
-        mAdView.setAdListener(new AdListener(){
-            @Override
-            public void onAdClosed() {
-                if (mAdView.isLoading()){
-                    mAdView.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
-                }
-
-            }
-        });
-
-
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
-        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
 
         mInterstitialAd.setAdListener(new AdListener(){
             @Override
             public void onAdClosed() {
                 if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
-                    mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("7341F6CF29732E7EF535478585141848").build());
+                    mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
 
                 }
                 if (intenttoimages){
@@ -415,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onImagesClicked() {
-        if (mInterstitialAd.isLoaded()){
+        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
             intenttoimages = true;
             mInterstitialAd.show();
         }else{
@@ -433,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onDocumentsClicked() {
-        if (mInterstitialAd.isLoaded()){
+        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
             intenttodocuments = true;
             mInterstitialAd.show();
         }else{
@@ -451,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 /**Use AdRequest.Builder.addTestDevice("7341F6CF29732E7EF535478585141848")*/
     @Override
     public void onVideosClicked() {
-        if (mInterstitialAd.isLoaded()){
+        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
             intenttovideos = true;
             mInterstitialAd.show();
         }else
@@ -467,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onAudiosClicked() {
-        if (mInterstitialAd.isLoaded()){
+        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
             intenttoaudios = true;
             mInterstitialAd.show();
         }else
@@ -483,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onGifsClicked() {
-        if (mInterstitialAd.isLoaded()){
+        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
             intenttogifs = true;
             mInterstitialAd.show();
         }else
@@ -499,13 +483,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onWallpapersClicked() {
-        if (mInterstitialAd.isLoaded()){
+        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
             intenttowall = true;
             mInterstitialAd.show();
         }else
             Log.e("TAG","Not loaded");
         if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, wallpaper.class);
+            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+            intent.putExtra("category", DataHolder.WALLPAPER);
             startActivity(intent);
 //            Toast.makeText(this, "Need to be implemented", Toast.LENGTH_SHORT).show();
         } else {
@@ -515,18 +500,26 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onVoiceClicked() {
-        if (mInterstitialAd.isLoaded()){
+        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
             intenttovoice = true;
             mInterstitialAd.show();
         }else
             Log.e("TAG", "Not loaded");
         if (hasPermission()) {
-          Intent intent = new Intent(MainActivity.this, voice.class);
+          Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+            intent.putExtra("category", DataHolder.VOICE);
           startActivity(intent);
 //            Toast.makeText(this, "Need to be implemented", Toast.LENGTH_SHORT).show();
         } else {
             askPermission();
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 
