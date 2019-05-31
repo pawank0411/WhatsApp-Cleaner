@@ -19,6 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="0dp"
+        android:foreground="?android:selectableItemBackground"
         app:cardElevation="3dp">
 
         <android.support.constraint.ConstraintLayout

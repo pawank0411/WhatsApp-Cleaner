@@ -2,16 +2,15 @@ package com.example.pawan.whatsAppcleaner.tabs;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,11 +41,10 @@ import com.google.android.gms.ads.MobileAds;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnCheckboxListener {
 
@@ -62,6 +60,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
     private final int VIDEOS = 2;
     private final int AUDIOS = 3;
     private final int FILE = 4;
+    private final int VOICE = 6;
     private ProgressDialog progressDialog;
     private AdView mAdView;
 
@@ -78,7 +77,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView;
         String category = null;
@@ -103,19 +102,24 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             default:
             case DataHolder.WALLPAPER:
             case DataHolder.IMAGE:
-                rootView = inflater.inflate(R.layout.image_wallpaper_activity, container, false);
+                rootView = inflater.inflate(R.layout.image_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                 innerDetailsAdapter = new InnerDetailsAdapter(IMAGES, getActivity(), innerDataList, this);
                 break;
             case DataHolder.GIF:
             case DataHolder.VIDEO:
-                rootView = inflater.inflate(R.layout.image_wallpaper_activity, container, false);
+                rootView = inflater.inflate(R.layout.image_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                 innerDetailsAdapter = new InnerDetailsAdapter(VIDEOS, getActivity(), innerDataList, this);
                 break;
             case DataHolder.VOICE:
+                rootView = inflater.inflate(R.layout.doc_activity, container, false);
+                recyclerView = rootView.findViewById(R.id.recycler_view);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                innerDetailsAdapter = new InnerDetailsAdapter(VOICE, getActivity(), innerDataList, this);
+                break;
             case DataHolder.AUDIO:
                 rootView = inflater.inflate(R.layout.doc_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
@@ -200,6 +204,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         }).execute(path);
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Collections.reverse(innerDataList);
@@ -377,6 +382,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                         FileDetails fileDetails = new FileDetails();
                                         fileDetails.setName(file.getName());
                                         fileDetails.setPath(file.getPath());
+                                        fileDetails.setImage(R.drawable.video_play);
+                                        fileDetails.setColor(R.color.transparent);
                                         fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get()
                                                         .getContext(),
                                                 getFileSize(file)));
@@ -405,6 +412,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                         FileDetails fileDetails = new FileDetails();
                                         fileDetails.setName(file.getName());
                                         fileDetails.setPath(file.getPath());
+                                        fileDetails.setImage(R.drawable.video_play);
+                                        fileDetails.setColor(R.color.transparent);
                                         fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
                                                 getFileSize(file)));
                                         files.add(fileDetails);
@@ -430,17 +439,19 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                             Log.e("Files", String.valueOf(res.length));
 
                                             for (int j = 0; j < res.length; j++) {
-
-                                                FileDetails fileDetails = new FileDetails();
-                                                fileDetails.setName(res[j].getName());
-                                                fileDetails.setPath(res[j].getPath());
-                                                fileDetails.setImage(R.drawable.voice);
-                                                fileDetails.setColor(R.color.orange);
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        getFileSize(res[j])));
-                                                files.add(fileDetails);
+                                                if (!res[j].getName().endsWith(".nomedia")) {
+                                                    FileDetails fileDetails = new FileDetails();
+                                                    fileDetails.setName(res[j].getName());
+                                                    fileDetails.setPath(res[j].getPath());
+                                                    fileDetails.setImage(R.drawable.voice);
+                                                    fileDetails.setColor(R.color.orange);
+                                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                            getFileSize(res[j])));
+                                                    files.add(fileDetails);
+                                                }
                                             }
                                         }
+
                                 }
                         }
                     }

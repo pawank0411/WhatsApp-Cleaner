@@ -26,6 +26,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Html;
 import android.text.format.Formatter;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.firebase.crash.FirebaseCrash;
 
 import io.fabric.sdk.android.Fabric;
+
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -67,12 +69,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private ArrayList<Details> dataList = new ArrayList<>();
     private TextView total_data, files;
     private ImageView logo;
+    private TextView no_ads;
     private RecyclerView recyclerView, recyclerView1;
     private DetailsAdapterCustom detailsAdaptercustom;
     private DetailsAdapter detailsAdapter1;
     private ProgressDialog progressDialog;
+    private AdView mAdView, mAdView1;
 
-    Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
+    private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
 
     private InterstitialAd mInterstitialAd;
     private static final String AD_ID = "ca-app-pub-7255339257613393~8837303265";
@@ -96,64 +100,169 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         files = findViewById(R.id.files);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView1 = findViewById(R.id.recycle);
-       // logo = findViewById(R.id.logo);
+        no_ads = findViewById(R.id.ads_not_loaded);
+        // logo = findViewById(R.id.logo);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
 
 
-            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Network",0);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Network", 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            editor.putBoolean("Status",isNetworkAvailable());
-            editor.commit();
+        editor.putBoolean("Status", isNetworkAvailable());
+        editor.commit();
 
-        /** Initializing*/
+
         MobileAds.initialize(this,
                 AD_ID);
+        if (isNetworkAvailable()) {
+            no_ads.setVisibility(View.VISIBLE);
+            no_ads.setText("Sorry For Ads,  but as a Student it will fulfill my daily Bread Butter needs.");
+
+
+            if (height <= 1920) {
+
+                mAdView = new AdView(this);
+
+                mAdView.setAdUnitId("ca-app-pub-7255339257613393/2279288290");
+                mAdView = findViewById(R.id.adView_small);
+               mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
+               // mAdView.loadAd(new AdRequest.Builder().addTestDevice("D7397574F6CC21785588738256355351").build());
+
+                mAdView.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        if (!mAdView.isLoading()) {
+                            mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
+             //               mAdView.loadAd(new AdRequest.Builder().addTestDevice("D7397574F6CC21785588738256355351").build());
+                        }
+                    }
+
+                    @Override
+                    public void onAdLoaded() {
+                        Log.e("Banner", "Loaded");
+                        no_ads.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(int i) {
+                        Log.e("Bannercode", String.valueOf(i));
+                    }
+                });
+            } else if (height > 1920){
+                mAdView1 = new AdView(this);
+
+                mAdView1.setAdUnitId("ca-app-pub-7255339257613393/1048368612");
+
+                mAdView1 = findViewById(R.id.adView_large);
+                mAdView1.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
+              //  mAdView1.loadAd(new AdRequest.Builder().addTestDevice("D7397574F6CC21785588738256355351").build());
+                mAdView1.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        if (!mAdView1.isLoading()) {
+                            mAdView1.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
+                            //mAdView1.loadAd(new AdRequest.Builder().addTestDevice("D7397574F6CC21785588738256355351").build());
+                        }
+                    }
+
+                    @Override
+                    public void onAdLoaded() {
+                        Log.e("Banner", "Loaded");
+                        no_ads.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(int i) {
+                        Log.e("Bannercode", String.valueOf(i));
+                    }
+                });
+            }
+
+        } else {
+            no_ads.setVisibility(View.VISIBLE);
+            no_ads.setText("Sorry For Ads,  but as a Student it will fulfill my daily Bread Butter needs.");
+        }
+
 
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
         mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
 
-        mInterstitialAd.setAdListener(new AdListener(){
+        mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
+                if (!mInterstitialAd.isLoaded() && !mInterstitialAd.isLoading()) {
                     mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
-
                 }
-                if (intenttoimages){
-                    intenttoimages = false;
-                    onImagesClicked();
-                }else if (intenttodocuments){
+
+                if (intenttodocuments) {
                     intenttodocuments = false;
-                    onDocumentsClicked();
-                }else if (intenttoaudios){
+                   try {
+                       onIntenttoDoc();
+                   }catch (Exception e){
+                       Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
+                   }
+                } else if (intenttoimages) {
+                    intenttoimages = false;
+                    try {
+                        onIntenttoImages();
+                    }catch (Exception e){
+                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
+                    }
+                } else if (intenttoaudios) {
                     intenttoaudios = false;
-                    onAudiosClicked();
-                }else if (intenttovideos){
-                    intenttovoice = false;
-                    onVoiceClicked();
-                }else if (intenttowall){
+                    try {
+                        onIntenttoAudio();
+                    }catch (Exception e){
+                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
+                    }
+                } else if (intenttovideos) {
+                    intenttovideos = false;
+                    try {
+                        onIntenttoVideos();
+                    }catch (Exception e){
+                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
+                    }
+                } else if (intenttowall) {
                     intenttowall = false;
-                    onWallpapersClicked();
-                }else if (intenttogifs){
+                    try {
+                        onIntenttoWall();
+                    }catch (Exception e){
+                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
+                    }
+                } else if (intenttogifs) {
                     intenttogifs = false;
-                    onGifsClicked();
-                }else if (intenttovoice){
+                    try {
+                        onIntenttoGif();
+                    }catch (Exception e){
+                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
+                    }
+                } else if (intenttovoice) {
                     intenttovoice = false;
-                    onVoiceClicked();
+                    try {
+                        onIntenttoVoice();
+                    }catch (Exception e){
+                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
-        });
 
-        mInterstitialAd.setAdListener(new AdListener(){
             @Override
             public void onAdFailedToLoad(int i) {
-                    Log.e("error code", String.valueOf(i));
+                super.onAdFailedToLoad(i);
+                Log.e("error code", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial", "Loaded");
             }
         });
 
-
-        files.setText(Html.fromHtml("<sub><small>Files</small></sub>"));
         detailsAdapter1 = new DetailsAdapter(this, dataList1, this);
         detailsAdaptercustom = new DetailsAdapterCustom(this, dataList, this);
 
@@ -397,17 +506,59 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         }
     }
 
+    public void onIntenttoImages() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.IMAGE);
+        startActivity(intent);
+    }
+
+    public void onIntenttoVideos() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.VIDEO);
+        startActivity(intent);
+    }
+
+    public void onIntenttoDoc() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.DOCUMENT);
+        startActivity(intent);
+    }
+
+    public void onIntenttoAudio() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.AUDIO);
+        startActivity(intent);
+    }
+
+    public void onIntenttoGif() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.GIF);
+        startActivity(intent);
+    }
+
+    public void onIntenttoWall() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.WALLPAPER);
+        startActivity(intent);
+    }
+
+    public void onIntenttoVoice() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.VOICE);
+        startActivity(intent);
+    }
+
+
     @Override
     public void onImagesClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
-            intenttoimages = true;
+        if (mInterstitialAd.isLoaded() && mInterstitialAd!=null) {
             mInterstitialAd.show();
-        }else{
-            Log.e("TAG","Not loaded");
+            intenttoimages = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
             if (hasPermission()) {
-                Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-                intent.putExtra("category", DataHolder.IMAGE);
-                startActivity(intent);
+                onIntenttoImages();
             } else {
                 askPermission();
             }
@@ -417,101 +568,98 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onDocumentsClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
-            intenttodocuments = true;
+        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
             mInterstitialAd.show();
-        }else{
+            intenttodocuments = true;
+
+        } else {
             Log.e("Tag", "Not Loaded");
             if (hasPermission()) {
-                Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-                intent.putExtra("category", DataHolder.DOCUMENT);
-                startActivity(intent);
+                onIntenttoDoc();
             } else {
                 askPermission();
             }
 
         }
     }
-/**Use AdRequest.Builder.addTestDevice("7341F6CF29732E7EF535478585141848")*/
+
     @Override
     public void onVideosClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
-            intenttovideos = true;
+        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
             mInterstitialAd.show();
-        }else
-            Log.e("TAG","Not Loaded");
-        if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.VIDEO);
-            startActivity(intent);
+            intenttovideos = true;
+
         } else {
-            askPermission();
+            Log.e("TAG", "Not Loaded");
+            if (hasPermission()) {
+                onIntenttoVideos();
+            } else {
+                askPermission();
+            }
         }
     }
 
     @Override
     public void onAudiosClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
-            intenttoaudios = true;
+        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
             mInterstitialAd.show();
-        }else
-            Log.e("TAG", "Not loaded");
-        if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.AUDIO);
-            startActivity(intent);
+            intenttoaudios = true;
+
         } else {
-            askPermission();
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoAudio();
+            } else {
+                askPermission();
+            }
         }
     }
 
     @Override
     public void onGifsClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
-            intenttogifs = true;
+        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
             mInterstitialAd.show();
-        }else
-            Log.e("Tag", "NotLoaded");
-        if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.GIF);
-            startActivity(intent);
+            intenttogifs = true;
+
         } else {
-            askPermission();
+            Log.e("Tag", "NotLoaded");
+            if (hasPermission()) {
+                onIntenttoGif();
+            } else {
+                askPermission();
+            }
         }
     }
 
     @Override
     public void onWallpapersClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
-            intenttowall = true;
+        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
             mInterstitialAd.show();
-        }else
-            Log.e("TAG","Not loaded");
-        if (hasPermission()) {
-            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.WALLPAPER);
-            startActivity(intent);
-//            Toast.makeText(this, "Need to be implemented", Toast.LENGTH_SHORT).show();
+            intenttowall = true;
+
         } else {
-            askPermission();
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoWall();
+            } else {
+                askPermission();
+            }
         }
     }
 
     @Override
     public void onVoiceClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd.isLoading()){
-            intenttovoice = true;
+        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
             mInterstitialAd.show();
-        }else
-            Log.e("TAG", "Not loaded");
-        if (hasPermission()) {
-          Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-            intent.putExtra("category", DataHolder.VOICE);
-          startActivity(intent);
-//            Toast.makeText(this, "Need to be implemented", Toast.LENGTH_SHORT).show();
+            intenttovoice = true;
+
         } else {
-            askPermission();
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoVoice();
+            } else {
+                askPermission();
+            }
         }
     }
 

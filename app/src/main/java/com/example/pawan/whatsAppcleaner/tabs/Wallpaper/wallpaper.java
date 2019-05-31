@@ -1,12 +1,9 @@
 package com.example.pawan.whatsAppcleaner.tabs.Wallpaper;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,8 +11,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Formatter;
 import android.util.Log;
@@ -23,17 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pawan.whatsAppcleaner.DataHolder;
-import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter;
 import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAdapter_image;
 import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 import com.example.pawan.whatsAppcleaner.R;
-import com.example.pawan.whatsAppcleaner.tabs.FilesFragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -78,7 +69,7 @@ public class wallpaper extends Fragment implements  InnerDetailsAdapter_image.On
 
         View rootView;
         String path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WallPaper";
-        rootView = inflater.inflate(R.layout.image_wallpaper_activity, container, false);
+        rootView = inflater.inflate(R.layout.image_activity, container, false);
 
         recyclerView = rootView.findViewById(R.id.recycler_view);
         button = rootView.findViewById(R.id.delete);
