@@ -24,7 +24,7 @@
             android:layout_height="0dp"
 
             android:fontFamily="@font/changa_medium"
-            android:text="0B"
+            android:text="@string/_0b"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="40sp"
@@ -38,7 +38,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/changa_medium"
-            android:text="Files"
+            android:text="@string/files"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -126,6 +126,4 @@
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"
         android:visibility="gone" />
-
-
 </RelativeLayout>

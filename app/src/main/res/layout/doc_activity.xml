@@ -15,14 +15,15 @@
         android:layout_marginBottom="54dp"
         android:background="@color/gray"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/doc_content"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/doc_content" />
 
     <ImageView
         android:id="@+id/nofiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="@string/no_files" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -43,7 +44,7 @@
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintHorizontal_bias="0.555"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></com.google.android.gms.ads.AdView>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <View
@@ -60,11 +61,11 @@
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="55dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="sans-serif-light"
-            android:text="Recents"
+            android:text="@string/recents"
             android:textAllCaps="false"
             android:textColor="@color/lblack"
             android:textSize="15sp"
@@ -84,7 +85,7 @@
             android:background="@drawable/button_shape"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="Delete selected items (0B)"
+            android:text="@string/delete_items_blank"
             android:textAllCaps="false"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"

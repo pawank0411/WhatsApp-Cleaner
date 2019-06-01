@@ -33,9 +33,8 @@ import com.example.pawan.whatsAppcleaner.adapters.innerAdapeters.InnerDetailsAda
 import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
+
 
 
 import java.io.File;
@@ -43,12 +42,11 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnCheckboxListener {
 
-    private RecyclerView recyclerView;
     private Button button;
-    private Switch toggle;
     private TextView no_ads;
     private ImageView no_files;
     private InnerDetailsAdapter innerDetailsAdapter;
@@ -61,8 +59,6 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
     private final int VOICE = 6;
     private ProgressDialog progressDialog;
     private AdView mAdView;
-
-    private static final String AD_ID = "ca-app-pub-7255339257613393~8837303265";
 
     public static FilesFragment newInstance(String category, String path) {
         FilesFragment filesFragment = new FilesFragment();
@@ -96,6 +92,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             return null;
         }
 
+        RecyclerView recyclerView;
         switch (category) {
             default:
             case DataHolder.WALLPAPER:
@@ -132,25 +129,24 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                 break;
         }
 
-        toggle = rootView.findViewById(R.id.switch1);
+        Switch toggle = rootView.findViewById(R.id.switch1);
         no_ads = rootView.findViewById(R.id.ads_not_loaded);
 
         button = rootView.findViewById(R.id.delete);
         no_files = rootView.findViewById(R.id.nofiles);
+        mAdView = rootView.findViewById(R.id.adView);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(innerDetailsAdapter);
 
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("Network",0);
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("Network",0);
         boolean status = sharedPreferences.getBoolean("Status",false);
 
         if (status){
             no_ads.setVisibility(View.VISIBLE);
-            no_ads.setText("Sorry For Ads,  but as a Student it will fulfill my daily Bread Butter needs.");
+            no_ads.setText(R.string.no_ads);
 
 
-            mAdView = new AdView(getContext());
-            mAdView = rootView.findViewById(R.id.adView);
             mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
 
             mAdView.setAdListener(new AdListener(){
@@ -175,7 +171,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         }
         else {
             no_ads.setVisibility(View.VISIBLE);
-            no_ads.setText("Sorry For Ads,  but as a Student it will fulfill my daily Bread Butter needs.");
+            no_ads.setText(R.string.no_ads);
         }
 
         Log.e("TEST", "" + path);
@@ -254,7 +250,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 } else if (success == 1) {
                                     Toast.makeText(getContext(), "Deleted successfully", Toast.LENGTH_SHORT).show();
                                 }
-                                button.setText("Delete Selected Items (0B)");
+                                button.setText(R.string.delete_items_blank);
                                 button.setTextColor(Color.parseColor("#A9A9A9"));
                             }
                         })
@@ -300,7 +296,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             button.setText("Delete Selected Items (" + size + ")");
             button.setTextColor(Color.parseColor("#C103A9F4"));
         } else {
-            button.setText("Delete Selected Items (0B)");
+            button.setText(R.string.delete_items_blank);
             button.setTextColor(Color.parseColor("#A9A9A9"));
         }
     }
@@ -339,8 +335,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             File directory = new File(path);
                File[] results = directory.listFiles();
                 if (results != null) {
-                    for (final File file : results) {
-                        //Still verify if the file is an image in whatsapp preferred format(jpg)
+                    //Still verify if the file is an image in whatsapp preferred format(jpg)
+                    for (final File file : results)
                         switch (category) {
                             case DataHolder.IMAGE:
                                 if (file.isFile()) {
@@ -427,28 +423,24 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 }
                                 break;
                             case DataHolder.VOICE:
-                                if (results != null) {
-                                        if (file.isDirectory()) {
-                                            File[] res = file.listFiles();
-                                            Log.e("Files", String.valueOf(res.length));
+                                if (file.isDirectory()) {
+                                    File[] res = file.listFiles();
 
-                                            for (int j = 0; j < res.length; j++) {
-                                                if (!res[j].getName().endsWith(".nomedia")) {
-                                                    FileDetails fileDetails = new FileDetails();
-                                                    fileDetails.setName(res[j].getName());
-                                                    fileDetails.setPath(res[j].getPath());
-                                                    fileDetails.setImage(R.drawable.voice);
-                                                    fileDetails.setColor(R.color.orange);
-                                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                            getFileSize(res[j])));
-                                                    files.add(fileDetails);
-                                                }
-                                            }
+                                    for (int j = 0; j < res.length; j++) {
+                                        if (!res[j].getName().endsWith(".nomedia")) {
+                                            FileDetails fileDetails = new FileDetails();
+                                            fileDetails.setName(res[j].getName());
+                                            fileDetails.setPath(res[j].getPath());
+                                            fileDetails.setImage(R.drawable.voice);
+                                            fileDetails.setColor(R.color.orange);
+                                            fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                    getFileSize(res[j])));
+                                            files.add(fileDetails);
                                         }
-
+                                    }
                                 }
+
                         }
-                    }
                 } else {
                     Log.e("Files", "No files found in " + directory.getName());
                 }

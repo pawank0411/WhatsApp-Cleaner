@@ -93,7 +93,6 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
         TextView title, data;
         CircleImageView image;
         CardView cardView;
-        ProgressBar progressBar;
 
         public DetailsViewHolder(View itemView) {
             super(itemView);

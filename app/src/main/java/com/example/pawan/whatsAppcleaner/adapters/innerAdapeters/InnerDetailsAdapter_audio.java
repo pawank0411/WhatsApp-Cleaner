@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetailsAdapter_audio.InnerDataViewHolder> {
 
     private Context ctx;
-    ArrayList<FileDetails> innerDataList;
+    private ArrayList<FileDetails> innerDataList;
 
     private  OnCheckboxListener onCheckboxlistener;
 
@@ -36,6 +35,7 @@ public class InnerDetailsAdapter_audio extends RecyclerView.Adapter<InnerDetails
         this.onCheckboxlistener = onCheckboxlistener;
     }
 
+    @NonNull
     @Override
     public InnerDataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(ctx);

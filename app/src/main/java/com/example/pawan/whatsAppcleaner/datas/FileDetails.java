@@ -16,15 +16,6 @@ public class FileDetails {
 
     }
 
-    public FileDetails(String name, String path, String size, boolean isSelected, int image, int color) {
-        this.name = name;
-        this.path = path;
-        this.size = size;
-        this.selected = isSelected;
-        this.image = image;
-        this.color = color;
-    }
-
     public String getName() {
         return name;
     }

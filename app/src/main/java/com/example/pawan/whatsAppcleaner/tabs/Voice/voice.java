@@ -2,7 +2,6 @@ package com.example.pawan.whatsAppcleaner.tabs.Voice;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -26,9 +25,7 @@ import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 import com.example.pawan.whatsAppcleaner.R;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -41,21 +38,13 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
 
     RecyclerView recyclerView;
     Button button;
-    private ImageView no_files;
     private InnerDetailsAdapter_audio innerDetailsAdapterAudio;
     private ArrayList<FileDetails> innerdatalist = new ArrayList<>();
 
     private AdView mAdView;
-
-    private static final String AD_ID = "ca-app-pub-7255339257613393~8837303265";
-    private double len;
-    private String byteMake;
     private static final long GiB = 1024 * 1024 * 1024;
     private static final long MiB = 1024 * 1024;
     private static final long KiB = 1024;
-    private String path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WallPaper";
-
-    private ProgressDialog progressDialog;
     private ArrayList<FileDetails> filesToDelete = new ArrayList<>();
     private TextView no_ads;
 
@@ -66,8 +55,9 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
 
         recyclerView = findViewById(R.id.recycler_view);
         button = findViewById(R.id.delete);
-        no_files = findViewById(R.id.nofiles);
+        ImageView no_files = findViewById(R.id.nofiles);
         no_ads = findViewById(R.id.ads_not_loaded);
+        mAdView = findViewById(R.id.adView);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +101,7 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
                                 } else if (success == 1) {
                                     Toast.makeText(voice.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                                 }
-                                button.setText("Delete Selected Items (0B)");
+                                button.setText(R.string.delete_items_blank);
                                 button.setTextColor(Color.parseColor("#A9A9A9"));
                             }
                         })
@@ -127,16 +117,10 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Network",0);
         boolean status = sharedPreferences.getBoolean("Status",false);
 
-        if (status == true){
+        if (status){
             no_ads.setVisibility(View.INVISIBLE);
 
-            MobileAds.initialize(getApplicationContext(),
-                    AD_ID);
-            mAdView = new AdView(getApplicationContext());
-            mAdView.setAdSize(AdSize.BANNER);
-            mAdView.setAdUnitId("ca-app-pub-7255339257613393/2279288290");
 
-            mAdView = findViewById(R.id.adView);
             mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
 
             mAdView.setAdListener(new AdListener(){
@@ -145,7 +129,7 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
                     if (mAdView.isLoading()){
                         mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
                         no_ads.setVisibility(View.VISIBLE);
-                        no_ads.setText("Soory For Ads, but as a Student it will fulfill my daily Bread Butter needs.");
+                        no_ads.setText(R.string.no_ads);
                     }
 
                 }
@@ -163,14 +147,14 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
                 public void onAdFailedToLoad(int i) {
                     Log.e("Bannercode", String.valueOf(i));
                     no_ads.setVisibility(View.VISIBLE);
-                    no_ads.setText("Soory For Ads, but as a Student it will fulfill my daily Bread Butter needs.");
+                    no_ads.setText(R.string.no_ads);
                 }
             });
 
         }
         else {
             no_ads.setVisibility(View.VISIBLE);
-            no_ads.setText("Soory For Ads, but as a Student it will fulfill my daily Bread Butter needs.");
+            no_ads.setText(R.string.no_ads);
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -190,15 +174,15 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
                         File[] res = file.listFiles();
                         Log.e("Files", String.valueOf(res.length));
 
-                        for (int j = 0; j < res.length; j++) {
+                        for (File re : res) {
 
                             FileDetails fileDetails = new FileDetails();
-                              fileDetails.setName(res[j].getName());
-                              fileDetails.setPath(res[j].getPath());
-                              fileDetails.setImage(R.drawable.voice);
-                              fileDetails.setColor(R.color.orange);
-                              fileDetails.setSize("" + getFileSize(res[j]));
-                              innerdatalist.add(fileDetails);
+                            fileDetails.setName(re.getName());
+                            fileDetails.setPath(re.getPath());
+                            fileDetails.setImage(R.drawable.voice);
+                            fileDetails.setColor(R.color.orange);
+                            fileDetails.setSize("" + getFileSize(re));
+                            innerdatalist.add(fileDetails);
                         }
                     }
                 }
@@ -238,71 +222,10 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
             button.setText("Delete Selected Items (" + size + ")");
             button.setTextColor(Color.parseColor("#C103A9F4"));
         } else {
-            button.setText("Delete Selected Items (0B)");
+            button.setText(R.string.delete_items_blank);
             button.setTextColor(Color.parseColor("#A9A9A9"));
         }
     }
-
-//    private static class FetchFiles extends AsyncTask<String, Void, Object> {
-//
-//        private voice.FetchFiles.OnFilesFetched onFilesFetched;
-//        private WeakReference<voice> wallpaperWeakReference;
-//
-//        FetchFiles(voice wallpaper, voice.FetchFiles.OnFilesFetched onFilesFetched) {
-//            wallpaperWeakReference = new WeakReference<>(wallpaper);
-//            this.onFilesFetched = onFilesFetched;
-//        }
-//
-//
-//        @Override
-//        protected void onPreExecute() {
-//            // display a progress dialog for good user experiance
-//            wallpaperWeakReference.get().progressDialog = new ProgressDialog(wallpaperWeakReference.get().getApplicationContext());
-//            wallpaperWeakReference.get().progressDialog.setMessage("Please Wait");
-//            wallpaperWeakReference.get().progressDialog.setCancelable(false);
-//            if (!wallpaperWeakReference.get().progressDialog.isShowing()) {
-//                wallpaperWeakReference.get().progressDialog.show();
-//            }
-//        }
-//
-//        @Override
-//        protected Object doInBackground(String... strings) {
-//            String path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WallPaper";
-//
-//
-//            File directory = new File(path);
-//
-//            ArrayList<FileDetails> fileList1 = new ArrayList<>();
-//
-//            File[] results = directory.listFiles();
-//            if (results != null) {
-//                for (int i = 0; i < results.length; i++) {
-//                    if (results[i].isDirectory()) {
-//                    } else {
-//                        FileDetails fileDetails = new FileDetails();
-//                        fileDetails.setName(results[i].getName());
-//                        fileDetails.setPath(results[i].getPath());
-//                        fileList1.add(fileDetails);
-//                    }
-//                }
-//                Log.e("Files", "files found: " + fileList1.toString());
-//            } else {
-//                Log.e("Files", "No files found in " + directory.getName());
-//            }
-//            return fileList1;
-//        }
-//        @Override
-//        protected void onPostExecute(Object o) {
-//            List<FileDetails> files = (List<FileDetails>) o;
-//            if (onFilesFetched != null) {
-//                onFilesFetched.onFilesFetched(files);
-//            }
-//        }
-//
-//        public interface OnFilesFetched {
-//            void onFilesFetched(List<FileDetails> fileDetails);
-//        }
-//    }
     private String getFileSize(File file) {
         NumberFormat format = new DecimalFormat("#.##");
         format.setMaximumFractionDigits(2);
@@ -311,21 +234,14 @@ public class voice extends AppCompatActivity implements  InnerDetailsAdapter_aud
 
         if (file.isFile()) {
             if (length > GiB) {
-                len = length / GiB;
-                byteMake = "GB";
                 return format.format(length / GiB) + " GB";
             } else if (length > MiB) {
-                len = length / MiB;
-                byteMake = "MB";
                 return format.format(length / MiB) + " MB";
             } else if (length > KiB) {
-                len = length / KiB;
-                byteMake = "KB";
                 return format.format(length / KiB) + " KB";
             }else
                 return format.format(length) + " B";
         } else {
-            len = 0;
         }
         return "";
     }

@@ -24,7 +24,8 @@
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />
+            card_view:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/logo" />
 
         <View
         android:layout_width="14dp"
@@ -32,7 +33,7 @@
         android:layout_gravity="center"
         android:background="@color/white"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="15.2dp"
+        android:layout_marginEnd="15.2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -41,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:button="@drawable/check_box_1"
             android:layout_marginBottom="5dp"
             card_view:layout_constraintBottom_toBottomOf="parent"

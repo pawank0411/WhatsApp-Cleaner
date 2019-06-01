@@ -16,7 +16,7 @@
         android:background="@color/white"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
-        tools:listitem="@layout/image_content"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/image_content" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
             ads:adUnitId="ca-app-pub-7255339257613393/2279288290"
             ads:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></com.google.android.gms.ads.AdView>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <View
@@ -54,11 +54,11 @@
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="55dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="sans-serif-light"
-            android:text="Recents"
+            android:text="@string/recents"
             android:textAllCaps="false"
             android:textColor="@color/lblack"
             android:textSize="15sp"
@@ -88,7 +88,7 @@
             android:background="@drawable/button_shape"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="Delete selected items (0B))"
+            android:text="@string/delete_items_blank"
             android:textAllCaps="false"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -133,5 +133,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="@string/no_files" />
 </RelativeLayout>

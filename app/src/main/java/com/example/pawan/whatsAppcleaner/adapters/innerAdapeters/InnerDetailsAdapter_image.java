@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 import com.example.pawan.whatsAppcleaner.R;
@@ -27,10 +25,9 @@ import java.util.List;
 public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetailsAdapter_image.InnerDataViewHolder> {
 
     private Context ctx;
-    ArrayList<FileDetails> innerDataList;
+    private ArrayList<FileDetails> innerDataList;
     private OnCheckboxListener onCheckboxlistener;
 
-    private static final int PICKFILE_RESULT_CODE = 8778;
 
     public InnerDetailsAdapter_image(Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxlistener){
         this.ctx = ctx;
@@ -38,8 +35,9 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetails
         this.onCheckboxlistener = onCheckboxlistener;
     }
 
+    @NonNull
     @Override
-    public InnerDataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public InnerDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(ctx);
         View view = inflater.inflate(R.layout.image_content, parent, false);
 
@@ -101,7 +99,6 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetails
 
     public class InnerDataViewHolder extends RecyclerView.ViewHolder {
 
-        TextView image_name;
         ImageView imageView;
         CardView cardView;
         CheckBox checkBox;

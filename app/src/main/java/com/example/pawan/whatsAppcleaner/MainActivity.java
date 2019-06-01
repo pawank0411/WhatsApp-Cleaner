@@ -30,8 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +43,6 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import io.fabric.sdk.android.Fabric;
@@ -56,16 +53,12 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-// TODO: 1/13/19 We implement the interface here
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
     private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
     private ArrayList<Details> dataList1 = new ArrayList<>();
     private ArrayList<Details> dataList = new ArrayList<>();
-    private TextView total_data, files;
-    private ImageView logo;
-    private TextView no_ads;
-    private RecyclerView recyclerView, recyclerView1;
+    private TextView total_data;
     private DetailsAdapterCustom detailsAdaptercustom;
     private DetailsAdapter detailsAdapter1;
     private ProgressDialog progressDialog;
@@ -83,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private String data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, tot_dat;
     @SuppressWarnings("FieldCanBeLocal")
     private long sum, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice;
-    private RelativeLayout loading;
 
     @Override
 
@@ -93,16 +85,13 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         setContentView(R.layout.activity_main);
 
         total_data = findViewById(R.id.data);
-        files = findViewById(R.id.files);
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView1 = findViewById(R.id.recycle);
-        no_ads = findViewById(R.id.ads_not_loaded);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView1 = findViewById(R.id.recycle);
         mAdView = findViewById(R.id.adView_small);
         mAdView1 = findViewById(R.id.adView_large);
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
@@ -112,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putBoolean("Status", isNetworkAvailable());
-        editor.commit();
+        editor.apply();
 
 
         if (isNetworkAvailable()) {
@@ -178,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttoDoc();
                 } else if (intenttoimages) {
                     intenttoimages = false;
-
+                    Toast.makeText(MainActivity.this, "intenttoimage", Toast.LENGTH_SHORT).show();
                     try {
                         onIntenttoImages();
                     } catch (Exception e) {
