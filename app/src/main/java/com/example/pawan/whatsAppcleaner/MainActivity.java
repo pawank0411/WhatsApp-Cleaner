@@ -14,23 +14,22 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.Html;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,16 +41,12 @@ import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapter;
 import com.example.pawan.whatsAppcleaner.adapters.DetailsAdapterCustom;
 import com.example.pawan.whatsAppcleaner.datas.Details;
 import com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity;
-import com.example.pawan.whatsAppcleaner.tabs.Voice.voice;
-import com.example.pawan.whatsAppcleaner.tabs.Wallpaper.wallpaper;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.dynamic.IFragmentWrapper;
-import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -79,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
 
     private InterstitialAd mInterstitialAd;
-    private static final String AD_ID = "ca-app-pub-7255339257613393~8837303265";
 
+
+    private FirebaseAnalytics mFirebaseAnalytics;
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
     @SuppressWarnings("FieldCanBeLocal")
@@ -101,13 +97,16 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView1 = findViewById(R.id.recycle);
         no_ads = findViewById(R.id.ads_not_loaded);
-        // logo = findViewById(R.id.logo);
+        mAdView = findViewById(R.id.adView_small);
+        mAdView1 = findViewById(R.id.adView_large);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Network", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -116,35 +115,22 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         editor.commit();
 
 
-        MobileAds.initialize(this,
-                AD_ID);
         if (isNetworkAvailable()) {
-            no_ads.setVisibility(View.VISIBLE);
-            no_ads.setText("Sorry For Ads,  but as a Student it will fulfill my daily Bread Butter needs.");
+            if (height <= 1920 && height >= 1280) {
 
-
-            if (height <= 1920) {
-
-                mAdView = new AdView(this);
-
-                mAdView.setAdUnitId("ca-app-pub-7255339257613393/2279288290");
-                mAdView = findViewById(R.id.adView_small);
-               mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
-               // mAdView.loadAd(new AdRequest.Builder().addTestDevice("D7397574F6CC21785588738256355351").build());
+                mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
 
                 mAdView.setAdListener(new AdListener() {
                     @Override
                     public void onAdClosed() {
                         if (!mAdView.isLoading()) {
-                            mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
-             //               mAdView.loadAd(new AdRequest.Builder().addTestDevice("D7397574F6CC21785588738256355351").build());
+                            mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
                         }
                     }
 
                     @Override
                     public void onAdLoaded() {
                         Log.e("Banner", "Loaded");
-                        no_ads.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -152,27 +138,20 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                         Log.e("Bannercode", String.valueOf(i));
                     }
                 });
-            } else if (height > 1920){
-                mAdView1 = new AdView(this);
+            } else if (height > 1920) {
 
-                mAdView1.setAdUnitId("ca-app-pub-7255339257613393/1048368612");
-
-                mAdView1 = findViewById(R.id.adView_large);
                 mAdView1.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
-              //  mAdView1.loadAd(new AdRequest.Builder().addTestDevice("D7397574F6CC21785588738256355351").build());
                 mAdView1.setAdListener(new AdListener() {
                     @Override
                     public void onAdClosed() {
                         if (!mAdView1.isLoading()) {
                             mAdView1.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
-                            //mAdView1.loadAd(new AdRequest.Builder().addTestDevice("D7397574F6CC21785588738256355351").build());
                         }
                     }
 
                     @Override
                     public void onAdLoaded() {
                         Log.e("Banner", "Loaded");
-                        no_ads.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -181,79 +160,75 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     }
                 });
             }
-
-        } else {
-            no_ads.setVisibility(View.VISIBLE);
-            no_ads.setText("Sorry For Ads,  but as a Student it will fulfill my daily Bread Butter needs.");
         }
 
 
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
-        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
+        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
 
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (!mInterstitialAd.isLoaded() && !mInterstitialAd.isLoading()) {
-                    mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
-                }
 
                 if (intenttodocuments) {
                     intenttodocuments = false;
-                   try {
-                       onIntenttoDoc();
-                   }catch (Exception e){
-                       Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
-                   }
+                    onIntenttoDoc();
                 } else if (intenttoimages) {
                     intenttoimages = false;
+
                     try {
                         onIntenttoImages();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
                     }
                 } else if (intenttoaudios) {
                     intenttoaudios = false;
                     try {
                         onIntenttoAudio();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
                     }
                 } else if (intenttovideos) {
                     intenttovideos = false;
                     try {
                         onIntenttoVideos();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
                     }
                 } else if (intenttowall) {
                     intenttowall = false;
                     try {
                         onIntenttoWall();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
                     }
                 } else if (intenttogifs) {
                     intenttogifs = false;
                     try {
                         onIntenttoGif();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
                     }
                 } else if (intenttovoice) {
                     intenttovoice = false;
                     try {
                         onIntenttoVoice();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
                     }
                 }
+
+                if (!mInterstitialAd.isLoaded() && !mInterstitialAd.isLoading()) {
+                    mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+
             }
 
             @Override
             public void onAdFailedToLoad(int i) {
-                super.onAdFailedToLoad(i);
                 Log.e("error code", String.valueOf(i));
             }
 
@@ -399,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         private WeakReference<MainActivity> mainActivityWeakReference;
 
-        public FetchFiles(MainActivity mainActivity) {
+        FetchFiles(MainActivity mainActivity) {
             this.mainActivityWeakReference = new WeakReference<>(mainActivity);
         }
 
@@ -551,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onImagesClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd!=null) {
+        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
             mInterstitialAd.show();
             intenttoimages = true;
 
@@ -568,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onDocumentsClicked() {
-        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
+        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
             mInterstitialAd.show();
             intenttodocuments = true;
 
@@ -585,7 +560,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onVideosClicked() {
-        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
+        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
             mInterstitialAd.show();
             intenttovideos = true;
 
@@ -601,7 +576,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onAudiosClicked() {
-        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
+        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
             mInterstitialAd.show();
             intenttoaudios = true;
 
@@ -617,7 +592,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onGifsClicked() {
-        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
+        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
             mInterstitialAd.show();
             intenttogifs = true;
 
@@ -633,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onWallpapersClicked() {
-        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
+        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
             mInterstitialAd.show();
             intenttowall = true;
 
@@ -649,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onVoiceClicked() {
-        if (mInterstitialAd.isLoaded()  && mInterstitialAd!=null) {
+        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
             mInterstitialAd.show();
             intenttovoice = true;
 

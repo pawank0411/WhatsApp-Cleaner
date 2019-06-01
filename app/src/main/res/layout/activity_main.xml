@@ -7,7 +7,7 @@
     android:background="@color/gray"
     tools:targetApi="11">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/data_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,10 +47,10 @@
             app:layout_constraintStart_toEndOf="@+id/data"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
         android:layout_marginTop="5dp"
         tools:listitem="@layout/main_content2">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <ScrollView
         android:id="@+id/scroll"
@@ -66,13 +66,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/recycler_view">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
     </ScrollView>
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -97,7 +97,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/scroll"
         android:layout_alignParentBottom="true"
-
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"

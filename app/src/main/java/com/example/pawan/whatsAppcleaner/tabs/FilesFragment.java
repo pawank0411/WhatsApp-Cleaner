@@ -8,13 +8,13 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,9 +41,7 @@ import com.google.android.gms.ads.MobileAds;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnCheckboxListener {
@@ -150,12 +148,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             no_ads.setVisibility(View.VISIBLE);
             no_ads.setText("Sorry For Ads,  but as a Student it will fulfill my daily Bread Butter needs.");
 
-            MobileAds.initialize(getContext(),
-                    AD_ID);
-            mAdView = new AdView(getContext());
-            mAdView.setAdSize(AdSize.BANNER);
-            mAdView.setAdUnitId("ca-app-pub-7255339257613393/2279288290");
 
+            mAdView = new AdView(getContext());
             mAdView = rootView.findViewById(R.id.adView);
             mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
 
@@ -169,7 +163,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
                 @Override
                 public void onAdLoaded() {
-                    Log.e("Loaded","Loaded");
+                    Log.e("Banner","Loaded");
                     no_ads.setVisibility(View.INVISIBLE);
                 }
 
