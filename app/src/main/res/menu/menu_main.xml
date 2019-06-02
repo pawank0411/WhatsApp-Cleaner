@@ -1,0 +1,18 @@
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/privacy"  app:showAsAction="never" android:title="@string/privacy">
+    </item>
+
+    <item
+        android:id="@+id/feedback"  app:showAsAction="never" android:title="@string/feedback">
+    </item>
+
+    <item
+        android:id="@+id/about"  app:showAsAction="never" android:title="@string/about">
+    </item>
+
+</menu>

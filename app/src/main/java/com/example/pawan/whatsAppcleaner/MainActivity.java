@@ -1,6 +1,8 @@
 package com.example.pawan.whatsAppcleaner;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,8 +32,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.crashlytics.android.Crashlytics;
@@ -52,6 +55,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
@@ -70,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos;
 
 
-    private FirebaseAnalytics mFirebaseAnalytics;
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
     @SuppressWarnings("FieldCanBeLocal")
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mAdView1 = findViewById(R.id.adView_large);
 
         // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(recyclerView));
@@ -103,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Network", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -123,23 +125,22 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         if (!file.exists()) {
             if (!file.mkdir()) {
-              //  Toast.makeText(this, "Can't be created ", Toast.LENGTH_SHORT).show();
+                  Log.e("FIle", "Can't be created");
             } else {
-               // Toast.makeText(this, "Created", Toast.LENGTH_SHORT).show();
+                 Log.e("FIle", "created");
             }
         } else {
-            //Toast.makeText(this, "Already there", Toast.LENGTH_SHORT).show();
+            Log.e("FIle", "Alreaddy Exists");
         }
 
         if (!file1.exists()) {
-            if (!file1.mkdir()) {
-              //  Toast.makeText(this, "Can't be created ", Toast.LENGTH_SHORT).show();
+            if (!file.mkdir()) {
+                Log.e("FIle", "Can't be created");
             } else {
-
-                //Toast.makeText(this, "Created", Toast.LENGTH_SHORT).show();
+                Log.e("FIle", "created");
             }
         } else {
-            //Toast.makeText(this, "Already there", Toast.LENGTH_SHORT).show();
+            Log.e("FIle", "Alreaddy Exists");
         }
 
         if (isNetworkAvailable()) {
@@ -426,6 +427,37 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     }
 
+    @SuppressLint("WrongConstant")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.actionbar);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.privacy:
+                Uri uri = Uri.parse("https://whatsapp-cleaner.flycricket.io/privacy.html");
+                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                startActivity(intent);
+                return (true);
+            case R.id.about:
+                Uri uri1 = Uri.parse("http://pawankumar.me/");
+                Intent intent1 = new Intent(Intent.ACTION_VIEW,uri1);
+                startActivity(intent1);
+            return (true);
+            case R.id.feedback:
+                Uri uri2 = Uri.parse("https://forms.gle/gsxE4QaqvAM6D3xJ9");
+                Intent intent2 = new Intent(Intent.ACTION_VIEW,uri2);
+                startActivity(intent2);
+                return (true);
+        }
+        return (super.onOptionsItemSelected(item));
+    }
 
     private void askPermission() {
         if (!hasPermission()) {

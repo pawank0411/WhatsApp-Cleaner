@@ -28,6 +28,7 @@
         <activity android:name="com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"/>
         <activity android:name=".tabs.Voice.voice" />
