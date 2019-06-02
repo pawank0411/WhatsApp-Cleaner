@@ -34,13 +34,15 @@ import com.example.pawan.whatsAppcleaner.datas.FileDetails;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,6 +61,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
     private final int VOICE = 6;
     private ProgressDialog progressDialog;
     private AdView mAdView;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public static FilesFragment newInstance(String category, String path) {
         FilesFragment filesFragment = new FilesFragment();
@@ -175,6 +179,16 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         }
 
         Log.e("TEST", "" + path);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(recyclerView));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, String.valueOf(recyclerView));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(button));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, String.valueOf(button));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "name");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         new FetchFiles(this, category, new FetchFiles.OnFilesFetched() {
             @Override
@@ -334,6 +348,14 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             if (path != null) {
             File directory = new File(path);
                File[] results = directory.listFiles();
+
+               //*Sorting Date Wise*//
+                Arrays.sort(results, new Comparator<File>(){
+                    public int compare(File f1, File f2)
+                    {
+                        return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+                    } });
+
                 if (results != null) {
                     //Still verify if the file is an image in whatsapp preferred format(jpg)
                     for (final File file : results)
@@ -424,18 +446,19 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 break;
                             case DataHolder.VOICE:
                                 if (file.isDirectory()) {
-                                    File[] res = file.listFiles();
-
-                                    for (int j = 0; j < res.length; j++) {
-                                        if (!res[j].getName().endsWith(".nomedia")) {
-                                            FileDetails fileDetails = new FileDetails();
-                                            fileDetails.setName(res[j].getName());
-                                            fileDetails.setPath(res[j].getPath());
-                                            fileDetails.setImage(R.drawable.voice);
-                                            fileDetails.setColor(R.color.orange);
-                                            fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                    getFileSize(res[j])));
-                                            files.add(fileDetails);
+                                    if (!file.getName().equals("Sent")) {
+                                        File[] res = file.listFiles();
+                                        for (int j = 0; j < res.length; j++) {
+                                            if (!res[j].getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(res[j].getName());
+                                                fileDetails.setPath(res[j].getPath());
+                                                fileDetails.setImage(R.drawable.voice);
+                                                fileDetails.setColor(R.color.orange);
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                        getFileSize(res[j])));
+                                                files.add(fileDetails);
+                                            }
                                         }
                                     }
                                 }

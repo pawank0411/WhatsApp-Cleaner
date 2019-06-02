@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
 
-    private InterstitialAd mInterstitialAd;
+    private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
+            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos;
 
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -92,6 +93,13 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(recyclerView));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, String.valueOf(recyclerView));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "name");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
@@ -103,6 +111,36 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         editor.putBoolean("Status", isNetworkAvailable());
         editor.apply();
 
+
+        /*Will Fix this in next Update*/
+        String sent_wall = "Sent";
+        String sent_voice = "Sent";
+        String wallpaper = Environment.getExternalStorageDirectory() + "/WhatsApp/Media/WallPaper/" + sent_wall;
+        String voice = Environment.getExternalStorageDirectory() + "/WhatsApp/Media/WhatsApp Voice Notes/" + sent_voice;
+
+        File file = new File(wallpaper);
+        File file1 = new File(voice);
+
+        if (!file.exists()) {
+            if (!file.mkdir()) {
+              //  Toast.makeText(this, "Can't be created ", Toast.LENGTH_SHORT).show();
+            } else {
+               // Toast.makeText(this, "Created", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            //Toast.makeText(this, "Already there", Toast.LENGTH_SHORT).show();
+        }
+
+        if (!file1.exists()) {
+            if (!file1.mkdir()) {
+              //  Toast.makeText(this, "Can't be created ", Toast.LENGTH_SHORT).show();
+            } else {
+
+                //Toast.makeText(this, "Created", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            //Toast.makeText(this, "Already there", Toast.LENGTH_SHORT).show();
+        }
 
         if (isNetworkAvailable()) {
             if (height <= 1920 && height >= 1280) {
@@ -152,79 +190,216 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         }
 
 
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
-        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+        mInterstitialAd_doc = new InterstitialAd(this);
+        mInterstitialAd_images = new InterstitialAd(this);
+        mInterstitialAd_videos = new InterstitialAd(this);
+        mInterstitialAd_audio = new InterstitialAd(this);
+        mInterstitialAd_voice = new InterstitialAd(this);
+        mInterstitialAd_wall = new InterstitialAd(this);
+        mInterstitialAd_gif = new InterstitialAd(this);
+
+        mInterstitialAd_doc.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_doc.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
                 .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
                 .addTestDevice("D7397574F6CC21785588738256355351").build());
 
-        mInterstitialAd.setAdListener(new AdListener() {
+        mInterstitialAd_doc.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-
                 if (intenttodocuments) {
                     intenttodocuments = false;
                     onIntenttoDoc();
-                } else if (intenttoimages) {
-                    intenttoimages = false;
-                    Toast.makeText(MainActivity.this, "intenttoimage", Toast.LENGTH_SHORT).show();
-                    try {
-                        onIntenttoImages();
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
-                    }
-                } else if (intenttoaudios) {
-                    intenttoaudios = false;
-                    try {
-                        onIntenttoAudio();
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
-                    }
-                } else if (intenttovideos) {
-                    intenttovideos = false;
-                    try {
-                        onIntenttoVideos();
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
-                    }
-                } else if (intenttowall) {
-                    intenttowall = false;
-                    try {
-                        onIntenttoWall();
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
-                    }
-                } else if (intenttogifs) {
-                    intenttogifs = false;
-                    try {
-                        onIntenttoGif();
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
-                    }
-                } else if (intenttovoice) {
-                    intenttovoice = false;
-                    try {
-                        onIntenttoVoice();
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, String.valueOf(e), Toast.LENGTH_LONG).show();
-                    }
                 }
+                if (!mInterstitialAd_doc.isLoaded() && !mInterstitialAd_doc.isLoading()) {
+                    mInterstitialAd_doc.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+            }
 
-                if (!mInterstitialAd.isLoaded() && !mInterstitialAd.isLoading()) {
-                    mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Interstitial_doc", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial_doc", "Loaded");
+            }
+
+        });
+
+        mInterstitialAd_images.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_images.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
+
+        mInterstitialAd_images.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+
+                if (intenttoimages) {
+                    intenttoimages = false;
+                    onIntenttoImages();
+                }
+                if (!mInterstitialAd_images.isLoaded() && !mInterstitialAd_images.isLoading()) {
+                    mInterstitialAd_images.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
                 }
 
             }
 
             @Override
             public void onAdFailedToLoad(int i) {
-                Log.e("error code", String.valueOf(i));
+                Log.e("Interstitial_images", String.valueOf(i));
             }
 
             @Override
             public void onAdLoaded() {
-                Log.e("Interstitial", "Loaded");
+                Log.e("Interstitial_images", "Loaded");
             }
+        });
+
+        mInterstitialAd_videos.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_videos.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
+
+        mInterstitialAd_videos.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                if (intenttovideos) {
+                    intenttovideos = false;
+                    onIntenttoVideos();
+                }
+                if (!mInterstitialAd_videos.isLoaded() && !mInterstitialAd_videos.isLoading()) {
+                    mInterstitialAd_videos.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Interstitial_videos", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial_videos", "Loaded");
+            }
+
+        });
+
+        mInterstitialAd_audio.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_audio.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
+
+        mInterstitialAd_audio.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                if (intenttoaudios) {
+                    intenttoaudios = false;
+                    onIntenttoAudio();
+                }
+                if (!mInterstitialAd_audio.isLoaded() && !mInterstitialAd_audio.isLoading()) {
+                    mInterstitialAd_audio.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Interstitial_audio", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial_audio", "Loaded");
+            }
+
+        });
+
+        mInterstitialAd_voice.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_voice.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
+
+        mInterstitialAd_voice.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                if (intenttovoice) {
+                    intenttovoice = false;
+                    onIntenttoVoice();
+                }
+                if (!mInterstitialAd_voice.isLoaded() && !mInterstitialAd_voice.isLoading()) {
+                    mInterstitialAd_doc.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Interstitial_voice", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial_voice", "Loaded");
+            }
+
+        });
+
+        mInterstitialAd_wall.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_wall.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
+
+        mInterstitialAd_wall.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                if (intenttowall) {
+                    intenttowall = false;
+                    onIntenttoWall();
+                }
+                if (!mInterstitialAd_wall.isLoaded() && !mInterstitialAd_wall.isLoading()) {
+                    mInterstitialAd_wall.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Interstitial_wall", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial_wall", "Loaded");
+            }
+
+        });
+
+        mInterstitialAd_gif.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_gif.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
+
+        mInterstitialAd_gif.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                if (intenttogifs) {
+                    intenttogifs = false;
+                    onIntenttoGif();
+                }
+                if (!mInterstitialAd_gif.isLoaded() && !mInterstitialAd_gif.isLoading()) {
+                    mInterstitialAd_gif.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Interstitial_gif", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial_gif", "Loaded");
+            }
+
         });
 
         detailsAdapter1 = new DetailsAdapter(this, dataList1, this);
@@ -515,8 +690,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onImagesClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
-            mInterstitialAd.show();
+        if (mInterstitialAd_images.isLoaded() && mInterstitialAd_images != null) {
+            mInterstitialAd_images.show();
             intenttoimages = true;
 
         } else {
@@ -532,8 +707,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onDocumentsClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
-            mInterstitialAd.show();
+        if (mInterstitialAd_doc.isLoaded() && mInterstitialAd_doc != null) {
+            mInterstitialAd_doc.show();
             intenttodocuments = true;
 
         } else {
@@ -549,8 +724,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onVideosClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
-            mInterstitialAd.show();
+        if (mInterstitialAd_videos.isLoaded() && mInterstitialAd_videos != null) {
+            mInterstitialAd_videos.show();
             intenttovideos = true;
 
         } else {
@@ -565,8 +740,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onAudiosClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
-            mInterstitialAd.show();
+        if (mInterstitialAd_audio.isLoaded() && mInterstitialAd_audio != null) {
+            mInterstitialAd_audio.show();
             intenttoaudios = true;
 
         } else {
@@ -581,8 +756,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onGifsClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
-            mInterstitialAd.show();
+        if (mInterstitialAd_gif.isLoaded() && mInterstitialAd_gif != null) {
+            mInterstitialAd_gif.show();
             intenttogifs = true;
 
         } else {
@@ -597,8 +772,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onWallpapersClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
-            mInterstitialAd.show();
+        if (mInterstitialAd_wall.isLoaded() && mInterstitialAd_wall != null) {
+            mInterstitialAd_wall.show();
             intenttowall = true;
 
         } else {
@@ -613,8 +788,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     @Override
     public void onVoiceClicked() {
-        if (mInterstitialAd.isLoaded() && mInterstitialAd != null) {
-            mInterstitialAd.show();
+        if (mInterstitialAd_voice.isLoaded() && mInterstitialAd_voice != null) {
+            mInterstitialAd_voice.show();
             intenttovoice = true;
 
         } else {
