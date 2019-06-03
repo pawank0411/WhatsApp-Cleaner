@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pawan.whatsAppcleaner">
+    package="com.pawan.android.whatsAppCleaner">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -10,12 +10,12 @@
 
     <application
         android:name=".Application"
-        android:icon="@drawable/splash"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/splash"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
-        <activity android:name="com.example.pawan.whatsAppcleaner.SplashScreen"
+        <activity android:name=".SplashScreen"
                     android:theme="@style/SplashTheme"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait">
@@ -25,7 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.pawan.whatsAppcleaner.tabs.TabLayoutActivity"
+        <activity android:name=".tabs.TabLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme"

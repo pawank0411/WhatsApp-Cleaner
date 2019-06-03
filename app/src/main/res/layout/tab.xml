@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         app:tabBackground="@color/white"
         app:tabRippleColor="@null"
+        app:tabIndicatorHeight="0dp"
         app:tabGravity="fill"
         app:tabMode="fixed"
         app:tabSelectedTextColor="#C103A9F4"

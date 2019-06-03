@@ -18,7 +18,7 @@ repositories {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.pawan.whatsAppcleaner"
+        applicationId "com.pawan.android.whatsAppCleaner"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1

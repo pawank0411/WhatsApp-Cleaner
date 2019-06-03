@@ -2,17 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context="com.pawan.android.whatsAppCleaner.MainActivity">
+
+    <group android:id="@+id/group1">
     <item
         android:id="@+id/privacy"  app:showAsAction="never" android:title="@string/privacy">
     </item>
+    </group>
 
+    <group android:id="@+id/gruop2">
     <item
         android:id="@+id/feedback"  app:showAsAction="never" android:title="@string/feedback">
     </item>
+    </group>
 
+    <group android:id="@+id/group3">
     <item
         android:id="@+id/about"  app:showAsAction="never" android:title="@string/about">
     </item>
-
+    </group>
 </menu>

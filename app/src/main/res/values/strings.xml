@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WhatsApp Cleaner</string>
+    <string name="app_name">WACleaner</string>
     <string name="title_activity_tab1">Tab1Activity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
