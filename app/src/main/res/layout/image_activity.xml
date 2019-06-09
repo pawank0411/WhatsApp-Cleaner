@@ -57,6 +57,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="55dp"
             android:layout_marginBottom="5dp"
+            android:checked="true"
             android:fontFamily="sans-serif-light"
             android:text="@string/recents"
             android:textAllCaps="false"
@@ -132,7 +133,7 @@
         android:id="@+id/nofiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/no_files"
         android:gravity="center"
-        android:visibility="gone"
-        android:contentDescription="@string/no_files" />
+        android:visibility="gone" />
 </RelativeLayout>

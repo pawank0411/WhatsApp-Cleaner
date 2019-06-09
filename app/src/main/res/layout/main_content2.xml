@@ -15,12 +15,12 @@
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="0dp"
         android:foreground="?android:selectableItemBackground"
-        app:cardElevation="3dp">
+        app:cardCornerRadius="0dp"
+        app:cardElevation="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -34,14 +34,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
-                android:singleLine="true"
                 android:layout_marginTop="5dp"
                 android:background="@color/white"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/image"
                 tools:text="Title" />
 
             <TextView
@@ -52,8 +52,8 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                android:textSize="13sp"
                 android:textColor="@color/dgray"
+                android:textSize="13sp"
                 app:layout_constraintEnd_toStartOf="@+id/image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title"
@@ -66,9 +66,9 @@
                 app:civ_border_color="@color/green"
                 app:civ_border_width="8dp"
                 app:civ_circle_background_color="@color/green"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:src="@drawable/ic_image" />
 
 

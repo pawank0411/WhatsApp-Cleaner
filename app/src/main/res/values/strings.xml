@@ -18,4 +18,8 @@
     <string name="about">About Developer</string>
     <string name="feedback">FeedBack</string>
     <string name="whatsapp_cleaner">WhatsApp cleaner</string>
+    <string name="rate_us">RATE US</string>
+    <string name="remind">REMIND ME LATER</string>
+    <string name="thanks">NO THANKS</string>
+    <string name="desp">If you enjoy using WA Cleaner, please take a moment to rate it. Thanks for your support!</string>
 </resources>

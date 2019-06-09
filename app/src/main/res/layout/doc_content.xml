@@ -1,80 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/recycler_view"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:selectableItemBackground"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="3dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/white"
+        android:padding="16dp">
 
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginRight="55dp"
             android:background="@color/white"
-            android:padding="16dp">
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@+id/checkbox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
 
+        <TextView
+            android:id="@+id/data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="12dp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:text="578MB" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="55dp"
-                android:singleLine="true"
-                android:background="@color/white"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Title"
-                app:layout_constraintEnd_toStartOf="@+id/checkbox"
-                android:layout_marginLeft="55dp"
-                android:layout_marginRight="55dp" />
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:button="@drawable/check_box_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/data"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="12dp"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                tools:text="578MB" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            app:civ_border_width="8dp"
+            app:civ_circle_background_color="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_doc" />
 
-            <CheckBox
-                android:id="@+id/checkbox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="4dp"
-                android:button="@drawable/check_box_1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/extension"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toBottomOf="@+id/image"
+            app:layout_constraintEnd_toEndOf="@+id/image"
+            app:layout_constraintStart_toStartOf="@+id/image"
+            app:layout_constraintTop_toTopOf="@+id/image" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/image"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                app:civ_border_width="8dp"
-                app:civ_circle_background_color="@color/red"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:src="@drawable/ic_doc" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -83,4 +98,4 @@
         android:background="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-    </androidx.cardview.widget.CardView>
+</androidx.cardview.widget.CardView>

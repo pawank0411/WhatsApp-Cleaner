@@ -8,20 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:386091474133:android:547f5e2c21bdc9de",
+        "mobilesdk_app_id": "1:386091474133:android:d4acf39302b3eb27",
         "android_client_info": {
-          "package_name": "com.pawan.android.whatsAppCleaner"
+          "package_name": "com.pawan.whatsAppCleaner"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "386091474133-78i8nhu1hkod2khffg67qgsh2e6n3rt5.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pawan.android.whatsAppCleaner",
-            "certificate_hash": "2ecb499e4260a542f956655a23c5ed53de8e28c7"
-          }
-        },
         {
           "client_id": "386091474133-m7ojkulk4hdeolhnclm1td36lcf2hd0i.apps.googleusercontent.com",
           "client_type": 3

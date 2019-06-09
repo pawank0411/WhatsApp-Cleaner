@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabBackground="@color/white"
-        app:tabRippleColor="@null"
-        app:tabIndicatorHeight="0dp"
         app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"
+        app:tabRippleColor="@null"
         app:tabSelectedTextColor="#C103A9F4"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
         app:tabTextColor="@android:color/darker_gray">
@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/gray" />
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"

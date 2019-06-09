@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#087213</color>
     <color name="colorAccent">#147703</color>
     <color name="green">#12921F</color>
+    <color name="lgreen">#3FB34A</color>
     <color name="gray">#ece4e4</color>
     <color name="dgray">#9B9999</color>
     <color name="white1">#A3FFFFFF</color>
@@ -19,4 +20,5 @@
     <color name="lightblue">#FF009688</color>
     <color name="ds">#03A9F4</color>
     <color name="lightpink">#DD336F</color>
+    <color name="tblack">#AE161616</color>
 </resources>
