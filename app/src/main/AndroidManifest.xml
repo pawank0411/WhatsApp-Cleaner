@@ -27,11 +27,12 @@
         </activity>
         <activity android:name=".tabs.TabLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".tabs.TabLayoutActivity_test"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"/>
-        <activity android:name=".tabs.Voice.voice" />
         <activity android:name=".Noapp"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"/>
@@ -43,7 +44,7 @@
     </provider>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7255339257613393~8837303265"/>
+            android:value="ca-app-pub-7255339257613393~4556179800"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -22,4 +22,10 @@
     <string name="remind">REMIND ME LATER</string>
     <string name="thanks">NO THANKS</string>
     <string name="desp">If you enjoy using WA Cleaner, please take a moment to rate it. Thanks for your support!</string>
+    <string name="select_all">Select All</string>
+    <string name="date">Date</string>
+    <string name="name">Name</string>
+    <string name="size">Size</string>
+    <string name="logo_designer">Logo Designer</string>
+    <string name="download_selected_items_0b">Download Selected Items (0B)</string>
 </resources>

@@ -38,7 +38,7 @@ public class AppRater {
                     (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
 
                 new AlertDialog.Builder(mContext)
-                        .setMessage("If you enjoy using " + APP_TITLE + ", please take a moment to rate it. Thanks for your support!")
+                        .setMessage("If you enjoy using " + APP_TITLE + ", please take a moment to Rate it. Thanks for your support!")
                         .setCancelable(false)
                         .setPositiveButton("Rate Us", new DialogInterface.OnClickListener() {
                             @Override
@@ -56,7 +56,14 @@ public class AppRater {
 
                                 dialog.dismiss();
                             }
-                        }).create().show();
+                        })
+                        .setNeutralButton("Remind Me Later", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create().show();
             }
         }
 

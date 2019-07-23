@@ -57,22 +57,6 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
             public void onClick(View v) {
                 // Intent intent;
                 switch (pos) {
-//                    case 0:
-//                        /*//differnt activites for differnt cards
-//                        // TODO: 1/13/19 First we need to rector this into the mainActivity.java  class
-//                     */
-//                        if (listener != null)
-//                            listener.onImagesClicked();
-//                        break;
-//                    case 1:
-//                        if (listener != null)
-//                            listener.onDocumentsClicked();
-//                        break;
-//
-//                    case 2:
-//                        if (listener !=null)
-//                            listener.onVideosClicked();
-//                        break;
 
 
                     case 0:
@@ -92,6 +76,10 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
                         if (listener != null)
                             listener.onGifsClicked();
                            break;
+                    case 4:
+                        if (listener != null)
+                            listener.onStatusClicked();
+                            break;
                 }
 
             }
@@ -123,14 +111,12 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
 
     // TODO: 1/13/19 So we create an interface that calls main Activity when the user clicks on any item
     public interface OnItemClickListener {
-//        void onImagesClicked();
-//        void onDocumentsClicked();
-//        void onVideosClicked();
+
         void onAudiosClicked();
         void onGifsClicked();
         void onWallpapersClicked();
         void onVoiceClicked();
-
+        void onStatusClicked();
 
 
         //We will add more to this as the need arises for now w have to modify the constructor to provide an instance of this interface

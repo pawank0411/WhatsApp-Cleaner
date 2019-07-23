@@ -1,10 +1,11 @@
 package com.pawan.whatsAppCleaner.tabs;
 
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.pawan.whatsAppCleaner.DataHolder;
 import com.pawan.whatsAppCleaner.R;
 
@@ -19,7 +20,6 @@ public class TabLayoutActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.viewpager);
         String category = getIntent().getStringExtra("category");
         TabsAdapter tabsAdapter;
-
 
         switch (category) {
             default:
@@ -44,8 +44,13 @@ public class TabLayoutActivity extends AppCompatActivity {
             case DataHolder.VOICE:
                 tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.VOICE, DataHolder.voiceReceivedPath, DataHolder.voicegifSentPath);
                 break;
+            case DataHolder.STATUS:
+                tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.STATUS, DataHolder.statuscache, DataHolder.statusdownload);
+                break;
         }
+
         viewPager.setAdapter(tabsAdapter);
+
         tabLayout.setupWithViewPager(viewPager);
     }
 }

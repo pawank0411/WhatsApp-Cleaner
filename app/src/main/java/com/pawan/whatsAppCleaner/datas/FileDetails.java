@@ -10,6 +10,27 @@ public class FileDetails {
     public int image;
     public String size;
 
+    public Long getS() {
+        return s;
+    }
+
+    public void setS(Long s) {
+        this.s = s;
+    }
+
+    public Long s;
+
+    public Long getMod() {
+        return mod;
+    }
+
+    public void setMod(Long mod) {
+        this.mod = mod;
+    }
+
+    public Long mod;
+
+
 
 
     public String ext;

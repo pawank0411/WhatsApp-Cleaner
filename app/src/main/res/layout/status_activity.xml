@@ -12,11 +12,12 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="81dp"
+        android:layout_marginTop="83dp"
         android:layout_marginBottom="54dp"
-        android:background="@color/gray"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/doc_content" />
+        android:background="@color/white"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/image_content" />
 
     <ImageView
         android:id="@+id/nofiles"
@@ -114,7 +115,7 @@
             android:background="@drawable/button_shape"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="@string/delete_items_blank"
+            android:text="@string/download_selected_items_0b"
             android:textAllCaps="false"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"

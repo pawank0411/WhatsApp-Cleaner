@@ -14,22 +14,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
-import androidx.core.view.MenuCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -37,20 +24,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
-import com.pawan.whatsAppCleaner.tabs.AppRater;
-import com.pawan.whatsAppCleaner.tabs.TabLayoutActivity;
-import com.pawan.whatsAppCleaner.adapters.DetailsAdapter;
-import com.pawan.whatsAppCleaner.adapters.DetailsAdapterCustom;
-import com.pawan.whatsAppCleaner.datas.Details;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
-
-import io.fabric.sdk.android.Fabric;
+import com.pawan.whatsAppCleaner.adapters.DetailsAdapter;
+import com.pawan.whatsAppCleaner.adapters.DetailsAdapterCustom;
+import com.pawan.whatsAppCleaner.datas.Details;
+import com.pawan.whatsAppCleaner.tabs.AppRater;
+import com.pawan.whatsAppCleaner.tabs.TabLayoutActivity;
+import com.pawan.whatsAppCleaner.tabs.TabLayoutActivity_test;
 
 import org.apache.commons.io.FileUtils;
 
@@ -58,6 +53,8 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
@@ -69,10 +66,10 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private DetailsAdapter detailsAdapter1;
     private ProgressDialog progressDialog;
     private AdView mAdView, mAdView1;
-    private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice;
+    private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice, intenttostatus;
 
     private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
-            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos;
+            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status;
     private String sent = "Sent";
 
 
@@ -80,9 +77,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
     @SuppressWarnings("FieldCanBeLocal")
-    private String data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, tot_dat;
+    private String data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, data_status, tot_dat;
     @SuppressWarnings("FieldCanBeLocal")
-    private long sum, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice;
+    private long sum, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
 
     @Override
 
@@ -173,8 +170,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_voice = new InterstitialAd(this);
         mInterstitialAd_wall = new InterstitialAd(this);
         mInterstitialAd_gif = new InterstitialAd(this);
+        mInterstitialAd_status = new InterstitialAd(this);
 
-        mInterstitialAd_doc.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_doc.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
         mInterstitialAd_doc.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
                 .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
                 .addTestDevice("D7397574F6CC21785588738256355351").build());
@@ -233,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             }
         });
 
-        mInterstitialAd_videos.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_videos.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
         mInterstitialAd_videos.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
                 .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
                 .addTestDevice("D7397574F6CC21785588738256355351").build());
@@ -262,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_audio.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_audio.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
         mInterstitialAd_audio.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
                 .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
                 .addTestDevice("D7397574F6CC21785588738256355351").build());
@@ -291,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_voice.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_voice.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
         mInterstitialAd_voice.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
                 .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
                 .addTestDevice("D7397574F6CC21785588738256355351").build());
@@ -320,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_wall.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_wall.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
         mInterstitialAd_wall.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
                 .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
                 .addTestDevice("D7397574F6CC21785588738256355351").build());
@@ -349,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_gif.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_gif.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
         mInterstitialAd_gif.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
                 .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
                 .addTestDevice("D7397574F6CC21785588738256355351").build());
@@ -363,6 +361,35 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 }
                 if (!mInterstitialAd_gif.isLoaded() && !mInterstitialAd_gif.isLoading()) {
                     mInterstitialAd_gif.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Interstitial_gif", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial_gif", "Loaded");
+            }
+
+        });
+
+        mInterstitialAd_status.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
+        mInterstitialAd_status.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
+
+        mInterstitialAd_status.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                if (intenttostatus) {
+                    intenttostatus = false;
+                    onIntenttostatus();
+                }
+                if (!mInterstitialAd_status.isLoaded() && !mInterstitialAd_status.isLoading()) {
+                    mInterstitialAd_status.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
                 }
             }
 
@@ -404,7 +431,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             progressDialog.setMessage("Please Wait");
             progressDialog.setCancelable(false);
             progressDialog.show();
-
             fetchFiles();
 
         }
@@ -426,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.privacy:
-                Uri uri = Uri.parse("https://whatsapp-cleaner.flycricket.io/privacy.html");
+                Uri uri = Uri.parse("https://whats-app-cleaner.flycricket.io/privacy.html");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
                 return (true);
@@ -439,6 +465,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 Uri uri2 = Uri.parse("https://forms.gle/gsxE4QaqvAM6D3xJ9");
                 Intent intent2 = new Intent(Intent.ACTION_VIEW, uri2);
                 startActivity(intent2);
+                return (true);
+            case R.id.logo:
+                Uri uri3 = Uri.parse("https://www.behance.net/vizdash1998");
+                Intent intent3 = new Intent(Intent.ACTION_VIEW, uri3);
+                startActivity(intent3);
                 return (true);
         }
         return (super.onOptionsItemSelected(item));
@@ -846,10 +877,18 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 mainActivityWeakReference.get().size_voice = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
                 mainActivityWeakReference.get().data_voice = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_voice);
             }
+            /*Size for status*/
+            mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Statuses";
+            File s = new File(mainActivityWeakReference.get().path);
+
+            mainActivityWeakReference.get().size_status = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
+            mainActivityWeakReference.get().data_status = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_status);
+
+
 
             mainActivityWeakReference.get().sum = mainActivityWeakReference.get().size_img + mainActivityWeakReference.get().size_doc +
                     mainActivityWeakReference.get().size_vid + mainActivityWeakReference.get().size_voice + mainActivityWeakReference.get().size_gif +
-                    mainActivityWeakReference.get().size_wall + mainActivityWeakReference.get().size_aud;
+                    mainActivityWeakReference.get().size_wall + mainActivityWeakReference.get().size_aud + mainActivityWeakReference.get().size_status;
             mainActivityWeakReference.get().tot_dat = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().sum);
 
 
@@ -870,6 +909,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     mainActivityWeakReference.get().data_vid,
                     R.drawable.ic_video,
                     R.color.blue));
+            mainActivityWeakReference.get().dataList1.add(new Details(
+                    "Statuses",
+                    mainActivityWeakReference.get().data_status,
+                    R.drawable.ic_status,
+                    R.color.purple
+            ));
 
             mainActivityWeakReference.get().dataList.clear();
             mainActivityWeakReference.get().dataList.add(new Details(
@@ -947,6 +992,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         startActivity(intent);
     }
 
+    public void onIntenttostatus(){
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity_test.class);
+        intent.putExtra("category", DataHolder.STATUS);
+        startActivity(intent);
+    }
 
     @Override
     public void onImagesClicked() {
@@ -1056,6 +1106,22 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             Log.e("TAG", "Not loaded");
             if (hasPermission()) {
                 onIntenttoVoice();
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onStatusClicked() {
+        if (mInterstitialAd_status.isLoaded() && mInterstitialAd_status != null) {
+            mInterstitialAd_status.show();
+            intenttostatus = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttostatus();
             } else {
                 askPermission();
             }

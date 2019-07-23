@@ -9,9 +9,10 @@ public class DataHolder {
     public static final String AUDIO = "audio";
     public static final String GIF = "gif";
     public static final String WALLPAPER = "wallpaper";
-    public static final String VOICE = "voice";
+    public static final String VOICE = "status";
+    public static final String STATUS = "Status";
 
-    public static final String imagesReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images/Private";
+    public static final String imagesReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images";
     public static final String imagesSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images/Sent";
 
     public static final String documentsReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Documents";
@@ -32,4 +33,6 @@ public class DataHolder {
     public static final String voiceReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes";
     public static final String voicegifSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes/Sent";
 
+    public static final String statuscache = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Statuses";
+    public static final String statusdownload = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Status Download";
 }

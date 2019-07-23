@@ -84,7 +84,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (viewType == VOICE) {
             View view = LayoutInflater.from(ctx).inflate(R.layout.doc_content, parent, false);
             return new InnerDataViewHolderDoc(view);
-        } else {
+        } else{
             View view = LayoutInflater.from(ctx).inflate(R.layout.doc_content, parent, false);
             return new InnerDataViewHolderDoc(view);
         }
@@ -150,6 +150,18 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     if (onCheckboxListener != null) {
                         onCheckboxListener.oncheckboxlistener(v, innerDataList);
+                    }
+                }
+            });
+            innerDataViewHolderMultimedia.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                    innerDataList.get(innerDataViewHolderMultimedia.getAdapterPosition()).setSelected(isChecked);
+
+                    if (onCheckboxListener != null) {
+                        onCheckboxListener.oncheckboxlistener(buttonView, innerDataList);
                     }
                 }
             });
@@ -225,6 +237,18 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             });
+            innerDataViewHolderVideos.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                    innerDataList.get(innerDataViewHolderVideos.getAdapterPosition()).setSelected(isChecked);
+
+                    if (onCheckboxListener != null) {
+                        onCheckboxListener.oncheckboxlistener(buttonView, innerDataList);
+                    }
+                }
+            });
 
             if (details.isSelected()) {
                 innerDataViewHolderVideos.checkBox.setChecked(true);
@@ -256,6 +280,11 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             });
+            if (details.isSelected()) {
+                innerDataViewHolder.checkBox.setChecked(true);
+            } else {
+                innerDataViewHolder.checkBox.setChecked(false);
+            }
 
             innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -459,13 +488,13 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             data = itemView.findViewById(R.id.data);
             cardView = itemView.findViewById(R.id.recycler_view);
             checkBox = itemView.findViewById(R.id.checkbox);
+
             imageView = itemView.findViewById(R.id.image);
             ext = itemView.findViewById(R.id.extension);
         }
-
     }
-
     public interface OnCheckboxListener {
         void oncheckboxlistener(View view, List<FileDetails> updatedFiles);
     }
+
 }
