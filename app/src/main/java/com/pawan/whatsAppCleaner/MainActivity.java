@@ -909,12 +909,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     mainActivityWeakReference.get().data_vid,
                     R.drawable.ic_video,
                     R.color.blue));
-            mainActivityWeakReference.get().dataList1.add(new Details(
-                    "Statuses",
-                    mainActivityWeakReference.get().data_status,
-                    R.drawable.ic_status,
-                    R.color.purple
-            ));
 
             mainActivityWeakReference.get().dataList.clear();
             mainActivityWeakReference.get().dataList.add(new Details(
@@ -937,7 +931,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     mainActivityWeakReference.get().data_gif,
                     R.drawable.ic_image,
                     R.color.lightpink));
-
+            mainActivityWeakReference.get().dataList.add(new Details(
+                    "Statuses",
+                    mainActivityWeakReference.get().data_status,
+                    R.drawable.ic_status,
+                    R.color.purple
+            ));
             return mainActivityWeakReference.get().tot_dat;
         }
 

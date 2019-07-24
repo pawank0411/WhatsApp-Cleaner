@@ -212,21 +212,6 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             }
         }).execute(path);
 
-//        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//                    Collections.reverse(innerDataList);
-//                    Log.e("State", "Toggled");
-//                    innerDetailsAdapter.notifyDataSetChanged();
-//                } else {
-//                    Collections.reverse(innerDataList);
-//                    Log.e("State", "Disabled");
-//                    innerDetailsAdapter.notifyDataSetChanged();
-//                }
-//            }
-//        });
-
-
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

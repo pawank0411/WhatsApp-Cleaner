@@ -416,18 +416,14 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                         }
 
                     }
+                    innerDataList.clear();
                     innerDataList.addAll(files);
                     innerDetailsAdapter.notifyDataSetChanged();
-                    for (int  i= 0; i < innerDataList.size(); i++){
-                        for (int j = innerDataList.size(); i < 0; i--){
-                            if (innerDataList.get(i).getName().equals(innerDataList.get(j).getName())){
-                                innerDataList.remove(i);
-                                innerDetailsAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
                     progressDialog.dismiss();
                     no_files.setVisibility(View.INVISIBLE);
+
+                    button.setText(R.string.delete_items_blank);
+                    button.setTextColor(Color.parseColor("#A9A9A9"));
                 }
             }
         });
