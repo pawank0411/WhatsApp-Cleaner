@@ -3,21 +3,14 @@ package com.pawan.whatsAppCleaner;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 
-import java.util.Objects;
-
-import static java.security.AccessController.getContext;
 
 public class Noapp extends AppCompatActivity {
     private AdView mAdView;
@@ -29,7 +22,7 @@ public class Noapp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.no_app);
 
-        SharedPreferences sharedPreferences = Objects.requireNonNull(this).getSharedPreferences("Network",0);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("Network",0);
         boolean status = sharedPreferences.getBoolean("Status",false);
 
         progressDialog = new ProgressDialog(this);

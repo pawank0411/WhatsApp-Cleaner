@@ -1,6 +1,8 @@
 package com.pawan.whatsAppCleaner.tabs;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
@@ -59,6 +61,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
     private CheckBox selectall;
     private boolean flag_d = true, flag_n = true, flag_s = true;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public static FilesFragment newInstance(String category, String path) {
@@ -222,7 +225,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                     size.setTextColor(Color.parseColor("#FF161616"));
                 }
                 if (flag_d) {
-                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_d = false;
                     date.setTextColor(Color.parseColor("#C103A9F4"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -233,7 +236,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                     });
                     innerDetailsAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_d = true;
                     date.setTextColor(Color.parseColor("#FF161616"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -258,7 +261,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                     size.setTextColor(Color.parseColor("#FF161616"));
                 }
                 if (flag_n) {
-                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_n = false;
                     name.setTextColor(Color.parseColor("#C103A9F4"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -270,7 +273,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                     Log.e("State", "Toggled");
                     innerDetailsAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_n = true;
                     name.setTextColor(Color.parseColor("#FF161616"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -294,7 +297,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                     name.setTextColor(Color.parseColor("#FF161616"));
                 }
                 if (flag_s) {
-                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_s = false;
                     size.setTextColor(Color.parseColor("#C103A9F4"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -306,7 +309,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                     Log.e("State", "Toggled");
                     innerDetailsAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_s = true;
                     size.setTextColor(Color.parseColor("#FF161616"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -340,42 +343,56 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!filesToDelete.isEmpty() && filesToDelete != null) {
-                    int success = -1;
-                    ArrayList<FileDetails> deletedFiles = new ArrayList<>();
+                if (!filesToDelete.isEmpty()) {
+                    new AlertDialog.Builder(getContext())
+                            .setMessage("Are you sure you want to delete selected files?")
+                            .setCancelable(true)
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    int success = -1;
+                                    ArrayList<FileDetails> deletedFiles = new ArrayList<>();
 
-                    for (FileDetails details : filesToDelete) {
-                        File file = new File(details.getPath());
-                        if (file.exists()) {
-                            if (file.delete()) {
-                                deletedFiles.add(details);
-                                if (success == 0) {
-                                    return;
+                                    for (FileDetails details : filesToDelete) {
+                                        File file = new File(details.getPath());
+                                        if (file.exists()) {
+                                            if (file.delete()) {
+                                                deletedFiles.add(details);
+                                                if (success == 0) {
+                                                    return;
+                                                }
+                                                success = 1;
+                                            } else {
+                                                Log.e("TEST", "" + file.getName() + " delete failed");
+                                                success = 0;
+                                            }
+                                        } else {
+                                            Log.e("TEST", "" + file.getName() + " doesn't exists");
+                                            success = 0;
+                                        }
+                                    }
+
+                                    filesToDelete.clear();
+
+                                    for (FileDetails deletedFile : deletedFiles) {
+                                        innerDataList.remove(deletedFile);
+                                    }
+                                    innerDetailsAdapter.notifyDataSetChanged();
+                                    if (success == 0) {
+                                        Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
+                                    } else if (success == 1) {
+                                        Toast.makeText(getContext(), "Deleted successfully", Toast.LENGTH_SHORT).show();
+                                    }
+                                    button.setText(R.string.delete_items_blank);
+                                    button.setTextColor(Color.parseColor("#A9A9A9"));
                                 }
-                                success = 1;
-                            } else {
-                                Log.e("TEST", "" + file.getName() + " delete failed");
-                                success = 0;
-                            }
-                        } else {
-                            Log.e("TEST", "" + file.getName() + " doesn't exists");
-                            success = 0;
-                        }
-                    }
-
-                    filesToDelete.clear();
-
-                    for (FileDetails deletedFile : deletedFiles) {
-                        innerDataList.remove(deletedFile);
-                    }
-                    innerDetailsAdapter.notifyDataSetChanged();
-                    if (success == 0) {
-                        Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
-                    } else if (success == 1) {
-                        Toast.makeText(getContext(), "Deleted successfully", Toast.LENGTH_SHORT).show();
-                    }
-                    button.setText(R.string.delete_items_blank);
-                    button.setTextColor(Color.parseColor("#A9A9A9"));
+                            })
+                            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).create().show();
                 }
             }
         });
@@ -483,6 +500,37 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                         fileDetails.setS(getFileSize(file));
                                         files.add(fileDetails);
                                     }
+                                } else  if (file.isDirectory()) {
+                                    if (!file.getName().equals("Sent")) {
+                                        File[] res = file.listFiles();
+                                        for (File re : res) {
+                                            if (!re.getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(re.getName());
+                                                fileDetails.setPath(re.getPath());
+                                                fileDetails.setMod(re.lastModified());
+                                                extension = FilenameUtils.getExtension((re.getPath()));
+
+                                                String mime = "*/*";
+                                                File a = new File(re.getPath());
+                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                                ".my.package.name.provider", a);
+                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                                if (mimeTypeMap.hasExtension(
+                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+
+                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                }
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                        getFileSize(re)));
+                                                fileDetails.setS(getFileSize(re));
+                                                Log.e("size", String.valueOf(getFileSize(re)));
+                                                files.add(fileDetails);
+                                            }
+                                        }
+                                    }
                                 }
                                 break;
                             case DataHolder.DOCUMENT:
@@ -555,6 +603,39 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                         fileDetails.setS(getFileSize(file));
                                         files.add(fileDetails);
                                     }
+                                }else  if (file.isDirectory()) {
+                                    if (!file.getName().equals("Sent")) {
+                                        File[] res = file.listFiles();
+                                        for (File re : res) {
+                                            if (!re.getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(re.getName());
+                                                fileDetails.setPath(re.getPath());
+                                                fileDetails.setMod(re.lastModified());
+                                                fileDetails.setImage(R.drawable.video_play);
+                                                fileDetails.setColor(R.color.transparent);
+                                                extension = FilenameUtils.getExtension((re.getPath()));
+
+                                                String mime = "*/*";
+                                                File a = new File(re.getPath());
+                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                                ".my.package.name.provider", a);
+                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                                if (mimeTypeMap.hasExtension(
+                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+
+                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                }
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                        getFileSize(re)));
+                                                fileDetails.setS(getFileSize(re));
+                                                Log.e("size", String.valueOf(getFileSize(re)));
+                                                files.add(fileDetails);
+                                            }
+                                        }
+                                    }
                                 }
                                 break;
                             case DataHolder.AUDIO:
@@ -626,6 +707,39 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                         fileDetails.setS(getFileSize(file));
                                         files.add(fileDetails);
                                     }
+                                }else  if (file.isDirectory()) {
+                                    if (!file.getName().equals("Sent")) {
+                                        File[] res = file.listFiles();
+                                        for (File re : res) {
+                                            if (!re.getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(re.getName());
+                                                fileDetails.setPath(re.getPath());
+                                                fileDetails.setMod(re.lastModified());
+                                                fileDetails.setImage(R.drawable.video_play);
+                                                fileDetails.setColor(R.color.transparent);
+                                                extension = FilenameUtils.getExtension((re.getPath()));
+
+                                                String mime = "*/*";
+                                                File a = new File(re.getPath());
+                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                                ".my.package.name.provider", a);
+                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                                if (mimeTypeMap.hasExtension(
+                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+
+                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                }
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                        getFileSize(re)));
+                                                fileDetails.setS(getFileSize(re));
+                                                Log.e("size", String.valueOf(getFileSize(re)));
+                                                files.add(fileDetails);
+                                            }
+                                        }
+                                    }
                                 }
                                 break;
                             case DataHolder.WALLPAPER:
@@ -639,6 +753,35 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                                 getFileSize(file)));
                                         fileDetails.setS(getFileSize(file));
                                         files.add(fileDetails);
+                                    }
+                                } else  if (file.isDirectory()) {
+                                    if (!file.getName().equals("Sent")) {
+                                        File[] res = file.listFiles();
+                                        for (File re : res) {
+                                            if (!re.getName().endsWith(".nomedia")) {
+                                                FileDetails fileDetails = new FileDetails();
+                                                fileDetails.setName(re.getName());
+                                                fileDetails.setPath(re.getPath());
+                                                fileDetails.setMod(re.lastModified());
+                                                String mime = "*/*";
+                                                File a = new File(re.getPath());
+                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                                ".my.package.name.provider", a);
+                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                                if (mimeTypeMap.hasExtension(
+                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+
+                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                }
+                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                        getFileSize(re)));
+                                                fileDetails.setS(getFileSize(re));
+                                                Log.e("size", String.valueOf(getFileSize(re)));
+                                                files.add(fileDetails);
+                                            }
+                                        }
                                     }
                                 }
                                 break;
@@ -736,10 +879,18 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                 } else {
                     Log.e("Files", "No files found in " + directory.getName());
                 }
+                Collections.sort(files, new Comparator<FileDetails>() {
+                    @Override
+                    public int compare(FileDetails o1, FileDetails o2) {
+                        filesFragmentWeakReference.get().flag_d = false;
+                        return -o1.getMod().compareTo(o2.getMod());
+                    }
+                });
             } else {
                 Log.e("Files", "Path is empty");
             }
-            //filesFragmentWeakReference.get().flag_d = false;
+
+
             return files;
         }
 

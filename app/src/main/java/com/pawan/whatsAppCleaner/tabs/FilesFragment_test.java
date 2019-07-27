@@ -1,12 +1,17 @@
 package com.pawan.whatsAppCleaner.tabs;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileUriExposedException;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -42,11 +48,9 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,15 +62,17 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
     private InnerDetailsAdapter innerDetailsAdapter;
     private ArrayList<FileDetails> innerDataList = new ArrayList<>();
     private ArrayList<FileDetails> filesToDelete = new ArrayList<>();
-
+    private String path_tab = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Status Download";
     private ProgressDialog progressDialog;
     private AdView mAdView;
+    @SuppressWarnings("FieldCanBeLocal")
     private CheckBox selectall;
     private boolean flag_d = true, flag_n = true, flag_s = true;
     private File source;
-    private String  statusdownload;
+    private String statusdownload;
     private int position;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public static FilesFragment_test newInstance(String category, String path) {
@@ -166,7 +172,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
-        Bundle bundle = new Bundle();
+        final Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(recyclerView));
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, String.valueOf(recyclerView));
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(button));
@@ -182,9 +188,9 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                     File check = new File(statusdownload);
                     File[] list = check.listFiles();
                     if (list != null) {
-                        for (int i = 0; i < list.length; i++) {
+                        for (File file : list) {
                             for (int j = 0; j < fileDetails.size(); j++) {
-                                String s = list[i].getName();
+                                String s = file.getName();
                                 String v = fileDetails.get(j).getName();
                                 if (s.equals(v)) {
                                     Log.e("dup", fileDetails.get(j).getName());
@@ -193,7 +199,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                             }
                         }
                     }
-                    if (fileDetails !=null && !fileDetails.isEmpty()) {
+                    if (!fileDetails.isEmpty()) {
                         innerDataList.addAll(fileDetails);
                         innerDetailsAdapter.notifyDataSetChanged();
                         progressDialog.dismiss();
@@ -224,7 +230,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                     size.setTextColor(Color.parseColor("#FF161616"));
                 }
                 if (flag_d) {
-                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_d = false;
                     date.setTextColor(Color.parseColor("#C103A9F4"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -235,7 +241,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                     });
                     innerDetailsAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_d = true;
                     date.setTextColor(Color.parseColor("#FF161616"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -260,7 +266,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                     size.setTextColor(Color.parseColor("#FF161616"));
                 }
                 if (flag_n) {
-                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_n = false;
                     name.setTextColor(Color.parseColor("#C103A9F4"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -272,7 +278,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                     Log.e("State", "Toggled");
                     innerDetailsAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_n = true;
                     name.setTextColor(Color.parseColor("#FF161616"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -296,7 +302,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                     name.setTextColor(Color.parseColor("#FF161616"));
                 }
                 if (flag_s) {
-                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_s = false;
                     size.setTextColor(Color.parseColor("#C103A9F4"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -308,7 +314,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                     Log.e("State", "Toggled");
                     innerDetailsAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_s = true;
                     size.setTextColor(Color.parseColor("#FF161616"));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
@@ -342,7 +348,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!filesToDelete.isEmpty() && filesToDelete != null) {
+                if (!filesToDelete.isEmpty()) {
                     int success = -1;
                     ArrayList<FileDetails> deletedFiles = new ArrayList<>();
                     for (FileDetails details : filesToDelete) {
@@ -384,46 +390,100 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
             @Override
             public void ontablistener(TabLayout.Tab tab) {
                 position = tab.getPosition();
-                if (position == 1){
-                    ArrayList<FileDetails> files = new ArrayList<>();
-                    statusdownload = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Status Download";
-                    File check = new File(statusdownload);
-                    File [] list = check.listFiles();
-                    for (File file : list){
-                        if (file.isFile()) {
-                            FileDetails fileDetails = new FileDetails();
-                            fileDetails.setName(file.getName());
-                            fileDetails.setPath(file.getPath());
-                            fileDetails.setMod(file.lastModified());
-                            String mime = "*/*";
-                            File a = new File(file.getPath());
-                            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getContext()),
-                                    Objects.requireNonNull(getContext()).getApplicationContext().getPackageName() +
-                                            ".my.package.name.provider", a);
-                            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                            if (mimeTypeMap.hasExtension(
-                                    MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+                if (position == 1) {
+                    new FetchFiles_tab(FilesFragment_test.this, new FetchFiles_tab.OnFilesFetched_tab() {
+                        @Override
+                        public void onFilesFetched_tab(List<FileDetails> fileDetails) {
 
-                                mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                            if (fileDetails != null && !fileDetails.isEmpty()) {
+                                innerDataList.clear();
+                                innerDataList.addAll(fileDetails);
+                                innerDetailsAdapter.notifyDataSetChanged();
+                                progressDialog.dismiss();
+                                no_files.setVisibility(View.INVISIBLE);
+                            } else {
+                                progressDialog.dismiss();
+                                Log.e("Nofiles", "NO Files Found");
+                                no_files.setVisibility(View.VISIBLE);
+                                no_files.setImageResource(R.drawable.file);
                             }
-
-                            fileDetails.setSize(Formatter.formatShortFileSize(
-                                            getContext(),
-                                    getFileSize(file)));
-                            fileDetails.setS(getFileSize(file));
-                            files.add(fileDetails);
                         }
-
-                    }
-                    innerDataList.clear();
-                    innerDataList.addAll(files);
-                    innerDetailsAdapter.notifyDataSetChanged();
-                    progressDialog.dismiss();
-                    no_files.setVisibility(View.INVISIBLE);
-
-                    button.setText(R.string.delete_items_blank);
+                    }).execute(path_tab);
+                    button.setText(R.string.share_delete);
                     button.setTextColor(Color.parseColor("#A9A9A9"));
+
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(getContext())
+                                    .setMessage("Are you want to share or delete?")
+                                    .setCancelable(true)
+                                    .setNegativeButton("DELETE", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            int success = -1;
+                                            ArrayList<FileDetails> deletedFiles = new ArrayList<>();
+
+                                            for (FileDetails details : filesToDelete) {
+                                                File file = new File(details.getPath());
+                                                if (file.exists()) {
+                                                    if (file.delete()) {
+                                                        deletedFiles.add(details);
+                                                        if (success == 0) {
+                                                            return;
+                                                        }
+                                                        success = 1;
+                                                    } else {
+                                                        Log.e("TEST", "" + file.getName() + " delete failed");
+                                                        success = 0;
+                                                    }
+                                                } else {
+                                                    Log.e("TEST", "" + file.getName() + " doesn't exists");
+                                                    success = 0;
+                                                }
+                                            }
+
+                                            filesToDelete.clear();
+
+                                            for (FileDetails deletedFile : deletedFiles) {
+                                                innerDataList.remove(deletedFile);
+                                            }
+                                            innerDetailsAdapter.notifyDataSetChanged();
+                                            if (success == 0) {
+                                                Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
+                                            } else if (success == 1) {
+                                                Toast.makeText(getContext(), "Deleted successfully", Toast.LENGTH_SHORT).show();
+                                            }
+                                            button.setText(R.string.share_delete);
+                                            button.setTextColor(Color.parseColor("#A9A9A9"));
+                                        }
+                                    })
+                                    .setPositiveButton("SHARE", new DialogInterface.OnClickListener() {
+                                        @RequiresApi(api = Build.VERSION_CODES.N)
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent sendIntent = new Intent();
+                                            try {
+                                                ArrayList<Uri> files = new ArrayList<>();
+                                                sendIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                                                sendIntent.setType("image/*");
+                                                for (FileDetails details : filesToDelete) {
+                                                    String soure = details.getPath();
+                                                    File file = new File(soure);
+                                                    Uri uri = FileProvider.getUriForFile(getContext(), Objects.requireNonNull(getContext()).getApplicationContext().getPackageName() +
+                                                            ".my.package.name.provider", file);
+                                                    files.add(uri);
+                                                }
+                                                sendIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                                                startActivity(sendIntent);
+                                            } catch (FileUriExposedException e) {
+                                                Log.e("err", String.valueOf(e));
+                                                Toast.makeText(getContext(), "An Error occured", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }).create().show();
+                        }
+                    });
                 }
             }
         });
@@ -448,22 +508,40 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 filesToDelete.add(details);
             }
         }
+        if (position == 1) {
+            if (filesToDelete.size() > 0) {
 
-        if (filesToDelete.size() > 0) {
+                long totalFileSize = 0;
 
-            long totalFileSize = 0;
+                for (FileDetails details : filesToDelete) {
+                    File file = new File(details.getPath());
+                    totalFileSize += file.length();
+                }
 
-            for (FileDetails details : filesToDelete) {
-                File file = new File(details.getPath());
-                totalFileSize += file.length();
+                String size = Formatter.formatShortFileSize(getActivity(), totalFileSize);
+                button.setText("Share or Delete Selected Items (" + size + ")");
+                button.setTextColor(Color.parseColor("#C103A9F4"));
+            } else {
+                button.setText(R.string.share_delete);
+                button.setTextColor(Color.parseColor("#A9A9A9"));
             }
-
-            String size = Formatter.formatShortFileSize(getActivity(), totalFileSize);
-            button.setText("Download Selected Items (" + size + ")");
-            button.setTextColor(Color.parseColor("#C103A9F4"));
         } else {
-            button.setText("Download Selected Items (0B)");
-            button.setTextColor(Color.parseColor("#A9A9A9"));
+            if (filesToDelete.size() > 0) {
+
+                long totalFileSize = 0;
+
+                for (FileDetails details : filesToDelete) {
+                    File file = new File(details.getPath());
+                    totalFileSize += file.length();
+                }
+
+                String size = Formatter.formatShortFileSize(getActivity(), totalFileSize);
+                button.setText("Download Selected Items (" + size + ")");
+                button.setTextColor(Color.parseColor("#C103A9F4"));
+            } else {
+                button.setText(R.string.download_selected_items_0b);
+                button.setTextColor(Color.parseColor("#A9A9A9"));
+            }
         }
     }
 
@@ -495,7 +573,6 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
         protected Object doInBackground(String... strings) {
 
             String path = strings[0];
-            String extension;
             ArrayList<FileDetails> files = new ArrayList<>();
 
             if (path != null) {
@@ -505,38 +582,43 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 if (results != null) {
                     //Still verify if the file is an image in whatsapp preferred format(jpg)
                     for (final File file : results) {
-                        switch (category) {
-                            case DataHolder.STATUS:
-                                if (file.isFile()) {
-                                    FileDetails fileDetails = new FileDetails();
-                                    fileDetails.setName(file.getName());
-                                    fileDetails.setPath(file.getPath());
-                                    fileDetails.setMod(file.lastModified());
-                                    String mime = "*/*";
-                                    File a = new File(file.getPath());
-                                    Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                            Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-                                                    ".my.package.name.provider", a);
-                                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                                    if (mimeTypeMap.hasExtension(
-                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+                        if (DataHolder.STATUS.equals(category)) {
+                            if (file.isFile()) {
+                                FileDetails fileDetails = new FileDetails();
+                                fileDetails.setName(file.getName());
+                                fileDetails.setPath(file.getPath());
+                                fileDetails.setMod(file.lastModified());
+                                String mime = "*/*";
+                                File a = new File(file.getPath());
+                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                ".my.package.name.provider", a);
+                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                if (mimeTypeMap.hasExtension(
+                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
 
-                                        mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-                                                MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
-                                    }
-
-                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().
-                                                    getContext(),
-                                            getFileSize(file)));
-                                    fileDetails.setS(getFileSize(file));
-                                    files.add(fileDetails);
+                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
                                 }
-                                break;
+
+                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().
+                                                getContext(),
+                                        getFileSize(file)));
+                                fileDetails.setS(getFileSize(file));
+                                files.add(fileDetails);
+                            }
                         }
                     }
                 } else {
                     Log.e("Files", "No files found in " + directory.getName());
                 }
+                Collections.sort(files, new Comparator<FileDetails>() {
+                    @Override
+                    public int compare(FileDetails o1, FileDetails o2) {
+                        filesFragmentWeakReference.get().flag_d = false;
+                        return -o1.getMod().compareTo(o2.getMod());
+                    }
+                });
             } else {
                 Log.e("Files", "Path is empty");
             }
@@ -554,6 +636,93 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
 
         public interface OnFilesFetched {
             void onFilesFetched(List<FileDetails> fileDetails);
+        }
+
+    }
+
+    private static class FetchFiles_tab extends AsyncTask<String, Void, Object> {
+
+        private OnFilesFetched_tab onFilesFetched;
+        private WeakReference<FilesFragment_test> filesFragmentWeakReference_tab;
+
+        FetchFiles_tab(FilesFragment_test filesFragment_test, OnFilesFetched_tab onFilesFetched) {
+            filesFragmentWeakReference_tab = new WeakReference<>(filesFragment_test);
+            this.onFilesFetched = onFilesFetched;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // display a progress dialog for good user experiance
+            filesFragmentWeakReference_tab.get().progressDialog = new ProgressDialog(filesFragmentWeakReference_tab.get().getContext());
+            filesFragmentWeakReference_tab.get().progressDialog.setMessage("Please Wait");
+            filesFragmentWeakReference_tab.get().progressDialog.setCancelable(false);
+            if (!filesFragmentWeakReference_tab.get().progressDialog.isShowing()) {
+                filesFragmentWeakReference_tab.get().progressDialog.show();
+            }
+        }
+
+
+        @Override
+        protected Object doInBackground(String... strings) {
+
+            String path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Status Download";
+            ArrayList<FileDetails> files = new ArrayList<>();
+
+            File directory = new File(path);
+            File[] results = directory.listFiles();
+
+            if (results != null) {
+                //Still verify if the file is an image in whatsapp preferred format(jpg)
+                for (File file : results) {
+                        if (file.isFile()) {
+                            FileDetails fileDetails = new FileDetails();
+                            fileDetails.setName(file.getName());
+                            fileDetails.setPath(file.getPath());
+                            fileDetails.setMod(file.lastModified());
+                            String mime = "*/*";
+                            File a = new File(file.getPath());
+                            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference_tab.get().getContext()),
+                                    Objects.requireNonNull(filesFragmentWeakReference_tab.get().getContext()).getApplicationContext().getPackageName() +
+                                            ".my.package.name.provider", a);
+                            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                            if (mimeTypeMap.hasExtension(
+                                    MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+
+                                mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                            }
+
+                            fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference_tab.get().
+                                            getContext(),
+                                    getFileSize(file)));
+                            fileDetails.setS(getFileSize(file));
+                            files.add(fileDetails);
+                        }
+                }
+            } else {
+                Log.e("Files", "No files found in " + directory.getName());
+            }
+            Collections.sort(files, new Comparator<FileDetails>() {
+                @Override
+                public int compare(FileDetails o1, FileDetails o2) {
+                    filesFragmentWeakReference_tab.get().flag_d = false;
+                    return -o1.getMod().compareTo(o2.getMod());
+                }
+            });
+            return files;
+        }
+
+
+        @Override
+        protected void onPostExecute(Object o) {
+            List<FileDetails> files = (List<FileDetails>) o;
+            if (onFilesFetched != null) {
+                onFilesFetched.onFilesFetched_tab(files);
+            }
+        }
+
+        public interface OnFilesFetched_tab {
+            void onFilesFetched_tab(List<FileDetails> fileDetails);
         }
 
     }

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "386091474133-423vcbdrmp423n071rrs9gl7afvj383d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pawan.whatsAppCleaner",
+            "certificate_hash": "2ecb499e4260a542f956655a23c5ed53de8e28c7"
+          }
+        },
+        {
           "client_id": "386091474133-m7ojkulk4hdeolhnclm1td36lcf2hd0i.apps.googleusercontent.com",
           "client_type": 3
         }

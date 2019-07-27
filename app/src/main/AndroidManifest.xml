@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.pawan.whatsAppCleaner">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -10,11 +11,13 @@
 
     <application
         android:name=".Application"
-        android:icon="@drawable/splash"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/splash"
         android:supportsRtl="true"
-        android:theme="@style/NoActionBar">
+        android:theme="@style/NoActionBar"
+        android:allowBackup="true"
+        tools:ignore="AllowBackup">
         <activity android:name=".SplashScreen"
                     android:theme="@style/SplashTheme"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -52,6 +55,10 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="ee29d83c27554d877c1bf08089bf48fd5ad12464" />
+        <service
+            android:name="com.pawan.whatsAppCleaner.CheckRecentRun" >
+        </service>
+
     </application>
 
 </manifest>

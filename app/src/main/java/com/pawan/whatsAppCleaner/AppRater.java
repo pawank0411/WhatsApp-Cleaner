@@ -1,4 +1,4 @@
-package com.pawan.whatsAppCleaner.tabs;
+package com.pawan.whatsAppCleaner;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -26,7 +26,7 @@ public class AppRater {
         editor.putLong("launch_count", launch_count);
 
         // Get date of first launch
-        Long date_firstLaunch = prefs.getLong("date_firstlaunch", 0);
+        long date_firstLaunch = prefs.getLong("date_firstlaunch", 0);
         if (date_firstLaunch == 0) {
             date_firstLaunch = System.currentTimeMillis();
             editor.putLong("date_firstlaunch", date_firstLaunch);
@@ -49,10 +49,8 @@ public class AppRater {
                         .setNegativeButton("No, Thanks", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (editor != null) {
-                                    editor.putBoolean("dontshowagain", true);
-                                    editor.commit();
-                                }
+                                editor.putBoolean("dontshowagain", true);
+                                editor.apply();
 
                                 dialog.dismiss();
                             }

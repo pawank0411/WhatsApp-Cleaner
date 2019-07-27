@@ -50,7 +50,7 @@ public class InnerDetailsAdapter_image extends RecyclerView.Adapter<InnerDetails
     @Override
     public InnerDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(ctx);
-        View view = inflater.inflate(R.layout.status, parent, false);
+        View view = inflater.inflate(R.layout.image_content, parent, false);
 
         return new InnerDataViewHolder(view);
     }

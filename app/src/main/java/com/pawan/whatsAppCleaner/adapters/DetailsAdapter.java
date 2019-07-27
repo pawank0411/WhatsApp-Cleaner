@@ -1,17 +1,18 @@
 package com.pawan.whatsAppCleaner.adapters;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.pawan.whatsAppCleaner.datas.Details;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.pawan.whatsAppCleaner.R;
+import com.pawan.whatsAppCleaner.datas.Details;
 
 import java.util.List;
 
@@ -25,12 +26,12 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
     private OnItemClickListener listener;
 
 
-
     public DetailsAdapter(Context ctx, List<Details> datalist, OnItemClickListener listener) {
         this.ctx = ctx;
         this.datalist = datalist;
         this.listener = listener;
     }
+
     @NonNull
     @Override
     public DetailsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -71,8 +72,12 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
                         break;
 
                     case 2:
-                        if (listener !=null)
+                        if (listener != null)
                             listener.onVideosClicked();
+                        break;
+                    case 3:
+                        if (listener != null)
+                            listener.onStatusClicked();
                         break;
 
                 }
@@ -106,8 +111,12 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
     // TODO: 1/13/19 So we create an interface that calls main Activity when the user clicks on any item
     public interface OnItemClickListener {
         void onImagesClicked();
+
         void onDocumentsClicked();
+
         void onVideosClicked();
+
+        void onStatusClicked();
     }
 
 }

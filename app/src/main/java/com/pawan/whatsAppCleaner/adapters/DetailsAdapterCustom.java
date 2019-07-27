@@ -1,17 +1,18 @@
 package com.pawan.whatsAppCleaner.adapters;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.pawan.whatsAppCleaner.datas.Details;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.pawan.whatsAppCleaner.R;
+import com.pawan.whatsAppCleaner.datas.Details;
 
 import java.util.List;
 
@@ -75,11 +76,7 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
                     case 3:
                         if (listener != null)
                             listener.onGifsClicked();
-                           break;
-                    case 4:
-                        if (listener != null)
-                            listener.onStatusClicked();
-                            break;
+                        break;
                 }
 
             }
@@ -92,7 +89,7 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
         return datalist.size();
     }
 
-    public  class DetailsViewHolder extends RecyclerView.ViewHolder {
+    public class DetailsViewHolder extends RecyclerView.ViewHolder {
 
         TextView title, data;
         CircleImageView image;
@@ -113,13 +110,13 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
     public interface OnItemClickListener {
 
         void onAudiosClicked();
+
         void onGifsClicked();
+
         void onWallpapersClicked();
+
         void onVoiceClicked();
-        void onStatusClicked();
 
-
-        //We will add more to this as the need arises for now w have to modify the constructor to provide an instance of this interface
     }
 
 }

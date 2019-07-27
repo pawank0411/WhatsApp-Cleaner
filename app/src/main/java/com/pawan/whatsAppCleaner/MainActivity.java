@@ -22,6 +22,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.pawan.whatsAppCleaner.adapters.DetailsAdapter;
 import com.pawan.whatsAppCleaner.adapters.DetailsAdapterCustom;
 import com.pawan.whatsAppCleaner.datas.Details;
-import com.pawan.whatsAppCleaner.tabs.AppRater;
 import com.pawan.whatsAppCleaner.tabs.TabLayoutActivity;
 import com.pawan.whatsAppCleaner.tabs.TabLayoutActivity_test;
 
@@ -72,7 +72,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status;
     private String sent = "Sent";
 
-
+    private final static String TAG = "MainActivity";
+    public final static String PREFS = "PrefsFile";
+    @SuppressWarnings("FieldCanBeLocal")
+    private SharedPreferences settings = null;
+    @SuppressWarnings("FieldCanBeLocal")
+    private SharedPreferences.Editor editor = null;
 
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
@@ -95,6 +100,18 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mAdView1 = findViewById(R.id.adView_large);
 
         AppRater.app_launched(this);
+
+        settings = getSharedPreferences(PREFS, MODE_PRIVATE);
+        editor = settings.edit();
+
+        // First time running app?
+        if (!settings.contains("lastRun"))
+            enableNotification(null);
+        else
+            recordRunTime();
+
+        Log.v(TAG, "Starting CheckRecentRun service...");
+        startService(new Intent(this, CheckRecentRun.class));
 
         // Obtain the FirebaseAnalytics instance.
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -201,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_images.setAdUnitId("ca-app-pub-7255339257613393/6137674653");
+        mInterstitialAd_images.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
         mInterstitialAd_images.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
                 .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
                 .addTestDevice("D7397574F6CC21785588738256355351").build());
@@ -435,6 +452,18 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         }
 
+    }
+
+    public void recordRunTime() {
+        editor.putLong("lastRun", System.currentTimeMillis());
+        editor.commit();
+    }
+
+    public void enableNotification(View v) {
+        editor.putLong("lastRun", System.currentTimeMillis());
+        editor.putBoolean("enabled", true);
+        editor.commit();
+        Log.v(TAG, "Notifications enabled");
     }
 
     @SuppressLint("WrongConstant")
@@ -878,13 +907,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 mainActivityWeakReference.get().data_voice = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_voice);
             }
             /*Size for status*/
-            mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Statuses";
-            File s = new File(mainActivityWeakReference.get().path);
-
-            mainActivityWeakReference.get().size_status = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
-            mainActivityWeakReference.get().data_status = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_status);
-
-
+            mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Status Download";
+            File status = new File(mainActivityWeakReference.get().path);
+            if (!status.exists()) {
+                status.mkdir();
+            } else {
+                mainActivityWeakReference.get().size_status = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
+                mainActivityWeakReference.get().data_status = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_status);
+            }
 
             mainActivityWeakReference.get().sum = mainActivityWeakReference.get().size_img + mainActivityWeakReference.get().size_doc +
                     mainActivityWeakReference.get().size_vid + mainActivityWeakReference.get().size_voice + mainActivityWeakReference.get().size_gif +
@@ -909,6 +939,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     mainActivityWeakReference.get().data_vid,
                     R.drawable.ic_video,
                     R.color.blue));
+            mainActivityWeakReference.get().dataList1.add(new Details(
+                    "Statuses",
+                    mainActivityWeakReference.get().data_status,
+                    R.drawable.ic_status,
+                    R.color.orange
+            ));
 
             mainActivityWeakReference.get().dataList.clear();
             mainActivityWeakReference.get().dataList.add(new Details(
@@ -929,14 +965,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             mainActivityWeakReference.get().dataList.add(new Details(
                     "GIFs",
                     mainActivityWeakReference.get().data_gif,
-                    R.drawable.ic_image,
-                    R.color.lightpink));
-            mainActivityWeakReference.get().dataList.add(new Details(
-                    "Statuses",
-                    mainActivityWeakReference.get().data_status,
-                    R.drawable.ic_status,
-                    R.color.purple
-            ));
+                    R.drawable.camera_iris,
+                    R.color.green));
             return mainActivityWeakReference.get().tot_dat;
         }
 
@@ -991,7 +1021,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         startActivity(intent);
     }
 
-    public void onIntenttostatus(){
+    public void onIntenttostatus() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity_test.class);
         intent.putExtra("category", DataHolder.STATUS);
         startActivity(intent);
