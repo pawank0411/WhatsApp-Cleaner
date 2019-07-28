@@ -62,6 +62,7 @@ public class AppRater {
                             }
                         })
                         .create().show();
+
             }
         }
 

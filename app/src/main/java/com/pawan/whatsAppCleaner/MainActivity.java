@@ -102,7 +102,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         AppRater.app_launched(this);
 
         settings = getSharedPreferences(PREFS, MODE_PRIVATE);
-        editor = settings.edit();
+
+
 
         // First time running app?
         if (!settings.contains("lastRun"))
@@ -455,14 +456,16 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     }
 
     public void recordRunTime() {
+        editor = settings.edit();
         editor.putLong("lastRun", System.currentTimeMillis());
-        editor.commit();
+        editor.apply();
     }
 
     public void enableNotification(View v) {
+        editor = settings.edit();
         editor.putLong("lastRun", System.currentTimeMillis());
         editor.putBoolean("enabled", true);
-        editor.commit();
+        editor.apply();
         Log.v(TAG, "Notifications enabled");
     }
 
@@ -910,7 +913,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Status Download";
             File status = new File(mainActivityWeakReference.get().path);
             if (!status.exists()) {
-                status.mkdir();
+                if (!status.mkdir()) {
+                    Log.e("FIle", "Can't be created");
+                } else {
+                    Log.e("FIle", "created");
+                }
             } else {
                 mainActivityWeakReference.get().size_status = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
                 mainActivityWeakReference.get().data_status = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_status);

@@ -1,18 +1,27 @@
 package com.pawan.whatsAppCleaner.tabs;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
+import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.pawan.whatsAppCleaner.CheckRecentRun;
 import com.pawan.whatsAppCleaner.DataHolder;
 import com.pawan.whatsAppCleaner.R;
 
 public class TabLayoutActivity_test extends AppCompatActivity {
     private static OnTabListener mOnTabListener;
-
+    private final static String TAG = "MainActivity";
+    public final static String PREFS = "PrefsFile";
+    @SuppressWarnings("FieldCanBeLocal")
+    private SharedPreferences settings = null;
+    @SuppressWarnings("FieldCanBeLocal")
+    private SharedPreferences.Editor editor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +32,19 @@ public class TabLayoutActivity_test extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.viewpager);
         String category = getIntent().getStringExtra("category");
         TabsAdapter_test tabsAdapter_test;
+
+        settings = getSharedPreferences(PREFS, MODE_PRIVATE);
+        editor = settings.edit();
+
+
+        // First time running app?
+        if (!settings.contains("lastRun"))
+            enableNotification(null);
+        else
+            recordRunTime();
+
+        Log.v(TAG, "Starting CheckRecentRun service...");
+        startService(new Intent(this, CheckRecentRun.class));
 
         switch (category) {
             default:
@@ -60,6 +82,18 @@ public class TabLayoutActivity_test extends AppCompatActivity {
 
     public interface OnTabListener {
         void ontablistener(TabLayout.Tab tab);
+    }
+
+    public void recordRunTime() {
+        editor.putLong("lastRun", System.currentTimeMillis());
+        editor.commit();
+    }
+
+    public void enableNotification(View v) {
+        editor.putLong("lastRun", System.currentTimeMillis());
+        editor.putBoolean("enabled", true);
+        editor.commit();
+        Log.v(TAG, "Notifications enabled");
     }
 
 }

@@ -1,6 +1,7 @@
 package com.pawan.whatsAppCleaner.tabs;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -20,6 +21,7 @@ public class TabsAdapter_test extends FragmentStatePagerAdapter {
         this.downloadPath = downloadPath;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int i) {
         switch (category) {

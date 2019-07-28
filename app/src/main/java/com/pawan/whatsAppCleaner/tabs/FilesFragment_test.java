@@ -38,7 +38,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.pawan.whatsAppCleaner.CheckRecentRun;
 import com.pawan.whatsAppCleaner.DataHolder;
+import com.pawan.whatsAppCleaner.MainActivity;
 import com.pawan.whatsAppCleaner.R;
 import com.pawan.whatsAppCleaner.adapters.innerAdapeters.InnerDetailsAdapter;
 import com.pawan.whatsAppCleaner.datas.FileDetails;
@@ -53,6 +55,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.OnCheckboxListener {
 
@@ -71,7 +75,12 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
     private File source;
     private String statusdownload;
     private int position;
-
+    @SuppressWarnings("FieldCanBeLocal")
+    private SharedPreferences settings = null;
+    @SuppressWarnings("FieldCanBeLocal")
+    private SharedPreferences.Editor editor = null;
+    private final static String TAG = "MainActivity";
+    public final static String PREFS = "PrefsFile";
     @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -119,7 +128,18 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 innerDetailsAdapter = new InnerDetailsAdapter(STATUS, getActivity(), innerDataList, this);
                 break;
         }
+        settings = getContext().getSharedPreferences(PREFS, MODE_PRIVATE);
 
+
+
+        // First time running app?
+        if (!settings.contains("lastRun"))
+            enableNotification(null);
+        else
+            recordRunTime();
+
+        Log.v(TAG, "Starting CheckRecentRun service...");
+        getContext().startService(new Intent(getContext(), CheckRecentRun.class));
         //Switch toggle = rootView.findViewById(R.id.switch1);
         no_ads = rootView.findViewById(R.id.ads_not_loaded);
 
@@ -195,6 +215,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                                 if (s.equals(v)) {
                                     Log.e("dup", fileDetails.get(j).getName());
                                     fileDetails.remove(j);
+                                    break;
                                 }
                             }
                         }
@@ -356,7 +377,11 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                         statusdownload = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Status Download/" + details.getName();
                         source = new File(soure);
                         if (!source.exists()) {
-                            source.mkdir();
+                            if (!source.mkdir()) {
+                                Log.e("FIle", "Can't be created");
+                            } else {
+                                Log.e("FIle", "created");
+                            }
                         }
                         File dest = new File(statusdownload);
                         try {
@@ -370,6 +395,10 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                         }
                     }
                     filesToDelete.clear();
+                    if (selectall.isChecked()){
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        startActivity(intent);
+                    }
                     for (FileDetails deletedFile : deletedFiles) {
                         innerDataList.remove(deletedFile);
                     }
@@ -444,7 +473,10 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                                             }
 
                                             filesToDelete.clear();
-
+                                            if (selectall.isChecked()){
+                                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                                startActivity(intent);
+                                            }
                                             for (FileDetails deletedFile : deletedFiles) {
                                                 innerDataList.remove(deletedFile);
                                             }
@@ -489,6 +521,20 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
         });
 
         return rootView;
+    }
+
+    public void recordRunTime() {
+        editor = settings.edit();
+        editor.putLong("lastRun", System.currentTimeMillis());
+        editor.apply();
+    }
+
+    public void enableNotification(View v) {
+        editor = settings.edit();
+        editor.putLong("lastRun", System.currentTimeMillis());
+        editor.putBoolean("enabled", true);
+        editor.apply();
+        Log.v(TAG, "Notifications enabled");
     }
 
     private static long getFileSize(File file) {
@@ -588,18 +634,18 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                                 fileDetails.setName(file.getName());
                                 fileDetails.setPath(file.getPath());
                                 fileDetails.setMod(file.lastModified());
-                                String mime = "*/*";
-                                File a = new File(file.getPath());
-                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-                                                ".my.package.name.provider", a);
-                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                                if (mimeTypeMap.hasExtension(
-                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
-
-                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
-                                }
+//                                String mime = "*/*";
+//                                File a = new File(file.getPath());
+//                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+//                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+//                                                ".my.package.name.provider", a);
+//                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+//                                if (mimeTypeMap.hasExtension(
+//                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+//
+//                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+//                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+//                                }
 
                                 fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().
                                                 getContext(),
@@ -679,18 +725,18 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                             fileDetails.setName(file.getName());
                             fileDetails.setPath(file.getPath());
                             fileDetails.setMod(file.lastModified());
-                            String mime = "*/*";
-                            File a = new File(file.getPath());
-                            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference_tab.get().getContext()),
-                                    Objects.requireNonNull(filesFragmentWeakReference_tab.get().getContext()).getApplicationContext().getPackageName() +
-                                            ".my.package.name.provider", a);
-                            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                            if (mimeTypeMap.hasExtension(
-                                    MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
-
-                                mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
-                            }
+//                            String mime = "*/*";
+//                            File a = new File(file.getPath());
+//                            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference_tab.get().getContext()),
+//                                    Objects.requireNonNull(filesFragmentWeakReference_tab.get().getContext()).getApplicationContext().getPackageName() +
+//                                            ".my.package.name.provider", a);
+//                            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+//                            if (mimeTypeMap.hasExtension(
+//                                    MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+//
+//                                mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+//                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+//                            }
 
                             fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference_tab.get().
                                             getContext(),

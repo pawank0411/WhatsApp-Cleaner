@@ -1,9 +1,11 @@
 package com.pawan.whatsAppCleaner;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +17,12 @@ import com.google.android.gms.ads.AdView;
 public class Noapp extends AppCompatActivity {
     private AdView mAdView;
     private ProgressDialog progressDialog;
-
+    private final static String TAG = "MainActivity";
+    public final static String PREFS = "PrefsFile";
+    @SuppressWarnings("FieldCanBeLocal")
+    private SharedPreferences settings = null;
+    @SuppressWarnings("FieldCanBeLocal")
+    private SharedPreferences.Editor editor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +36,18 @@ public class Noapp extends AppCompatActivity {
         progressDialog.setMessage("Please Wait");
         progressDialog.setCancelable(false);
         progressDialog.show();
+
+        settings = getSharedPreferences(PREFS, MODE_PRIVATE);
+
+
+        // First time running app?
+        if (!settings.contains("lastRun"))
+            enableNotification(null);
+        else
+            recordRunTime();
+
+        Log.v(TAG, "Starting CheckRecentRun service...");
+        startService(new Intent(this, CheckRecentRun.class));
 
         if (!status) {
             progressDialog.dismiss();
@@ -67,6 +86,20 @@ public class Noapp extends AppCompatActivity {
 
         }
     }
+    public void recordRunTime() {
+        editor = settings.edit();
+        editor.putLong("lastRun", System.currentTimeMillis());
+        editor.apply();
+    }
+
+    public void enableNotification(View v) {
+        editor = settings.edit();
+        editor.putLong("lastRun", System.currentTimeMillis());
+        editor.putBoolean("enabled", true);
+        editor.apply();
+        Log.v(TAG, "Notifications enabled");
+    }
+
 
     @Override
     public void onBackPressed() {
