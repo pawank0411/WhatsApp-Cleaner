@@ -1,4 +1,4 @@
-package com.pawan.whatsAppCleaner.tabs;
+package com.pawan.whats_AppCleaner.tabs;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -38,12 +37,12 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.pawan.whatsAppCleaner.CheckRecentRun;
-import com.pawan.whatsAppCleaner.DataHolder;
-import com.pawan.whatsAppCleaner.MainActivity;
-import com.pawan.whatsAppCleaner.R;
-import com.pawan.whatsAppCleaner.adapters.innerAdapeters.InnerDetailsAdapter;
-import com.pawan.whatsAppCleaner.datas.FileDetails;
+import com.pawan.whats_AppCleaner.CheckRecentRun;
+import com.pawan.whats_AppCleaner.DataHolder;
+import com.pawan.whats_AppCleaner.MainActivity;
+import com.pawan.whats_AppCleaner.R;
+import com.pawan.whats_AppCleaner.adapters.innerAdapeters.InnerDetailsAdapter;
+import com.pawan.whats_AppCleaner.datas.FileDetails;
 
 import org.apache.commons.io.FileUtils;
 

@@ -1,4 +1,4 @@
-package com.pawan.whatsAppCleaner.tabs;
+package com.pawan.whats_AppCleaner.tabs;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,9 +10,9 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.pawan.whatsAppCleaner.CheckRecentRun;
-import com.pawan.whatsAppCleaner.DataHolder;
-import com.pawan.whatsAppCleaner.R;
+import com.pawan.whats_AppCleaner.CheckRecentRun;
+import com.pawan.whats_AppCleaner.DataHolder;
+import com.pawan.whats_AppCleaner.R;
 
 public class TabLayoutActivity_test extends AppCompatActivity {
     private static OnTabListener mOnTabListener;

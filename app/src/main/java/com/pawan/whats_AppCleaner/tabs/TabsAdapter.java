@@ -1,4 +1,4 @@
-package com.pawan.whatsAppCleaner.tabs;
+package com.pawan.whats_AppCleaner.tabs;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.pawan.whatsAppCleaner.DataHolder;
+import com.pawan.whats_AppCleaner.DataHolder;
 
 public class TabsAdapter extends FragmentStatePagerAdapter {
     private String receivedPath;

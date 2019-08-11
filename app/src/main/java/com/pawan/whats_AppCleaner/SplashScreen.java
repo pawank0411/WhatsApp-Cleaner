@@ -1,4 +1,4 @@
-package com.pawan.whatsAppCleaner;
+package com.pawan.whats_AppCleaner;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

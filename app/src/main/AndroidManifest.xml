@@ -1,76 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.pawan.whatsAppCleaner">
+    package="com.pawan.whats_AppCleaner">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".Application"
+        android:name="com.pawan.whats_AppCleaner.Application"
+        android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/splash"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar"
-        android:allowBackup="true"
         tools:ignore="AllowBackup">
-        <activity android:name=".SplashScreen"
-                    android:theme="@style/SplashTheme"
+        <activity
+            android:name="com.pawan.whats_AppCleaner.SplashScreen"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".tabs.TabLayoutActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".tabs.TabLayoutActivity_test"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme"
+        <activity
+            android:name="com.pawan.whats_AppCleaner.tabs.TabLayoutActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name="com.pawan.whats_AppCleaner.tabs.TabLayoutActivity_test"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.pawan.whats_AppCleaner.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Noapp"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.pawan.whats_AppCleaner.Noapp"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <provider android:name=".model.GenericFileProvider" android:grantUriPermissions="true" android:exported="false" android:authorities="${applicationId}.my.package.name.provider">
+        <provider
+            android:name="com.pawan.whats_AppCleaner.model.GenericFileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
 
-        <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
 
-    </provider>
+        </provider>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7255339257613393~4556179800"/>
+            android:value="ca-app-pub-7255339257613393~4556179800" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="ee29d83c27554d877c1bf08089bf48fd5ad12464" />
+        <service android:name="com.pawan.whats_AppCleaner.CheckRecentRun"></service>
         <service
-            android:name="com.pawan.whatsAppCleaner.CheckRecentRun" >
-        </service>
-        <service
-            android:name=".MyAndroidFirebaseMsgService"
+            android:name="com.pawan.whats_AppCleaner.MyAndroidFirebaseMsgService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/notification_icon" />
-        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/green" />
+
     </application>
 
 </manifest>

@@ -1,11 +1,10 @@
-package com.pawan.whatsAppCleaner;
+package com.pawan.whats_AppCleaner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -34,18 +33,16 @@ import androidx.core.view.MenuCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.pawan.whatsAppCleaner.adapters.DetailsAdapter;
-import com.pawan.whatsAppCleaner.adapters.DetailsAdapterCustom;
-import com.pawan.whatsAppCleaner.datas.Details;
-import com.pawan.whatsAppCleaner.tabs.TabLayoutActivity;
-import com.pawan.whatsAppCleaner.tabs.TabLayoutActivity_test;
+import com.pawan.whats_AppCleaner.adapters.DetailsAdapter;
+import com.pawan.whats_AppCleaner.adapters.DetailsAdapterCustom;
+import com.pawan.whats_AppCleaner.datas.Details;
+import com.pawan.whats_AppCleaner.tabs.TabLayoutActivity;
+import com.pawan.whats_AppCleaner.tabs.TabLayoutActivity_test;
 
 import org.apache.commons.io.FileUtils;
 
@@ -53,9 +50,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import io.fabric.sdk.android.Fabric;
-
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
     private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
@@ -90,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         total_data = findViewById(R.id.data);
@@ -99,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mAdView = findViewById(R.id.adView_small);
         mAdView1 = findViewById(R.id.adView_large);
 
-        AppRater.app_launched(this);
+        AppRater.app_launched(MainActivity.this);
 
         settings = getSharedPreferences(PREFS, MODE_PRIVATE);
 
@@ -514,21 +507,15 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                         .setTitle("Permission needed")
                         .setMessage("Storage permission is needed to read WhatsApp Media")
                         .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                            Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_CODE);
-                                }
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_CODE);
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                finish();
-                            }
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            dialog.dismiss();
+                            finish();
                         }).create().show();
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -556,21 +543,15 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                             .setTitle("Permission needed")
                             .setMessage("Storage permission is needed to read WhatsApp Media. Press OK to enable in settings.")
                             .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                    intent.setData(uri);
-                                    startActivityForResult(intent, EXTERNAL_STORAGE_PERMISSION_CODE);
-                                }
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                intent.setData(uri);
+                                startActivityForResult(intent, EXTERNAL_STORAGE_PERMISSION_CODE);
                             })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    finish();
-                                }
+                            .setNegativeButton("Cancel", (dialog, which) -> {
+                                dialog.dismiss();
+                                finish();
                             }).create().show();
 
 
@@ -580,21 +561,15 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                             .setTitle("Permission needed")
                             .setMessage("Storage permission is needed to read WhatsApp Media")
                             .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                                Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_CODE);
-                                    }
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                            Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_CODE);
                                 }
                             })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    finish();
-                                }
+                            .setNegativeButton("Cancel", (dialog, which) -> {
+                                dialog.dismiss();
+                                finish();
                             }).create().show();
                 }
             }

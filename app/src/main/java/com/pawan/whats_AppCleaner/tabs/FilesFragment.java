@@ -1,8 +1,7 @@
-package com.pawan.whatsAppCleaner.tabs;
+package com.pawan.whats_AppCleaner.tabs;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,12 +32,12 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.pawan.whatsAppCleaner.CheckRecentRun;
-import com.pawan.whatsAppCleaner.DataHolder;
-import com.pawan.whatsAppCleaner.MainActivity;
-import com.pawan.whatsAppCleaner.R;
-import com.pawan.whatsAppCleaner.adapters.innerAdapeters.InnerDetailsAdapter;
-import com.pawan.whatsAppCleaner.datas.FileDetails;
+import com.pawan.whats_AppCleaner.CheckRecentRun;
+import com.pawan.whats_AppCleaner.DataHolder;
+import com.pawan.whats_AppCleaner.MainActivity;
+import com.pawan.whats_AppCleaner.R;
+import com.pawan.whats_AppCleaner.adapters.innerAdapeters.InnerDetailsAdapter;
+import com.pawan.whats_AppCleaner.datas.FileDetails;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -187,13 +185,15 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             no_ads.setText(R.string.no_ads);
 
 
-            mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
+            mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("46BC4FB22E91830D5B7E730BBDDF9B42")
+                    .build());
 
             mAdView.setAdListener(new AdListener() {
                 @Override
                 public void onAdClosed() {
                     if (!mAdView.isLoading()) {
-                        mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
+                        mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                                .addTestDevice("46BC4FB22E91830D5B7E730BBDDF9B42").build());
                     }
                 }
 
@@ -225,206 +225,150 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "name");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-        new FetchFiles(this, category, new FetchFiles.OnFilesFetched() {
-            @Override
-            public void onFilesFetched(List<FileDetails> fileDetails) {
-                if (fileDetails != null && !fileDetails.isEmpty()) {
-                    innerDataList.addAll(fileDetails);
-                    innerDetailsAdapter.notifyDataSetChanged();
-                    progressDialog.dismiss();
-                    no_files.setVisibility(View.INVISIBLE);
-                } else {
-                    progressDialog.dismiss();
-                    Log.e("Nofiles", "NO Files Found");
-                    no_files.setVisibility(View.VISIBLE);
-                    no_files.setImageResource(R.drawable.file);
-                }
+        new FetchFiles(this, category, fileDetails -> {
+            if (fileDetails != null && !fileDetails.isEmpty()) {
+                innerDataList.addAll(fileDetails);
+                innerDetailsAdapter.notifyDataSetChanged();
+                progressDialog.dismiss();
+                no_files.setVisibility(View.INVISIBLE);
+            } else {
+                progressDialog.dismiss();
+                Log.e("Nofiles", "NO Files Found");
+                no_files.setVisibility(View.VISIBLE);
+                no_files.setImageResource(R.drawable.file);
             }
         }).execute(path);
 
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!flag_n || !flag_s) {
-                    flag_n = true;
-                    flag_s = true;
-                    name.setTextColor(Color.parseColor("#FF161616"));
-                    size.setTextColor(Color.parseColor("#FF161616"));
-                }
-                if (flag_d) {
+        date.setOnClickListener(v -> {
+            if (!flag_n || !flag_s) {
+                flag_n = true;
+                flag_s = true;
+                name.setTextColor(Color.parseColor("#FF161616"));
+                size.setTextColor(Color.parseColor("#FF161616"));
+            }
+            if (flag_d) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
-                    flag_d = false;
-                    date.setTextColor(Color.parseColor("#C103A9F4"));
-                    Collections.sort(innerDataList, new Comparator<FileDetails>() {
-                        @Override
-                        public int compare(FileDetails o1, FileDetails o2) {
-                            return -o1.getMod().compareTo(o2.getMod());
-                        }
-                    });
-                    innerDetailsAdapter.notifyDataSetChanged();
-                } else {
+                flag_d = false;
+                date.setTextColor(Color.parseColor("#C103A9F4"));
+                Collections.sort(innerDataList, (o1, o2) -> -o1.getMod().compareTo(o2.getMod()));
+                innerDetailsAdapter.notifyDataSetChanged();
+            } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
-                    flag_d = true;
-                    date.setTextColor(Color.parseColor("#FF161616"));
-                    Collections.sort(innerDataList, new Comparator<FileDetails>() {
-                        @Override
-                        public int compare(FileDetails o1, FileDetails o2) {
-                            return o1.getMod().compareTo(o2.getMod());
-                        }
-                    });
-                    Log.e("State", "Disabled");
-                    innerDetailsAdapter.notifyDataSetChanged();
-                }
+                flag_d = true;
+                date.setTextColor(Color.parseColor("#FF161616"));
+                Collections.sort(innerDataList, (o1, o2) -> o1.getMod().compareTo(o2.getMod()));
+                Log.e("State", "Disabled");
+                innerDetailsAdapter.notifyDataSetChanged();
             }
         });
 
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!flag_d || !flag_s) {
-                    flag_d = true;
-                    flag_s = true;
-                    date.setTextColor(Color.parseColor("#FF161616"));
-                    size.setTextColor(Color.parseColor("#FF161616"));
-                }
-                if (flag_n) {
+        name.setOnClickListener(v -> {
+            if (!flag_d || !flag_s) {
+                flag_d = true;
+                flag_s = true;
+                date.setTextColor(Color.parseColor("#FF161616"));
+                size.setTextColor(Color.parseColor("#FF161616"));
+            }
+            if (flag_n) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
-                    flag_n = false;
-                    name.setTextColor(Color.parseColor("#C103A9F4"));
-                    Collections.sort(innerDataList, new Comparator<FileDetails>() {
-                        @Override
-                        public int compare(FileDetails o1, FileDetails o2) {
-                            return o1.getName().compareTo(o2.getName());
-                        }
-                    });
-                    Log.e("State", "Toggled");
-                    innerDetailsAdapter.notifyDataSetChanged();
-                } else {
+                flag_n = false;
+                name.setTextColor(Color.parseColor("#C103A9F4"));
+                Collections.sort(innerDataList, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+                Log.e("State", "Toggled");
+                innerDetailsAdapter.notifyDataSetChanged();
+            } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
-                    flag_n = true;
-                    name.setTextColor(Color.parseColor("#FF161616"));
-                    Collections.sort(innerDataList, new Comparator<FileDetails>() {
-                        @Override
-                        public int compare(FileDetails o1, FileDetails o2) {
-                            return -o1.getName().compareTo(o2.getName());
-                        }
-                    });
-                    Log.e("State", "Disabled");
-                    innerDetailsAdapter.notifyDataSetChanged();
-                }
+                flag_n = true;
+                name.setTextColor(Color.parseColor("#FF161616"));
+                Collections.sort(innerDataList, (o1, o2) -> -o1.getName().compareTo(o2.getName()));
+                Log.e("State", "Disabled");
+                innerDetailsAdapter.notifyDataSetChanged();
             }
         });
-        size.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!flag_d || !flag_n) {
-                    flag_d = true;
-                    flag_n = true;
-                    date.setTextColor(Color.parseColor("#FF161616"));
-                    name.setTextColor(Color.parseColor("#FF161616"));
-                }
-                if (flag_s) {
+        size.setOnClickListener(v -> {
+            if (!flag_d || !flag_n) {
+                flag_d = true;
+                flag_n = true;
+                date.setTextColor(Color.parseColor("#FF161616"));
+                name.setTextColor(Color.parseColor("#FF161616"));
+            }
+            if (flag_s) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
-                    flag_s = false;
-                    size.setTextColor(Color.parseColor("#C103A9F4"));
-                    Collections.sort(innerDataList, new Comparator<FileDetails>() {
-                        @Override
-                        public int compare(FileDetails o1, FileDetails o2) {
-                            return -o1.getS().compareTo(o2.getS());
-                        }
-                    });
-                    Log.e("State", "Toggled");
-                    innerDetailsAdapter.notifyDataSetChanged();
-                } else {
+                flag_s = false;
+                size.setTextColor(Color.parseColor("#C103A9F4"));
+                Collections.sort(innerDataList, (o1, o2) -> -o1.getS().compareTo(o2.getS()));
+                Log.e("State", "Toggled");
+                innerDetailsAdapter.notifyDataSetChanged();
+            } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
-                    flag_s = true;
-                    size.setTextColor(Color.parseColor("#FF161616"));
-                    Collections.sort(innerDataList, new Comparator<FileDetails>() {
-                        @Override
-                        public int compare(FileDetails o1, FileDetails o2) {
-                            return o1.getS().compareTo(o2.getS());
-                        }
-                    });
-                    Log.e("State", "Disabled");
-                    innerDetailsAdapter.notifyDataSetChanged();
-                }
+                flag_s = true;
+                size.setTextColor(Color.parseColor("#FF161616"));
+                Collections.sort(innerDataList, (o1, o2) -> o1.getS().compareTo(o2.getS()));
+                Log.e("State", "Disabled");
+                innerDetailsAdapter.notifyDataSetChanged();
             }
         });
 
-        selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    for (int i = 0; i < innerDataList.size(); i++) {
-                        innerDataList.get(i).setSelected(true);
-                    }
-                    innerDetailsAdapter.notifyDataSetChanged();
-                } else {
-                    for (int i = 0; i < innerDataList.size(); i++) {
-                        innerDataList.get(i).setSelected(false);
-                    }
-                    innerDetailsAdapter.notifyDataSetChanged();
+        selectall.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                for (int i = 0; i < innerDataList.size(); i++) {
+                    innerDataList.get(i).setSelected(true);
                 }
+                innerDetailsAdapter.notifyDataSetChanged();
+            } else {
+                for (int i = 0; i < innerDataList.size(); i++) {
+                    innerDataList.get(i).setSelected(false);
+                }
+                innerDetailsAdapter.notifyDataSetChanged();
             }
         });
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!filesToDelete.isEmpty()) {
-                    new AlertDialog.Builder(getContext())
-                            .setMessage("Are you sure you want to delete selected files?")
-                            .setCancelable(true)
-                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    int success = -1;
-                                    ArrayList<FileDetails> deletedFiles = new ArrayList<>();
+        button.setOnClickListener(v -> {
+            if (!filesToDelete.isEmpty()) {
+                new AlertDialog.Builder(getContext())
+                        .setMessage("Are you sure you want to delete selected files?")
+                        .setCancelable(true)
+                        .setPositiveButton("YES", (dialog, which) -> {
+                            int success = -1;
+                            ArrayList<FileDetails> deletedFiles = new ArrayList<>();
 
-                                    for (FileDetails details : filesToDelete) {
-                                        File file = new File(details.getPath());
-                                        if (file.exists()) {
-                                            if (file.delete()) {
-                                                deletedFiles.add(details);
-                                                if (success == 0) {
-                                                    return;
-                                                }
-                                                success = 1;
-                                            } else {
-                                                Log.e("TEST", "" + file.getName() + " delete failed");
-                                                success = 0;
-                                            }
-                                        } else {
-                                            Log.e("TEST", "" + file.getName() + " doesn't exists");
-                                            success = 0;
+                            for (FileDetails details : filesToDelete) {
+                                File file = new File(details.getPath());
+                                if (file.exists()) {
+                                    if (file.delete()) {
+                                        deletedFiles.add(details);
+                                        if (success == 0) {
+                                            return;
                                         }
+                                        success = 1;
+                                    } else {
+                                        Log.e("TEST", "" + file.getName() + " delete failed");
+                                        success = 0;
                                     }
-
-                                    filesToDelete.clear();
-
-                                    for (FileDetails deletedFile : deletedFiles) {
-                                        innerDataList.remove(deletedFile);
-                                    }
-                                    innerDetailsAdapter.notifyDataSetChanged();
-                                    if (selectall.isChecked()) {
-                                        Intent intent = new Intent(getContext(), MainActivity.class);
-                                        startActivity(intent);
-                                    }
-                                    if (success == 0) {
-                                        Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
-                                    } else if (success == 1) {
-                                        Toast.makeText(getContext(), "Deleted successfully", Toast.LENGTH_SHORT).show();
-                                    }
-                                    button.setText(R.string.delete_items_blank);
-                                    button.setTextColor(Color.parseColor("#A9A9A9"));
+                                } else {
+                                    Log.e("TEST", "" + file.getName() + " doesn't exists");
+                                    success = 0;
                                 }
-                            })
-                            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create().show();
-                }
+                            }
+
+                            filesToDelete.clear();
+
+                            for (FileDetails deletedFile : deletedFiles) {
+                                innerDataList.remove(deletedFile);
+                            }
+                            innerDetailsAdapter.notifyDataSetChanged();
+                            if (selectall.isChecked()) {
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                startActivity(intent);
+                            }
+                            if (success == 0) {
+                                Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
+                            } else if (success == 1) {
+                                Toast.makeText(getContext(), "Deleted successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            button.setText(R.string.delete_items_blank);
+                            button.setTextColor(Color.parseColor("#A9A9A9"));
+                        })
+                        .setNegativeButton("NO", (dialog, which) -> dialog.dismiss()).create().show();
             }
         });
 

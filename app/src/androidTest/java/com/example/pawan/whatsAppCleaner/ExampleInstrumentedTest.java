@@ -1,4 +1,4 @@
-package com.pawan.whatsAppCleaner;
+package com.pawan.whats_AppCleaner;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

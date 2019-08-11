@@ -1,19 +1,20 @@
-package com.pawan.whatsAppCleaner;
+package com.pawan.whats_AppCleaner;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.util.Log;
 
 public class AppRater {
     private final static int DAYS_UNTIL_PROMPT = 3;//Min number of days
     private final static int LAUNCHES_UNTIL_PROMPT = 3;//Min number of launches
 
-    private final static String APP_TITLE = "WA Cleaner";// App Name
-    private final static String APP_PNAME = "com.pawan.whatsAppCleaner";// Package Name
+    private final static String APP_TITLE = "Whats-App Cleaner";// App Name
+    private final static String APP_PNAME = "com.pawan.whatsApp_Cleaner";// Package Name
     public static void app_launched(final Context mContext) {
+
         SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);
         if (prefs.getBoolean("dontshowagain", false)) {
             return;
@@ -36,31 +37,18 @@ public class AppRater {
         if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
             if (System.currentTimeMillis() >= date_firstLaunch +
                     (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
-
+                Log.e("launch", "Succes");
                 new AlertDialog.Builder(mContext)
                         .setMessage("If you enjoy using " + APP_TITLE + ", please take a moment to Rate it. Thanks for your support!")
                         .setCancelable(false)
-                        .setPositiveButton("Rate Us", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
-                            }
-                        })
-                        .setNegativeButton("No, Thanks", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                editor.putBoolean("dontshowagain", true);
-                                editor.apply();
+                        .setPositiveButton("Rate Us", (dialog, which) -> mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME))))
+                        .setNegativeButton("No, Thanks", (dialog, which) -> {
+                            editor.putBoolean("dontshowagain", true);
+                            editor.apply();
 
-                                dialog.dismiss();
-                            }
+                            dialog.dismiss();
                         })
-                        .setNeutralButton("Remind Me Later", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNeutralButton("Remind Me Later", (dialog, which) -> dialog.dismiss())
                         .create().show();
 
             }

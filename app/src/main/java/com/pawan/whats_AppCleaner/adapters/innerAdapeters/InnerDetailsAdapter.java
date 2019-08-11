@@ -1,4 +1,4 @@
-package com.pawan.whatsAppCleaner.adapters.innerAdapeters;
+package com.pawan.whats_AppCleaner.adapters.innerAdapeters;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -23,8 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.pawan.whatsAppCleaner.datas.FileDetails;
-import com.pawan.whatsAppCleaner.R;
+import com.pawan.whats_AppCleaner.datas.FileDetails;
+import com.pawan.whats_AppCleaner.R;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 

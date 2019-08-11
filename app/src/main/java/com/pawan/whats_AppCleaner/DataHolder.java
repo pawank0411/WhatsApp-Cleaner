@@ -1,4 +1,4 @@
-package com.pawan.whatsAppCleaner;
+package com.pawan.whats_AppCleaner;
 
 import android.os.Environment;
 
