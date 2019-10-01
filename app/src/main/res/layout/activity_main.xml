@@ -7,98 +7,201 @@
     android:background="@color/gray"
     tools:targetApi="11">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/data_layout"
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/green">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/data"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:fontFamily="@font/changa_medium"
-                android:gravity="center"
-                android:text="@string/_0b"
-                android:textColor="@color/white"
-                android:textSize="40sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/files"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/changa_medium"
-                android:gravity="center"
-                android:text="@string/files"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/data"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/data"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/data_layout"
-        android:layout_marginTop="5dp"
-        tools:listitem="@layout/main_content2" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycle"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recycler_view"
-            android:layout_marginTop="1dp" />
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/data_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@color/green">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/data"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:fontFamily="@font/changa_medium"
+                        android:gravity="center"
+                        android:text="@string/_0b"
+                        android:textColor="@color/white"
+                        android:textSize="40sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/files"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/changa_medium"
+                        android:gravity="center"
+                        android:text="@string/files"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/data"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/data"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView_large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recycle"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        ads:adSize="LARGE_BANNER"
-        ads:adUnitId="ca-app-pub-7255339257613393/3750418498">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/data_layout"
+                android:layout_marginTop="5dp"
+                tools:listitem="@layout/main_content2" />
 
-    </com.google.android.gms.ads.AdView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recycler_view"
+                android:layout_marginTop="1dp" />
 
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView_small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recycle"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-7255339257613393/3750418498">
 
-    </com.google.android.gms.ads.AdView>
+            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView_large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recycle"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                ads:adSize="LARGE_BANNER"
+                ads:adUnitId="ca-app-pub-7255339257613393/3750418498">
+
+            </com.google.android.gms.ads.AdView>
+
+            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recycle"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                ads:adSize="BANNER"
+                ads:adUnitId="ca-app-pub-7255339257613393/3750418498">
+
+            </com.google.android.gms.ads.AdView>
+
+            <!--<RelativeLayout-->
+            <!--android:id="@+id/rate"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:background="#D4000000">-->
+
+            <!--<androidx.cardview.widget.CardView-->
+            <!--android:id="@+id/recycler"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:foreground="?android:selectableItemBackground"-->
+            <!--app:cardCornerRadius="5dp"-->
+            <!--app:cardElevation="9dp">-->
+
+
+            <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/white"-->
+
+            <!--android:padding="16dp">-->
+
+
+            <!--<TextView-->
+            <!--android:id="@+id/title"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="30dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginEnd="30dp"-->
+            <!--android:layout_marginBottom="12dp"-->
+            <!--android:background="@color/white"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="15sp"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<Button-->
+            <!--android:id="@+id/button8"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="65dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/button_shape"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<Button-->
+            <!--android:id="@+id/button9"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:background="@drawable/button_shape"-->
+            <!--app:layout_constraintBaseline_toBaselineOf="@+id/button8"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/button10"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/button8"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<Button-->
+            <!--android:id="@+id/button10"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:background="@drawable/button_shape"-->
+            <!--app:layout_constraintBaseline_toBaselineOf="@id/button9"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+
+            <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+            <!--</androidx.cardview.widget.CardView>-->
+
+        </RelativeLayout>
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/ads_not_loaded"
@@ -119,94 +222,4 @@
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"
         android:visibility="gone" />
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/rate"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:gravity="center"-->
-        <!--android:background="#D4000000">-->
-
-        <!--<androidx.cardview.widget.CardView-->
-            <!--android:id="@+id/recycler"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:foreground="?android:selectableItemBackground"-->
-            <!--app:cardCornerRadius="5dp"-->
-            <!--app:cardElevation="9dp">-->
-
-
-            <!--<androidx.constraintlayout.widget.ConstraintLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="@color/white"-->
-
-                <!--android:padding="16dp">-->
-
-
-                <!--<TextView-->
-                    <!--android:id="@+id/title"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginStart="30dp"-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:layout_marginEnd="30dp"-->
-                    <!--android:layout_marginBottom="12dp"-->
-                    <!--android:background="@color/white"-->
-                    <!--android:textColor="@color/black"-->
-                    <!--android:gravity="center"-->
-                    <!--android:textSize="15sp"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/button8"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginStart="8dp"-->
-                    <!--android:layout_marginTop="65dp"-->
-                    <!--android:layout_marginBottom="8dp"-->
-                    <!--android:gravity="center"-->
-                    <!--android:background="@drawable/button_shape"-->
-                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/button9"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginStart="8dp"-->
-                    <!--android:layout_marginTop="8dp"-->
-                    <!--android:layout_marginEnd="8dp"-->
-                    <!--android:gravity="center"-->
-                    <!--android:layout_marginBottom="8dp"-->
-                    <!--android:background="@drawable/button_shape"-->
-                    <!--app:layout_constraintBaseline_toBaselineOf="@+id/button8"-->
-                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--app:layout_constraintEnd_toStartOf="@+id/button10"-->
-                    <!--app:layout_constraintStart_toEndOf="@+id/button8"-->
-                    <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/button10"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="8dp"-->
-                    <!--android:layout_marginEnd="8dp"-->
-                    <!--android:gravity="center"-->
-                    <!--android:layout_marginBottom="8dp"-->
-                    <!--android:background="@drawable/button_shape"-->
-                    <!--app:layout_constraintBaseline_toBaselineOf="@id/button9"-->
-                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-
-            <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
-
-        <!--</androidx.cardview.widget.CardView>-->
-    </RelativeLayout>
+</RelativeLayout>
