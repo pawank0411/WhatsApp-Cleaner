@@ -33,6 +33,7 @@ import androidx.core.view.MenuCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -50,6 +51,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
     private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
@@ -95,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         AppRater.app_launched(MainActivity.this);
 
         settings = getSharedPreferences(PREFS, MODE_PRIVATE);
-
 
 
         // First time running app?
@@ -439,6 +440,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             askPermission();
 
             progressDialog = new ProgressDialog(this);
+            //The line of code below will set the progress to look like the Material Design version
+            progressDialog.setProgressStyle(R.style.Widget_AppCompat_ProgressBar_Horizontal/*style/Widget.ProgressBar.Horizontal*/);
             progressDialog.setMessage("Please Wait");
             progressDialog.setCancelable(false);
             progressDialog.show();
