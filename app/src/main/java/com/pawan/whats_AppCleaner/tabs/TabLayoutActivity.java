@@ -31,6 +31,7 @@ public class TabLayoutActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabs);
         ViewPager viewPager = findViewById(R.id.viewpager);
         String category = getIntent().getStringExtra("category");
+        String pathname = getIntent().getStringExtra("pathname");
         TabsAdapter tabsAdapter;
 
         settings = getSharedPreferences(PREFS, MODE_PRIVATE);
@@ -47,7 +48,7 @@ public class TabLayoutActivity extends AppCompatActivity {
         startService(new Intent(this, CheckRecentRun.class));
 
         switch (category) {
-            default:
+
             case DataHolder.IMAGE:
                 tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.IMAGE, DataHolder.imagesReceivedPath, DataHolder.imagesSentPath);
                 break;
@@ -71,6 +72,9 @@ public class TabLayoutActivity extends AppCompatActivity {
                 break;
             case DataHolder.STATUS:
                 tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.STATUS, DataHolder.statuscache, DataHolder.statusdownload);
+                break;
+            default:
+                tabsAdapter = new TabsAdapter(getSupportFragmentManager(), DataHolder.NONDEFAULT, pathname, pathname);
                 break;
         }
 

@@ -81,6 +81,14 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
                     case 1:
                         return FilesFragment.newInstance(DataHolder.VOICE, sentPath);
                 }
+            case DataHolder.NONDEFAULT:
+                switch (i){
+                    default:
+                    case 0:
+                        return FilesFragment.newInstance(DataHolder.NONDEFAULT, receivedPath);
+                    case 1:
+                        return FilesFragment.newInstance(DataHolder.NONDEFAULT, sentPath);
+                }
         }
 
     }

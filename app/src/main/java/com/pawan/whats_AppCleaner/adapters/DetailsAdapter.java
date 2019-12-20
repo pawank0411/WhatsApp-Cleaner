@@ -58,7 +58,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
             @Override
             public void onClick(View v) {
                 // Intent intent;
-                switch (pos) {
+                switch (detailsViewHolder.getAdapterPosition()) {
                     case 0:
                         /*//differnt activites for differnt cards
                         // TODO: 1/13/19 First we need to rector this into the mainActivity.java  class

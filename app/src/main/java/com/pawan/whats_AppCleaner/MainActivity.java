@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private DetailsAdapter detailsAdapter1;
     private ProgressDialog progressDialog;
     private AdView mAdView, mAdView1;
-    private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice, intenttostatus;
+    private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice, intenttostatus,intenttodefault;
 
     private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
-            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status;
+            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status,mInterstitialAd_nondefault;
     private String sent = "Sent";
 
     private final static String TAG = "MainActivity";
@@ -78,13 +78,26 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @SuppressWarnings("FieldCanBeLocal")
     private String data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, data_status, tot_dat;
     @SuppressWarnings("FieldCanBeLocal")
-    private long sum, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
+    private long sum = 0, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
+    private ArrayList<File> defaultList = new ArrayList<>();
 
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Create list of filepath of default folders
+        defaultList.add(new File(DataHolder.imagesReceivedPath));
+        defaultList.add(new File(DataHolder.documentsReceivedPath));
+        defaultList.add(new File(DataHolder.videosReceivedPath));
+        defaultList.add(new File(DataHolder.statuscache));
+        defaultList.add(new File(DataHolder.statusdownload));
+        defaultList.add(new File(DataHolder.audiosReceivedPath));
+        defaultList.add(new File(DataHolder.voiceReceivedPath));
+        defaultList.add(new File(DataHolder.wallReceivedPath));
+        defaultList.add(new File(DataHolder.gifReceivedPath));
+
 
         total_data = findViewById(R.id.data);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -182,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_wall = new InterstitialAd(this);
         mInterstitialAd_gif = new InterstitialAd(this);
         mInterstitialAd_status = new InterstitialAd(this);
+        mInterstitialAd_nondefault = new InterstitialAd(this);
+
 
         mInterstitialAd_doc.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
         mInterstitialAd_doc.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
@@ -416,6 +431,35 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
+        mInterstitialAd_nondefault.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
+        mInterstitialAd_nondefault.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
+                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+                .addTestDevice("D7397574F6CC21785588738256355351").build());
+
+        mInterstitialAd_nondefault.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                if (intenttostatus) {
+                    intenttostatus = false;
+                    onIntenttostatus();
+                }
+                if (!mInterstitialAd_nondefault.isLoaded() && !mInterstitialAd_nondefault.isLoading()) {
+                    mInterstitialAd_nondefault.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e("Interstitial_gif", String.valueOf(i));
+            }
+
+            @Override
+            public void onAdLoaded() {
+                Log.e("Interstitial_gif", "Loaded");
+            }
+
+        });
+
         detailsAdapter1 = new DetailsAdapter(this, dataList1, this);
         detailsAdaptercustom = new DetailsAdapterCustom(this, dataList, this);
 
@@ -599,6 +643,18 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         @Override
         protected String doInBackground(Void... voids) {
+
+            File root = new File(Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/");
+
+            File[] listOfFiles = root.listFiles();
+            long tot_size = 0;
+            for(int i = 0;i < listOfFiles.length ; i++){
+                long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
+                Log.d(TAG,listOfFiles[i].getPath());
+                tot_size += size;
+            }
+            mainActivityWeakReference.get().sum = tot_size;
+
             /*Size for Images folder*/
             mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images";
 
@@ -898,32 +954,30 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 mainActivityWeakReference.get().data_status = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_status);
             }
 
-            mainActivityWeakReference.get().sum = mainActivityWeakReference.get().size_img + mainActivityWeakReference.get().size_doc +
-                    mainActivityWeakReference.get().size_vid + mainActivityWeakReference.get().size_voice + mainActivityWeakReference.get().size_gif +
-                    mainActivityWeakReference.get().size_wall + mainActivityWeakReference.get().size_aud + mainActivityWeakReference.get().size_status;
-            mainActivityWeakReference.get().tot_dat = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().sum);
+
+           mainActivityWeakReference.get().tot_dat = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().sum);
 
 
             //For Images,documents and Videos
             mainActivityWeakReference.get().dataList1.clear();
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Images",
-                    mainActivityWeakReference.get().data_img,
+                    mainActivityWeakReference.get().data_img,DataHolder.imagesReceivedPath,
                     R.drawable.ic_image,
                     R.color.green));
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Documents",
-                    mainActivityWeakReference.get().data_doc,
+                    mainActivityWeakReference.get().data_doc,DataHolder.documentsReceivedPath,
                     R.drawable.ic_folder,
                     R.color.orange));
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Videos",
-                    mainActivityWeakReference.get().data_vid,
+                    mainActivityWeakReference.get().data_vid,DataHolder.videosReceivedPath,
                     R.drawable.ic_video,
                     R.color.blue));
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Statuses",
-                    mainActivityWeakReference.get().data_status,
+                    mainActivityWeakReference.get().data_status,DataHolder.statuscache,
                     R.drawable.ic_status,
                     R.color.orange
             ));
@@ -931,25 +985,41 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             mainActivityWeakReference.get().dataList.clear();
             mainActivityWeakReference.get().dataList.add(new Details(
                     "Audio files",
-                    mainActivityWeakReference.get().data_aud,
+                    mainActivityWeakReference.get().data_aud,DataHolder.audiosReceivedPath,
                     R.drawable.ic_library_music_black,
                     R.color.purple));
             mainActivityWeakReference.get().dataList.add(new Details(
                     "Voice files",
-                    mainActivityWeakReference.get().data_voice,
+                    mainActivityWeakReference.get().data_voice,DataHolder.voiceReceivedPath,
                     R.drawable.ic_queue_music_black,
                     R.color.lightblue));
             mainActivityWeakReference.get().dataList.add(new Details(
                     "Wallpapers",
-                    mainActivityWeakReference.get().data_wall,
+                    mainActivityWeakReference.get().data_wall,DataHolder.wallReceivedPath,
                     R.drawable.ic_image,
                     R.color.maroon));
             mainActivityWeakReference.get().dataList.add(new Details(
                     "GIFs",
-                    mainActivityWeakReference.get().data_gif,
+                    mainActivityWeakReference.get().data_gif,DataHolder.gifReceivedPath,
                     R.drawable.camera_iris,
-                    R.color.green));
+                    R.color.orange));
+
+            //Adding the files not present in the default files list
+            for(int i = 0;i < listOfFiles.length ; i++){
+               if(!mainActivityWeakReference.get().defaultList.contains(listOfFiles[i])){
+                   long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
+                   String pathName = listOfFiles[i].getPath();
+                   String folderName = pathName.substring(pathName.indexOf("a/")+2);
+                   String data = Formatter.formatShortFileSize(mainActivityWeakReference.get(), size);
+                   mainActivityWeakReference.get().dataList.add(new Details(
+                           folderName,
+                           data,pathName,
+                           R.drawable.ic_folder,
+                           R.color.black));
+               }
+            }
             return mainActivityWeakReference.get().tot_dat;
+
         }
 
         @Override
@@ -1006,6 +1076,13 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onIntenttostatus() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity_test.class);
         intent.putExtra("category", DataHolder.STATUS);
+        startActivity(intent);
+    }
+
+    public void onIntenttoNonDefault(String path) {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.NONDEFAULT);
+        intent.putExtra("pathname",path);
         startActivity(intent);
     }
 
@@ -1133,6 +1210,22 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             Log.e("TAG", "Not loaded");
             if (hasPermission()) {
                 onIntenttostatus();
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onNonDefaultClicked(String path) {
+        if (mInterstitialAd_nondefault.isLoaded() && mInterstitialAd_nondefault != null) {
+            mInterstitialAd_nondefault.show();
+            intenttodefault = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoNonDefault(path);
             } else {
                 askPermission();
             }
