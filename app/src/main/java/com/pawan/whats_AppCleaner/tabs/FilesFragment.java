@@ -39,6 +39,7 @@ import com.pawan.whats_AppCleaner.R;
 import com.pawan.whats_AppCleaner.adapters.innerAdapeters.InnerDetailsAdapter;
 import com.pawan.whats_AppCleaner.datas.FileDetails;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -140,6 +141,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 innerDetailsAdapter = new InnerDetailsAdapter(AUDIOS, getActivity(), innerDataList, this);
                 break;
+            case DataHolder.NONDEFAULT:
             case DataHolder.DOCUMENT:
                 rootView = inflater.inflate(R.layout.doc_activity, container, false);
                 recyclerView = rootView.findViewById(R.id.recycler_view);
@@ -519,6 +521,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                     }
                                 }
                                 break;
+                            case DataHolder.NONDEFAULT:
                             case DataHolder.DOCUMENT:
                                 //Check if it is a file or a folder
                                 if (file.isFile()) {
@@ -623,13 +626,14 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                                         break;
                                                 }
                                                 fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        getFileSize(re)));
-                                                fileDetails.setS(getFileSize(re));
+                                                        re.isDirectory() ?  FileUtils.sizeOfDirectory(re) : getFileSize(re)));
+                                                fileDetails.setS(re.isDirectory() ?  FileUtils.sizeOfDirectory(re) : getFileSize(re));
                                                 files.add(fileDetails);
                                             }
                                         }
                                     }
                                 }
+
                                 break;
                             case DataHolder.VIDEO:
                                 if (file.isFile()) {

@@ -2,11 +2,12 @@ package com.pawan.whats_AppCleaner.datas;
 
 public class Details {
 
-    public Details(String title, String  data, int image, int color){
+    public Details(String title, String  data,String path, int image, int color){
         this.title = title;
         this.data = data;
         this.image = image;
         this.color = color;
+        this.path  = path;
     }
 
     public String getTitle() {
@@ -32,8 +33,12 @@ public class Details {
         return color;
     }
 
+    public String getPath(){return path;}
+
+
     private String title;
     private String data;
     private int image;
     private int color;
+    private String path;
 }

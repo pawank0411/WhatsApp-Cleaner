@@ -57,7 +57,7 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
             @Override
             public void onClick(View v) {
                 // Intent intent;
-                switch (pos) {
+                switch (detailsViewHolder.getAdapterPosition()) {
 
 
                     case 0:
@@ -77,6 +77,11 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
                         if (listener != null)
                             listener.onGifsClicked();
                         break;
+                    default:
+                        if (listener != null)
+                            listener.onNonDefaultClicked(details.getPath());
+                        break;
+
                 }
 
             }
@@ -116,6 +121,8 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
         void onWallpapersClicked();
 
         void onVoiceClicked();
+
+        void onNonDefaultClicked(String path);
 
     }
 

@@ -11,6 +11,7 @@ public class DataHolder {
     public static final String WALLPAPER = "wallpaper";
     public static final String VOICE = "status";
     public static final String STATUS = "Status";
+    public static final String NONDEFAULT = "nondefault";
 
     public static final String imagesReceivedPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images";
     public static final String imagesSentPath = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Images/Sent";
