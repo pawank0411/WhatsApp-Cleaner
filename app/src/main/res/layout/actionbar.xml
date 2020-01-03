@@ -9,11 +9,11 @@
         android:id="@+id/action_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginStart="10.5dp"
         android:fontFamily="@font/changa_medium"
+        android:gravity="center"
         android:text="@string/whatsapp_cleaner"
-        android:textColor="#ffffff"
+        android:textColor="#FFFFFF"
         android:textSize="19sp" />
 </LinearLayout>

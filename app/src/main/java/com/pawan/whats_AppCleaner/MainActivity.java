@@ -1010,6 +1010,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                    long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
                    String pathName = listOfFiles[i].getPath();
                    String folderName = pathName.substring(pathName.indexOf("a/")+2);
+                   if(folderName.startsWith("WhatsApp ")){
+                       folderName = folderName.substring(9);
+                   }
                    String data = Formatter.formatShortFileSize(mainActivityWeakReference.get(), size);
                    mainActivityWeakReference.get().dataList.add(new Details(
                            folderName,
