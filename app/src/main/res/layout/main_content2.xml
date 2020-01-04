@@ -16,8 +16,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:foreground="?android:selectableItemBackground"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="3dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,7 +26,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="#CCE0B6"
             android:padding="16dp">
 
             <TextView
@@ -33,9 +34,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/white"
+                android:layout_marginEnd="5dp"
+                android:background="#CCE0B6"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -50,9 +51,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
                 android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/dgray"
+                android:layout_marginEnd="5dp"
+                android:textColor="#4E4E4E"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toStartOf="@+id/image"
                 app:layout_constraintStart_toStartOf="parent"

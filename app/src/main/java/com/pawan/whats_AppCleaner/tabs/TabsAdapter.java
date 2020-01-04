@@ -95,19 +95,32 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        if(!category.equals(DataHolder.NONDEFAULT))
+            return 2;
+        else
+            return 1;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "Recieved Files";
-            case 1:
-                return "Sent Files";
-            default:
-                return "";
+        if(!category.equals(DataHolder.NONDEFAULT)) {
+            switch (position) {
+                case 0:
+                    return "Recieved Files";
+                case 1:
+                    return "Sent Files";
+                default:
+                    return "";
+            }
+        }else
+        {
+            String folderName = receivedPath.substring(receivedPath.indexOf("a/")+2);
+            if(folderName.startsWith("WhatsApp ")){
+                folderName = folderName.substring(9);
+            }
+            return folderName;
         }
+
     }
 }
