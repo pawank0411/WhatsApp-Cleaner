@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner.tabs;
+package com.pawan.files_cleaner.tabs;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -37,12 +37,12 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.pawan.whats_AppCleaner.CheckRecentRun;
-import com.pawan.whats_AppCleaner.DataHolder;
-import com.pawan.whats_AppCleaner.MainActivity;
-import com.pawan.whats_AppCleaner.R;
-import com.pawan.whats_AppCleaner.adapters.innerAdapeters.InnerDetailsAdapter;
-import com.pawan.whats_AppCleaner.datas.FileDetails;
+import com.pawan.files_cleaner.CheckRecentRun;
+import com.pawan.files_cleaner.DataHolder;
+import com.pawan.files_cleaner.MainActivity;
+import com.pawan.files_cleaner.R;
+import com.pawan.files_cleaner.adapters.innerAdapeters.InnerDetailsAdapter;
+import com.pawan.files_cleaner.datas.FileDetails;
 
 import org.apache.commons.io.FileUtils;
 
@@ -444,7 +444,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                         @Override
                         public void onClick(View v) {
                             new AlertDialog.Builder(getContext())
-                                    .setMessage("Are you want to share or delete?")
+                                    .setMessage("Do you want to share or delete?")
                                     .setCancelable(true)
                                     .setNegativeButton("DELETE", new DialogInterface.OnClickListener() {
                                         @Override

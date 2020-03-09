@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner;
+package com.pawan.files_cleaner;
 
 import org.junit.Test;
 

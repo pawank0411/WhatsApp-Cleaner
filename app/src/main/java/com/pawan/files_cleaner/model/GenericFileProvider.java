@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner.model;
+package com.pawan.files_cleaner.model;
 
 import androidx.core.content.FileProvider;
 

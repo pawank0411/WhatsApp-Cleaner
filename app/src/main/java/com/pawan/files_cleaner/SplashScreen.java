@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner;
+package com.pawan.files_cleaner;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,9 +20,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.SplashTheme);
-
         settings = getSharedPreferences(PREFS, MODE_PRIVATE);
-
 
         if (!settings.contains("lastRun"))
             enableNotification(null);
@@ -36,6 +34,7 @@ public class SplashScreen extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
     public void recordRunTime() {
         editor = settings.edit();
         editor.putLong("lastRun", System.currentTimeMillis());

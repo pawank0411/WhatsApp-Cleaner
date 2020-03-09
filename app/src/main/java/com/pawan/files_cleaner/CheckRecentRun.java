@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner;
+package com.pawan.files_cleaner;
 
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
@@ -64,7 +64,9 @@ public class CheckRecentRun extends Service {
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pi);
+        if (am != null) {
+            am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pi);
+        }
         Log.v(TAG, "Alarm set");
     }
 

@@ -40,7 +40,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginEnd="10dp"
             ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-7255339257613393/3750418498"
+            ads:adUnitId="ca-app-pub-7255339257613393/5143250272"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintHorizontal_bias="0.555"
             app:layout_constraintStart_toStartOf="parent"

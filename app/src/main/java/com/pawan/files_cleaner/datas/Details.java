@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner.datas;
+package com.pawan.files_cleaner.datas;
 
 public class Details {
 

@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner.tabs;
+package com.pawan.files_cleaner.tabs;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -32,12 +32,12 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.pawan.whats_AppCleaner.CheckRecentRun;
-import com.pawan.whats_AppCleaner.DataHolder;
-import com.pawan.whats_AppCleaner.MainActivity;
-import com.pawan.whats_AppCleaner.R;
-import com.pawan.whats_AppCleaner.adapters.innerAdapeters.InnerDetailsAdapter;
-import com.pawan.whats_AppCleaner.datas.FileDetails;
+import com.pawan.files_cleaner.CheckRecentRun;
+import com.pawan.files_cleaner.DataHolder;
+import com.pawan.files_cleaner.MainActivity;
+import com.pawan.files_cleaner.R;
+import com.pawan.files_cleaner.adapters.innerAdapeters.InnerDetailsAdapter;
+import com.pawan.files_cleaner.datas.FileDetails;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -165,7 +165,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(innerDetailsAdapter);
 
-        settings = getContext().getSharedPreferences(PREFS, MODE_PRIVATE);
+        settings = Objects.requireNonNull(getContext()).getSharedPreferences(PREFS, MODE_PRIVATE);
 
 
 
@@ -187,15 +187,18 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             no_ads.setText(R.string.no_ads);
 
 
-            mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("46BC4FB22E91830D5B7E730BBDDF9B42")
+            mAdView.loadAd(new AdRequest.Builder()
+//                    .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("46BC4FB22E91830D5B7E730BBDDF9B42")
                     .build());
 
             mAdView.setAdListener(new AdListener() {
                 @Override
                 public void onAdClosed() {
                     if (!mAdView.isLoading()) {
-                        mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                                .addTestDevice("46BC4FB22E91830D5B7E730BBDDF9B42").build());
+                        mAdView.loadAd(new AdRequest.Builder()
+//                                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                                .addTestDevice("46BC4FB22E91830D5B7E730BBDDF9B42")
+                                .build());
                     }
                 }
 
@@ -465,6 +468,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                     for (final File file : results) {
                         switch (category) {
                             case DataHolder.IMAGE:
+                            case DataHolder.WALLPAPER:
                                 if (file.isFile()) {
                                     if (!file.getName().endsWith(".nomedia")) {
                                         FileDetails fileDetails = new FileDetails();
@@ -491,31 +495,33 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 } else if (file.isDirectory()) {
                                     if (!file.getName().equals("Sent")) {
                                         File[] res = file.listFiles();
-                                        for (File re : res) {
-                                            if (!re.getName().endsWith(".nomedia")) {
-                                                FileDetails fileDetails = new FileDetails();
-                                                fileDetails.setName(re.getName());
-                                                fileDetails.setPath(re.getPath());
-                                                fileDetails.setMod(re.lastModified());
-                                                //extension = FilenameUtils.getExtension((re.getPath()));
+                                        if (res != null) {
+                                            for (File re : res) {
+                                                if (!re.getName().endsWith(".nomedia")) {
+                                                    FileDetails fileDetails = new FileDetails();
+                                                    fileDetails.setName(re.getName());
+                                                    fileDetails.setPath(re.getPath());
+                                                    fileDetails.setMod(re.lastModified());
+                                                    //extension = FilenameUtils.getExtension((re.getPath()));
 
-//                                                String mime = "*/*";
-                                               // File a = new File(re.getPath());
-                                               // Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                //        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-                                                 //               ".my.package.name.provider", a);
-                                             //   MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-//                                                if (mimeTypeMap.hasExtension(
-//                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
-//
-//                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-//                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
-//                                                }
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        getFileSize(re)));
-                                                fileDetails.setS(getFileSize(re));
-                                                Log.e("size", String.valueOf(getFileSize(re)));
-                                                files.add(fileDetails);
+    //                                                String mime = "*/*";
+                                                   // File a = new File(re.getPath());
+                                                   // Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                                    //        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                     //               ".my.package.name.provider", a);
+                                                 //   MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+    //                                                if (mimeTypeMap.hasExtension(
+    //                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+    //
+    //                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+    //                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+    //                                                }
+                                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                            getFileSize(re)));
+                                                    fileDetails.setS(getFileSize(re));
+                                                    Log.e("size", String.valueOf(getFileSize(re)));
+                                                    files.add(fileDetails);
+                                                }
                                             }
                                         }
                                     }
@@ -578,57 +584,59 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 } else if (file.isDirectory()){
                                     if (!file.getName().equals("Sent")) {
                                         File[] res = file.listFiles();
-                                        for (File re : res) {
-                                            if (!re.getName().endsWith(".nomedia")) {
-                                                FileDetails fileDetails = new FileDetails();
-                                                fileDetails.setName(re.getName());
-                                                fileDetails.setPath(re.getPath());
-                                                fileDetails.setMod(re.lastModified());
-                                                fileDetails.setImage(R.drawable.ic_doc);
-                                                extension = FilenameUtils.getExtension((re.getPath()));
+                                        if (res != null) {
+                                            for (File re : res) {
+                                                if (!re.getName().endsWith(".nomedia")) {
+                                                    FileDetails fileDetails = new FileDetails();
+                                                    fileDetails.setName(re.getName());
+                                                    fileDetails.setPath(re.getPath());
+                                                    fileDetails.setMod(re.lastModified());
+                                                    fileDetails.setImage(R.drawable.ic_doc);
+                                                    extension = FilenameUtils.getExtension((re.getPath()));
 
-                                                String mime = "*/*";
-                                                File a = new File(re.getPath());
-                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-                                                                ".my.package.name.provider", a);
-                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                                                if (mimeTypeMap.hasExtension(
-                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+                                                    String mime = "*/*";
+                                                    File a = new File(re.getPath());
+                                                    Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                                            Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                                    ".my.package.name.provider", a);
+                                                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                                    if (mimeTypeMap.hasExtension(
+                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
 
-                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                        mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                                                MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                    }
+                                                    switch (mime) {
+                                                        case "image":
+                                                            fileDetails.setColor(R.color.green);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "video":
+                                                            fileDetails.setColor(R.color.blue);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "text":
+                                                            fileDetails.setColor(R.color.orange);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "application":
+                                                            fileDetails.setColor(R.color.red);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "audio":
+                                                            fileDetails.setColor(R.color.purple);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        default:
+                                                            fileDetails.setColor(R.color.gray);
+                                                            fileDetails.setImage(R.drawable.ic_unkown);
+                                                            break;
+                                                    }
+                                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                            re.isDirectory() ?  FileUtils.sizeOfDirectory(re) : getFileSize(re)));
+                                                    fileDetails.setS(re.isDirectory() ?  FileUtils.sizeOfDirectory(re) : getFileSize(re));
+                                                    files.add(fileDetails);
                                                 }
-                                                switch (mime) {
-                                                    case "image":
-                                                        fileDetails.setColor(R.color.green);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "video":
-                                                        fileDetails.setColor(R.color.blue);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "text":
-                                                        fileDetails.setColor(R.color.orange);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "application":
-                                                        fileDetails.setColor(R.color.red);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "audio":
-                                                        fileDetails.setColor(R.color.purple);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    default:
-                                                        fileDetails.setColor(R.color.gray);
-                                                        fileDetails.setImage(R.drawable.ic_unkown);
-                                                        break;
-                                                }
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        re.isDirectory() ?  FileUtils.sizeOfDirectory(re) : getFileSize(re)));
-                                                fileDetails.setS(re.isDirectory() ?  FileUtils.sizeOfDirectory(re) : getFileSize(re));
-                                                files.add(fileDetails);
                                             }
                                         }
                                     }
@@ -653,33 +661,35 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 } else if (file.isDirectory()) {
                                     if (!file.getName().equals("Sent")) {
                                         File[] res = file.listFiles();
-                                        for (File re : res) {
-                                            if (!re.getName().endsWith(".nomedia")) {
-                                                FileDetails fileDetails = new FileDetails();
-                                                fileDetails.setName(re.getName());
-                                                fileDetails.setPath(re.getPath());
-                                                fileDetails.setMod(re.lastModified());
-                                                fileDetails.setImage(R.drawable.video_play);
-                                                fileDetails.setColor(R.color.transparent);
-//                                                extension = FilenameUtils.getExtension((re.getPath()));
-//
-//                                                String mime = "*/*";
-//                                                File a = new File(re.getPath());
-//                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-//                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-//                                                                ".my.package.name.provider", a);
-//                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-//                                                if (mimeTypeMap.hasExtension(
-//                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
-//
-//                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-//                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
-//                                                }
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        getFileSize(re)));
-                                                fileDetails.setS(getFileSize(re));
-                                                Log.e("size", String.valueOf(getFileSize(re)));
-                                                files.add(fileDetails);
+                                        if (res != null) {
+                                            for (File re : res) {
+                                                if (!re.getName().endsWith(".nomedia")) {
+                                                    FileDetails fileDetails = new FileDetails();
+                                                    fileDetails.setName(re.getName());
+                                                    fileDetails.setPath(re.getPath());
+                                                    fileDetails.setMod(re.lastModified());
+                                                    fileDetails.setImage(R.drawable.video_play);
+                                                    fileDetails.setColor(R.color.transparent);
+    //                                                extension = FilenameUtils.getExtension((re.getPath()));
+    //
+    //                                                String mime = "*/*";
+    //                                                File a = new File(re.getPath());
+    //                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+    //                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+    //                                                                ".my.package.name.provider", a);
+    //                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+    //                                                if (mimeTypeMap.hasExtension(
+    //                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+    //
+    //                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+    //                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+    //                                                }
+                                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                            getFileSize(re)));
+                                                    fileDetails.setS(getFileSize(re));
+                                                    Log.e("size", String.valueOf(getFileSize(re)));
+                                                    files.add(fileDetails);
+                                                }
                                             }
                                         }
                                     }
@@ -741,57 +751,59 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 } else if (file.isDirectory()){
                                     if (!file.getName().equals("Sent")) {
                                         File[] res = file.listFiles();
-                                        for (File re : res) {
-                                            if (!re.getName().endsWith(".nomedia")) {
-                                                FileDetails fileDetails = new FileDetails();
-                                                fileDetails.setName(re.getName());
-                                                fileDetails.setPath(re.getPath());
-                                                fileDetails.setMod(re.lastModified());
-                                                fileDetails.setImage(R.drawable.ic_audio);
-                                                extension = FilenameUtils.getExtension((re.getPath()));
+                                        if (res != null) {
+                                            for (File re : res) {
+                                                if (!re.getName().endsWith(".nomedia")) {
+                                                    FileDetails fileDetails = new FileDetails();
+                                                    fileDetails.setName(re.getName());
+                                                    fileDetails.setPath(re.getPath());
+                                                    fileDetails.setMod(re.lastModified());
+                                                    fileDetails.setImage(R.drawable.ic_audio);
+                                                    extension = FilenameUtils.getExtension((re.getPath()));
 
-                                                String mime = "*/*";
-                                                File a = new File(re.getPath());
-                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-                                                                ".my.package.name.provider", a);
-                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                                                if (mimeTypeMap.hasExtension(
-                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+                                                    String mime = "*/*";
+                                                    File a = new File(re.getPath());
+                                                    Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                                            Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                                    ".my.package.name.provider", a);
+                                                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                                    if (mimeTypeMap.hasExtension(
+                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
 
-                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                        mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                                                MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                    }
+                                                    switch (mime) {
+                                                        case "image":
+                                                            fileDetails.setColor(R.color.green);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "video":
+                                                            fileDetails.setColor(R.color.blue);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "text":
+                                                            fileDetails.setColor(R.color.orange);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "application":
+                                                            fileDetails.setColor(R.color.red);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "audio":
+                                                            fileDetails.setColor(R.color.purple);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        default:
+                                                            fileDetails.setColor(R.color.gray);
+                                                            fileDetails.setImage(R.drawable.ic_unkown);
+                                                            break;
+                                                    }
+                                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                            getFileSize(re)));
+                                                    fileDetails.setS(getFileSize(re));
+                                                    files.add(fileDetails);
                                                 }
-                                                switch (mime) {
-                                                    case "image":
-                                                        fileDetails.setColor(R.color.green);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "video":
-                                                        fileDetails.setColor(R.color.blue);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "text":
-                                                        fileDetails.setColor(R.color.orange);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "application":
-                                                        fileDetails.setColor(R.color.red);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "audio":
-                                                        fileDetails.setColor(R.color.purple);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    default:
-                                                        fileDetails.setColor(R.color.gray);
-                                                        fileDetails.setImage(R.drawable.ic_unkown);
-                                                        break;
-                                                }
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        getFileSize(re)));
-                                                fileDetails.setS(getFileSize(re));
-                                                files.add(fileDetails);
                                             }
                                         }
                                     }
@@ -814,75 +826,34 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 } else if (file.isDirectory()) {
                                     if (!file.getName().equals("Sent")) {
                                         File[] res = file.listFiles();
-                                        for (File re : res) {
-                                            if (!re.getName().endsWith(".nomedia")) {
-                                                FileDetails fileDetails = new FileDetails();
-                                                fileDetails.setName(re.getName());
-                                                fileDetails.setPath(re.getPath());
-                                                fileDetails.setMod(re.lastModified());
-                                                fileDetails.setImage(R.drawable.video_play);
-                                                fileDetails.setColor(R.color.transparent);
+                                        if (res != null) {
+                                            for (File re : res) {
+                                                if (!re.getName().endsWith(".nomedia")) {
+                                                    FileDetails fileDetails = new FileDetails();
+                                                    fileDetails.setName(re.getName());
+                                                    fileDetails.setPath(re.getPath());
+                                                    fileDetails.setMod(re.lastModified());
+                                                    fileDetails.setImage(R.drawable.video_play);
+                                                    fileDetails.setColor(R.color.transparent);
 
-//                                                String mime = "*/*";
-//                                                File a = new File(re.getPath());
-//                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-//                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-//                                                                ".my.package.name.provider", a);
-//                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-//                                                if (mimeTypeMap.hasExtension(
-//                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
-//
-//                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-//                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
-//                                                }
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        getFileSize(re)));
-                                                fileDetails.setS(getFileSize(re));
-                                                Log.e("size", String.valueOf(getFileSize(re)));
-                                                files.add(fileDetails);
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-                            case DataHolder.WALLPAPER:
-                                if (file.isFile()) {
-                                    if (!file.getName().endsWith(".nomedia")) {
-                                        FileDetails fileDetails = new FileDetails();
-                                        fileDetails.setName(file.getName());
-                                        fileDetails.setPath(file.getPath());
-                                        fileDetails.setMod(file.lastModified());
-                                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                getFileSize(file)));
-                                        fileDetails.setS(getFileSize(file));
-                                        files.add(fileDetails);
-                                    }
-                                } else if (file.isDirectory()) {
-                                    if (!file.getName().equals("Sent")) {
-                                        File[] res = file.listFiles();
-                                        for (File re : res) {
-                                            if (!re.getName().endsWith(".nomedia")) {
-                                                FileDetails fileDetails = new FileDetails();
-                                                fileDetails.setName(re.getName());
-                                                fileDetails.setPath(re.getPath());
-                                                fileDetails.setMod(re.lastModified());
-//                                                String mime = "*/*";
-//                                                File a = new File(re.getPath());
-//                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-//                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-//                                                                ".my.package.name.provider", a);
-//                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-//                                                if (mimeTypeMap.hasExtension(
-//                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
-//
-//                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-//                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
-//                                                }
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        getFileSize(re)));
-                                                fileDetails.setS(getFileSize(re));
-                                                Log.e("size", String.valueOf(getFileSize(re)));
-                                                files.add(fileDetails);
+    //                                                String mime = "*/*";
+    //                                                File a = new File(re.getPath());
+    //                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+    //                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+    //                                                                ".my.package.name.provider", a);
+    //                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+    //                                                if (mimeTypeMap.hasExtension(
+    //                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+    //
+    //                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+    //                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+    //                                                }
+                                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                            getFileSize(re)));
+                                                    fileDetails.setS(getFileSize(re));
+                                                    Log.e("size", String.valueOf(getFileSize(re)));
+                                                    files.add(fileDetails);
+                                                }
                                             }
                                         }
                                     }
@@ -892,58 +863,60 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                 if (file.isDirectory()) {
                                     if (!file.getName().equals("Sent")) {
                                         File[] res = file.listFiles();
-                                        for (File re : res) {
-                                            if (!re.getName().endsWith(".nomedia")) {
-                                                FileDetails fileDetails = new FileDetails();
-                                                fileDetails.setName(re.getName());
-                                                fileDetails.setPath(re.getPath());
-                                                fileDetails.setMod(re.lastModified());
-                                                fileDetails.setImage(R.drawable.voice);
-                                                fileDetails.setColor(R.color.orange);
-                                                extension = FilenameUtils.getExtension((re.getPath()));
+                                        if (res != null) {
+                                            for (File re : res) {
+                                                if (!re.getName().endsWith(".nomedia")) {
+                                                    FileDetails fileDetails = new FileDetails();
+                                                    fileDetails.setName(re.getName());
+                                                    fileDetails.setPath(re.getPath());
+                                                    fileDetails.setMod(re.lastModified());
+                                                    fileDetails.setImage(R.drawable.voice);
+                                                    fileDetails.setColor(R.color.orange);
+                                                    extension = FilenameUtils.getExtension((re.getPath()));
 
-                                                String mime = "*/*";
-                                                File a = new File(re.getPath());
-                                                Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                        Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
-                                                                ".my.package.name.provider", a);
-                                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                                                if (mimeTypeMap.hasExtension(
-                                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+                                                    String mime = "*/*";
+                                                    File a = new File(re.getPath());
+                                                    Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
+                                                            Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                                    ".my.package.name.provider", a);
+                                                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                                    if (mimeTypeMap.hasExtension(
+                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
 
-                                                    mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
-                                                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                        mime = Objects.requireNonNull(mimeTypeMap.getMimeTypeFromExtension(
+                                                                MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
+                                                    }
+                                                    switch (mime) {
+                                                        case "image":
+                                                            fileDetails.setColor(R.color.green);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "video":
+                                                            fileDetails.setColor(R.color.blue);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "text":
+                                                            fileDetails.setColor(R.color.orange);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "application":
+                                                            fileDetails.setColor(R.color.red);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        case "audio":
+                                                            fileDetails.setColor(R.color.purple);
+                                                            fileDetails.setExt(extension);
+                                                            break;
+                                                        default:
+                                                            fileDetails.setColor(R.color.gray);
+                                                            fileDetails.setImage(R.drawable.ic_unkown);
+                                                            break;
+                                                    }
+                                                    fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
+                                                            getFileSize(re)));
+                                                    fileDetails.setS(getFileSize(re));
+                                                    files.add(fileDetails);
                                                 }
-                                                switch (mime) {
-                                                    case "image":
-                                                        fileDetails.setColor(R.color.green);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "video":
-                                                        fileDetails.setColor(R.color.blue);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "text":
-                                                        fileDetails.setColor(R.color.orange);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "application":
-                                                        fileDetails.setColor(R.color.red);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    case "audio":
-                                                        fileDetails.setColor(R.color.purple);
-                                                        fileDetails.setExt(extension);
-                                                        break;
-                                                    default:
-                                                        fileDetails.setColor(R.color.gray);
-                                                        fileDetails.setImage(R.drawable.ic_unkown);
-                                                        break;
-                                                }
-                                                fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference.get().getContext(),
-                                                        getFileSize(re)));
-                                                fileDetails.setS(getFileSize(re));
-                                                files.add(fileDetails);
                                             }
                                         }
                                     }

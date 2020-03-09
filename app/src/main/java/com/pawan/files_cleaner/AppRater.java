@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner;
+package com.pawan.files_cleaner;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,8 +11,8 @@ public class AppRater {
     private final static int DAYS_UNTIL_PROMPT = 3;//Min number of days
     private final static int LAUNCHES_UNTIL_PROMPT = 3;//Min number of launches
 
-    private final static String APP_TITLE = "Whats-App Cleaner";// App Name
-    private final static String APP_PNAME = "com.pawan.whatsApp_Cleaner";// Package Name
+    private final static String APP_TITLE = "whats-App cleaner";// App Name
+    private final static String APP_PNAME = "com.pawan.files_cleaner";// Package Name
     public static void app_launched(final Context mContext) {
 
         SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);

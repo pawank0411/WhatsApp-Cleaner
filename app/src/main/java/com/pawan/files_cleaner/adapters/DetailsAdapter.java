@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner.adapters;
+package com.pawan.files_cleaner.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,21 +11,22 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.pawan.whats_AppCleaner.R;
-import com.pawan.whats_AppCleaner.datas.Details;
+import com.pawan.files_cleaner.R;
+import com.pawan.files_cleaner.datas.Details;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCustom.DetailsViewHolder> {
+public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsViewHolder> {
     private Context ctx;
 
     private List<Details> datalist;
 
     private OnItemClickListener listener;
 
-    public DetailsAdapterCustom(Context ctx, List<Details> datalist, OnItemClickListener listener) {
+
+    public DetailsAdapter(Context ctx, List<Details> datalist, OnItemClickListener listener) {
         this.ctx = ctx;
         this.datalist = datalist;
         this.listener = listener;
@@ -41,7 +42,7 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DetailsAdapterCustom.DetailsViewHolder detailsViewHolder, int positions) {
+    public void onBindViewHolder(@NonNull DetailsAdapter.DetailsViewHolder detailsViewHolder, int positions) {
 
         Details details = datalist.get(positions);
         detailsViewHolder.title.setText(details.getTitle());
@@ -58,35 +59,31 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
             public void onClick(View v) {
                 // Intent intent;
                 switch (detailsViewHolder.getAdapterPosition()) {
-
-
                     case 0:
+                        /*//differnt activites for differnt cards
+                        // TODO: 1/13/19 First we need to rector this into the mainActivity.java  class
+                     */
                         if (listener != null)
-                            listener.onAudiosClicked();
+                            listener.onImagesClicked();
                         break;
-
                     case 1:
                         if (listener != null)
-                            listener.onVoiceClicked();
+                            listener.onDocumentsClicked();
                         break;
+
                     case 2:
                         if (listener != null)
-                            listener.onWallpapersClicked();
+                            listener.onVideosClicked();
                         break;
                     case 3:
                         if (listener != null)
-                            listener.onGifsClicked();
-                        break;
-                    default:
-                        if (listener != null)
-                            listener.onNonDefaultClicked(details.getPath());
+                            listener.onStatusClicked();
                         break;
 
                 }
 
             }
         });
-
     }
 
     @Override
@@ -94,12 +91,12 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
         return datalist.size();
     }
 
+
     public class DetailsViewHolder extends RecyclerView.ViewHolder {
 
         TextView title, data;
         CircleImageView image;
         CardView cardView;
-
 
         public DetailsViewHolder(View itemView) {
             super(itemView);
@@ -113,17 +110,13 @@ public class DetailsAdapterCustom extends RecyclerView.Adapter<DetailsAdapterCus
 
     // TODO: 1/13/19 So we create an interface that calls main Activity when the user clicks on any item
     public interface OnItemClickListener {
+        void onImagesClicked();
 
-        void onAudiosClicked();
+        void onDocumentsClicked();
 
-        void onGifsClicked();
+        void onVideosClicked();
 
-        void onWallpapersClicked();
-
-        void onVoiceClicked();
-
-        void onNonDefaultClicked(String path);
-
+        void onStatusClicked();
     }
 
 }

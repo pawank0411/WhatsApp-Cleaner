@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray"
+    android:id="@+id/mainLayout"
     tools:targetApi="11">
 
     <ScrollView
@@ -61,7 +62,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 ads:adSize="LARGE_BANNER"
-                ads:adUnitId="ca-app-pub-7255339257613393/3750418498" />
+                ads:adUnitId="ca-app-pub-7255339257613393/5143250272" />
 
             <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/adView_small"
@@ -104,7 +104,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 ads:adSize="BANNER"
-                ads:adUnitId="ca-app-pub-7255339257613393/3750418498" />
+                ads:adUnitId="ca-app-pub-7255339257613393/5143250272" />
 
             <!--<RelativeLayout-->
             <!--android:id="@+id/rate"-->
@@ -219,4 +219,5 @@
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"
         android:visibility="gone" />
-</RelativeLayout>
+    <include layout="@layout/festival"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

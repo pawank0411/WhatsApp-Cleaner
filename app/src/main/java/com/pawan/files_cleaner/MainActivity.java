@@ -1,4 +1,4 @@
-package com.pawan.whats_AppCleaner;
+package com.pawan.files_cleaner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -21,10 +21,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -34,16 +36,22 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.pawan.whats_AppCleaner.adapters.DetailsAdapter;
-import com.pawan.whats_AppCleaner.adapters.DetailsAdapterCustom;
-import com.pawan.whats_AppCleaner.datas.Details;
-import com.pawan.whats_AppCleaner.tabs.TabLayoutActivity;
-import com.pawan.whats_AppCleaner.tabs.TabLayoutActivity_test;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.pawan.files_cleaner.adapters.DetailsAdapter;
+import com.pawan.files_cleaner.adapters.DetailsAdapterCustom;
+import com.pawan.files_cleaner.datas.Details;
+import com.pawan.files_cleaner.tabs.TabLayoutActivity;
+import com.pawan.files_cleaner.tabs.TabLayoutActivity_test;
 
 import org.apache.commons.io.FileUtils;
 
@@ -61,11 +69,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private DetailsAdapterCustom detailsAdaptercustom;
     private DetailsAdapter detailsAdapter1;
     private ProgressDialog progressDialog;
-    private AdView mAdView, mAdView1;
-    private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice, intenttostatus,intenttodefault;
+    //    private AdView mAdView, mAdView1;
+    private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice, intenttostatus, intenttodefault;
 
     private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
-            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status,mInterstitialAd_nondefault;
+            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status, mInterstitialAd_nondefault;
     private String sent = "Sent";
 
     private final static String TAG = "MainActivity";
@@ -82,13 +90,17 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @SuppressWarnings("FieldCanBeLocal")
     private long sum = 0, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
     private ArrayList<File> defaultList = new ArrayList<>();
+    private boolean showfestival;
+    LottieAnimationView lottieAnimationView;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        lottieAnimationView = findViewById(R.id.lav_actionBar);
         //Create list of filepath of default folders
         defaultList.add(new File(DataHolder.imagesReceivedPath));
         defaultList.add(new File(DataHolder.documentsReceivedPath));
@@ -103,9 +115,25 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         total_data = findViewById(R.id.data);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                lottieAnimationView.cancelAnimation();
+                lottieAnimationView.setVisibility(View.GONE);
+                return false;
+            }
+        });
         RecyclerView recyclerView1 = findViewById(R.id.recycle);
-        mAdView = findViewById(R.id.adView_small);
-        mAdView1 = findViewById(R.id.adView_large);
+        recyclerView1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                lottieAnimationView.cancelAnimation();
+                lottieAnimationView.setVisibility(View.GONE);
+                return false;
+            }
+        });
+//        mAdView = findViewById(R.id.adView_small);
+//        mAdView1 = findViewById(R.id.adView_large);
 
         AppRater.app_launched(MainActivity.this);
 
@@ -124,6 +152,21 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         // Obtain the FirebaseAnalytics instance.
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        CollectionReference apiCollection = FirebaseFirestore.getInstance().collection("cleaner");
+        apiCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (queryDocumentSnapshots != null) {
+                    for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
+                        showfestival = documentChange.getDocument().getBoolean("festival");
+                        if (!showfestival) {
+                            lottieAnimationView.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        });
+
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(recyclerView));
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, String.valueOf(recyclerView));
@@ -140,52 +183,60 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         editor.putBoolean("Status", isNetworkAvailable());
         editor.apply();
 
-        if (isNetworkAvailable()) {
-            if (height <= 1920 && height > 1280) {
-
-                mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
-
-                mAdView.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdClosed() {
-                        if (!mAdView.isLoading()) {
-                            mAdView.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
-                        }
-                    }
-
-                    @Override
-                    public void onAdLoaded() {
-                        Log.e("Banner", "Loaded");
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(int i) {
-                        Log.e("Bannercode", String.valueOf(i));
-                    }
-                });
-            } else if (height > 1920) {
-
-                mAdView1.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
-                mAdView1.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdClosed() {
-                        if (!mAdView1.isLoading()) {
-                            mAdView1.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").build());
-                        }
-                    }
-
-                    @Override
-                    public void onAdLoaded() {
-                        Log.e("Banner", "Loaded");
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(int i) {
-                        Log.e("Bannercode", String.valueOf(i));
-                    }
-                });
-            }
-        }
+//        if (isNetworkAvailable()) {
+//            if (height <= 1920 && height > 1280) {
+//
+//                mAdView.loadAd(new AdRequest.Builder()
+////                        .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+//                        .build());
+//
+//                mAdView.setAdListener(new AdListener() {
+//                    @Override
+//                    public void onAdClosed() {
+//                        if (!mAdView.isLoading()) {
+//                            mAdView.loadAd(new AdRequest.Builder()
+////                                    .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+//                                    .build());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onAdLoaded() {
+//                        Log.e("Banner", "Loaded");
+//                    }
+//
+//                    @Override
+//                    public void onAdFailedToLoad(int i) {
+//                        Log.e("Bannercode", String.valueOf(i));
+//                    }
+//                });
+//            } else if (height > 1920) {
+//
+//                mAdView1.loadAd(new AdRequest.Builder()
+////                        .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                        .build());
+//                mAdView1.setAdListener(new AdListener() {
+//                    @Override
+//                    public void onAdClosed() {
+//                        if (!mAdView1.isLoading()) {
+//                            mAdView1.loadAd(new AdRequest.Builder()
+////                                    .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                                    .build());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onAdLoaded() {
+//                        Log.e("Banner", "Loaded");
+//                    }
+//
+//                    @Override
+//                    public void onAdFailedToLoad(int i) {
+//                        Log.e("Bannercode", String.valueOf(i));
+//                    }
+//                });
+//            }
+//        }
 
 
         mInterstitialAd_doc = new InterstitialAd(this);
@@ -199,10 +250,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_nondefault = new InterstitialAd(this);
 
 
-        mInterstitialAd_doc.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_doc.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_doc.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_doc.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_doc.setAdListener(new AdListener() {
             @Override
@@ -212,7 +265,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttoDoc();
                 }
                 if (!mInterstitialAd_doc.isLoaded() && !mInterstitialAd_doc.isLoading()) {
-                    mInterstitialAd_doc.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_doc.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
             }
 
@@ -228,10 +283,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_images.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_images.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_images.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_images.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_images.setAdListener(new AdListener() {
             @Override
@@ -242,7 +299,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttoImages();
                 }
                 if (!mInterstitialAd_images.isLoaded() && !mInterstitialAd_images.isLoading()) {
-                    mInterstitialAd_images.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_images.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
 
             }
@@ -258,10 +317,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             }
         });
 
-        mInterstitialAd_videos.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_videos.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_videos.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_videos.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_videos.setAdListener(new AdListener() {
             @Override
@@ -271,7 +332,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttoVideos();
                 }
                 if (!mInterstitialAd_videos.isLoaded() && !mInterstitialAd_videos.isLoading()) {
-                    mInterstitialAd_videos.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_videos.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
             }
 
@@ -287,10 +350,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_audio.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_audio.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_audio.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_audio.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_audio.setAdListener(new AdListener() {
             @Override
@@ -300,7 +365,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttoAudio();
                 }
                 if (!mInterstitialAd_audio.isLoaded() && !mInterstitialAd_audio.isLoading()) {
-                    mInterstitialAd_audio.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_audio.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
             }
 
@@ -316,10 +383,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_voice.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_voice.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_voice.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_voice.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_voice.setAdListener(new AdListener() {
             @Override
@@ -329,7 +398,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttoVoice();
                 }
                 if (!mInterstitialAd_voice.isLoaded() && !mInterstitialAd_voice.isLoading()) {
-                    mInterstitialAd_doc.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_doc.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
             }
 
@@ -345,10 +416,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_wall.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_wall.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_wall.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_wall.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_wall.setAdListener(new AdListener() {
             @Override
@@ -358,7 +431,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttoWall();
                 }
                 if (!mInterstitialAd_wall.isLoaded() && !mInterstitialAd_wall.isLoading()) {
-                    mInterstitialAd_wall.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_wall.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
             }
 
@@ -374,10 +449,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_gif.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_gif.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_gif.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_gif.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_gif.setAdListener(new AdListener() {
             @Override
@@ -387,7 +464,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttoGif();
                 }
                 if (!mInterstitialAd_gif.isLoaded() && !mInterstitialAd_gif.isLoading()) {
-                    mInterstitialAd_gif.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_gif.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
             }
 
@@ -403,10 +482,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_status.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_status.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_status.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_status.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_status.setAdListener(new AdListener() {
             @Override
@@ -416,7 +497,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttostatus();
                 }
                 if (!mInterstitialAd_status.isLoaded() && !mInterstitialAd_status.isLoading()) {
-                    mInterstitialAd_status.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_status.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
             }
 
@@ -432,10 +515,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         });
 
-        mInterstitialAd_nondefault.setAdUnitId("ca-app-pub-7255339257613393/6990771456");
-        mInterstitialAd_nondefault.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7")
-                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
-                .addTestDevice("D7397574F6CC21785588738256355351").build());
+        mInterstitialAd_nondefault.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
+        mInterstitialAd_nondefault.loadAd(new AdRequest.Builder()
+//                .addTestDevice("623B1B7759D51209294A77125459D9B7")
+//                .addTestDevice("C07AF1687B80C3A74C718498EF9B938A").addTestDevice("882530CA8147915F79DF99860BF2F5B0")
+//                .addTestDevice("D7397574F6CC21785588738256355351")
+                .build());
 
         mInterstitialAd_nondefault.setAdListener(new AdListener() {
             @Override
@@ -445,7 +530,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     onIntenttostatus();
                 }
                 if (!mInterstitialAd_nondefault.isLoaded() && !mInterstitialAd_nondefault.isLoading()) {
-                    mInterstitialAd_nondefault.loadAd(new AdRequest.Builder().addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A").build());
+                    mInterstitialAd_nondefault.loadAd(new AdRequest.Builder()
+//                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
+                            .build());
                 }
             }
 
@@ -529,7 +616,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 startActivity(intent);
                 return (true);
             case R.id.about:
-                Uri uri1 = Uri.parse("http://pawankumar.me/");
+                Uri uri1 = Uri.parse("https://pawan0411.github.io/");
                 Intent intent1 = new Intent(Intent.ACTION_VIEW, uri1);
                 startActivity(intent1);
                 return (true);
@@ -651,10 +738,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
             File[] listOfFiles = root.listFiles();
             long tot_size = 0;
-            for(int i = 0;i < listOfFiles.length ; i++){
-                long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
-                Log.d(TAG,listOfFiles[i].getPath());
-                tot_size += size;
+            if (listOfFiles != null) {
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
+                    Log.d(TAG, listOfFiles[i].getPath());
+                    tot_size += size;
+                }
             }
             mainActivityWeakReference.get().sum = tot_size;
 
@@ -958,29 +1047,29 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             }
 
 
-           mainActivityWeakReference.get().tot_dat = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().sum);
+            mainActivityWeakReference.get().tot_dat = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().sum);
 
 
             //For Images,documents and Videos
             mainActivityWeakReference.get().dataList1.clear();
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Images",
-                    mainActivityWeakReference.get().data_img,DataHolder.imagesReceivedPath,
+                    mainActivityWeakReference.get().data_img, DataHolder.imagesReceivedPath,
                     R.drawable.ic_image,
                     R.color.green));
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Documents",
-                    mainActivityWeakReference.get().data_doc,DataHolder.documentsReceivedPath,
+                    mainActivityWeakReference.get().data_doc, DataHolder.documentsReceivedPath,
                     R.drawable.ic_folder,
                     R.color.orange));
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Videos",
-                    mainActivityWeakReference.get().data_vid,DataHolder.videosReceivedPath,
+                    mainActivityWeakReference.get().data_vid, DataHolder.videosReceivedPath,
                     R.drawable.ic_video,
                     R.color.blue));
             mainActivityWeakReference.get().dataList1.add(new Details(
                     "Statuses",
-                    mainActivityWeakReference.get().data_status,DataHolder.statuscache,
+                    mainActivityWeakReference.get().data_status, DataHolder.statuscache,
                     R.drawable.ic_status,
                     R.color.orange
             ));
@@ -988,41 +1077,43 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             mainActivityWeakReference.get().dataList.clear();
             mainActivityWeakReference.get().dataList.add(new Details(
                     "Audio files",
-                    mainActivityWeakReference.get().data_aud,DataHolder.audiosReceivedPath,
+                    mainActivityWeakReference.get().data_aud, DataHolder.audiosReceivedPath,
                     R.drawable.ic_library_music_black,
                     R.color.purple));
             mainActivityWeakReference.get().dataList.add(new Details(
                     "Voice files",
-                    mainActivityWeakReference.get().data_voice,DataHolder.voiceReceivedPath,
+                    mainActivityWeakReference.get().data_voice, DataHolder.voiceReceivedPath,
                     R.drawable.ic_queue_music_black,
                     R.color.lightblue));
             mainActivityWeakReference.get().dataList.add(new Details(
                     "Wallpapers",
-                    mainActivityWeakReference.get().data_wall,DataHolder.wallReceivedPath,
+                    mainActivityWeakReference.get().data_wall, DataHolder.wallReceivedPath,
                     R.drawable.ic_image,
                     R.color.maroon));
             mainActivityWeakReference.get().dataList.add(new Details(
                     "GIFs",
-                    mainActivityWeakReference.get().data_gif,DataHolder.gifReceivedPath,
+                    mainActivityWeakReference.get().data_gif, DataHolder.gifReceivedPath,
                     R.drawable.camera_iris,
                     R.color.orange));
 
             //Adding the files not present in the default files list
-            for(int i = 0;i < listOfFiles.length ; i++){
-               if(!mainActivityWeakReference.get().defaultList.contains(listOfFiles[i])){
-                   long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
-                   String pathName = listOfFiles[i].getPath();
-                   String folderName = pathName.substring(pathName.indexOf("a/")+2);
-                   if(folderName.startsWith("WhatsApp ")){
-                       folderName = folderName.substring(9);
-                   }
-                   String data = Formatter.formatShortFileSize(mainActivityWeakReference.get(), size);
-                   mainActivityWeakReference.get().dataList.add(new Details(
-                           folderName,
-                           data,pathName,
-                           R.drawable.ic_folder,
-                           R.color.black));
-               }
+            if (listOfFiles != null) {
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    if (!mainActivityWeakReference.get().defaultList.contains(listOfFiles[i])) {
+                        long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
+                        String pathName = listOfFiles[i].getPath();
+                        String folderName = pathName.substring(pathName.indexOf("a/") + 2);
+                        if (folderName.startsWith("WhatsApp ")) {
+                            folderName = folderName.substring(9);
+                        }
+                        String data = Formatter.formatShortFileSize(mainActivityWeakReference.get(), size);
+                        mainActivityWeakReference.get().dataList.add(new Details(
+                                folderName,
+                                data, pathName,
+                                R.drawable.ic_folder,
+                                R.color.black));
+                    }
+                }
             }
             return mainActivityWeakReference.get().tot_dat;
 
@@ -1088,7 +1179,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onIntenttoNonDefault(String path) {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.NONDEFAULT);
-        intent.putExtra("pathname",path);
+        intent.putExtra("pathname", path);
         startActivity(intent);
     }
 
@@ -1241,7 +1332,10 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo activeNetworkInfo = null;
+        if (connectivityManager != null) {
+            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        }
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

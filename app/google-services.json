@@ -1,42 +1,87 @@
 {
   "project_info": {
-    "project_number": "386091474133",
-    "firebase_url": "https://whatsapp-cleaner-ed3a0.firebaseio.com",
-    "project_id": "whatsapp-cleaner-ed3a0",
-    "storage_bucket": "whatsapp-cleaner-ed3a0.appspot.com"
+    "project_number": "334392427707",
+    "firebase_url": "https://awol-64d31.firebaseio.com",
+    "project_id": "awol-64d31",
+    "storage_bucket": "awol-64d31.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:386091474133:android:a83ee6010ca586d3",
+        "mobilesdk_app_id": "1:334392427707:android:9025ccc954587d2ea8559e",
         "android_client_info": {
-          "package_name": "com.pawan.whats_AppCleaner"
+          "package_name": "com.pawan.files_cleaner"
         }
       },
       "oauth_client": [
         {
-          "client_id": "386091474133-592216l71ta7k80ko93colg85niekbeg.apps.googleusercontent.com",
+          "client_id": "334392427707-68bl74nmpphcm0dfr4bu8arhg0bp3qll.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.pawan.whats_AppCleaner",
+            "package_name": "com.pawan.files_cleaner",
             "certificate_hash": "2ecb499e4260a542f956655a23c5ed53de8e28c7"
           }
         },
         {
-          "client_id": "386091474133-m7ojkulk4hdeolhnclm1td36lcf2hd0i.apps.googleusercontent.com",
+          "client_id": "334392427707-3lc9iv6o0n20ojs9bktb9n2jloadid73.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC-YnYDmnaM12AQeyXWtwbwUktFLvyxfPI"
+          "current_key": "AIzaSyD2oze-W3L4J7svrxFKit74Z2u4eq-i8Ew"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "386091474133-m7ojkulk4hdeolhnclm1td36lcf2hd0i.apps.googleusercontent.com",
+              "client_id": "334392427707-3lc9iv6o0n20ojs9bktb9n2jloadid73.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334392427707:android:21c8aa88e441b068",
+        "android_client_info": {
+          "package_name": "mohit.codex_iter.www.awol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "334392427707-k399dc90bd2i8g3ifkmgrlpv7k2n24ka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mohit.codex_iter.www.awol",
+            "certificate_hash": "64c533e322c7010c0ccdbdb92f69cd9bcac01d25"
+          }
+        },
+        {
+          "client_id": "334392427707-dis11tet7830se8lmi9acso9ah86b7l5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mohit.codex_iter.www.awol",
+            "certificate_hash": "2ecb499e4260a542f956655a23c5ed53de8e28c7"
+          }
+        },
+        {
+          "client_id": "334392427707-3lc9iv6o0n20ojs9bktb9n2jloadid73.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2oze-W3L4J7svrxFKit74Z2u4eq-i8Ew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "334392427707-3lc9iv6o0n20ojs9bktb9n2jloadid73.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.pawan.whats_AppCleaner">
+    package="com.pawan.files_cleaner">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.pawan.whats_AppCleaner.Application"
+        android:name="com.pawan.files_cleaner.Application"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
@@ -20,10 +20,11 @@
         android:theme="@style/NoActionBar"
         tools:ignore="AllowBackup">
         <activity
-            android:name="com.pawan.whats_AppCleaner.SplashScreen"
+            android:name="com.pawan.files_cleaner.SplashScreen"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -32,23 +33,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.pawan.whats_AppCleaner.tabs.TabLayoutActivity"
+            android:name="com.pawan.files_cleaner.tabs.TabLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
-            android:name="com.pawan.whats_AppCleaner.tabs.TabLayoutActivity_test"
+            android:name="com.pawan.files_cleaner.tabs.TabLayoutActivity_test"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="com.pawan.whats_AppCleaner.MainActivity"
+            android:name="com.pawan.files_cleaner.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.pawan.whats_AppCleaner.Noapp"
+            android:name="com.pawan.files_cleaner.Noapp"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <provider
-            android:name="com.pawan.whats_AppCleaner.model.GenericFileProvider"
+            android:name="com.pawan.files_cleaner.model.GenericFileProvider"
             android:authorities="${applicationId}.my.package.name.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -66,9 +69,9 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name="com.pawan.whats_AppCleaner.CheckRecentRun" />
+        <service android:name="com.pawan.files_cleaner.CheckRecentRun" />
         <service
-            android:name="com.pawan.whats_AppCleaner.MyAndroidFirebaseMsgService"
+            android:name="com.pawan.files_cleaner.MyAndroidFirebaseMsgService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
