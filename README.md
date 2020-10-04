@@ -14,16 +14,16 @@ This app is the powerful tool to clean and backup received and sent media via Wh
 ## Screenshots
 
 ### HomeScreen
-<img src="./screenshots/main.jpg" width=30%>
+<img src="./screenshots/main.png" width=30%>
 
 ### Documents Section
-<img src="./screenshots/doc.jpg" width=30%>
+<img src="./screenshots/doc.png" width=30%>
 
 ### Delete Your Files
-<img src="./screenshots/delete.jpg" width=30%>
+<img src="./screenshots/delete.png" width=30%>
 
 ### Download Your Statuses
-<img src="./screenshots/status.jpg" width=30%>
+<img src="./screenshots/status.png" width=30%>
 
 ## Contribution Guidelines
 Any kind of contribution to the project is highly welcomed, as this project is selected for KWoC, we encourage all participants new to open source to give it a try. Any one willing to contribute to this particular project must follow the contribution for cleanliness, easy to read and smooth working of the project,</br>

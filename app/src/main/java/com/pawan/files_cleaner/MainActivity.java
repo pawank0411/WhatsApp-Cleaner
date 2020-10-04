@@ -21,12 +21,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -41,12 +39,6 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.pawan.files_cleaner.adapters.DetailsAdapter;
 import com.pawan.files_cleaner.adapters.DetailsAdapterCustom;
 import com.pawan.files_cleaner.datas.Details;
@@ -70,7 +62,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private DetailsAdapter detailsAdapter1;
     private ProgressDialog progressDialog;
     //    private AdView mAdView, mAdView1;
-    private Boolean intenttoimages, intenttovideos, intenttoaudios, intenttodocuments, intenttogifs, intenttowall, intenttovoice, intenttostatus, intenttodefault;
+    private Boolean intenttoimages;
+    private Boolean intenttovideos;
+    private Boolean intenttoaudios;
+    private Boolean intenttodocuments;
+    private Boolean intenttogifs;
+    private Boolean intenttowall;
+    private Boolean intenttovoice;
+    private Boolean intenttostatus;
 
     private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
             mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status, mInterstitialAd_nondefault;
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @SuppressWarnings("FieldCanBeLocal")
     private long sum = 0, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
     private ArrayList<File> defaultList = new ArrayList<>();
-    private boolean showfestival;
+//    private boolean showfestival;
     LottieAnimationView lottieAnimationView;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lottieAnimationView = findViewById(R.id.lav_actionBar);
+//        lottieAnimationView = findViewById(R.id.lav_actionBar);
         //Create list of filepath of default folders
         defaultList.add(new File(DataHolder.imagesReceivedPath));
         defaultList.add(new File(DataHolder.documentsReceivedPath));
@@ -115,23 +114,23 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         total_data = findViewById(R.id.data);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                lottieAnimationView.cancelAnimation();
-                lottieAnimationView.setVisibility(View.GONE);
-                return false;
-            }
-        });
+//        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                lottieAnimationView.cancelAnimation();
+//                lottieAnimationView.setVisibility(View.GONE);
+//                return false;
+//            }
+//        });
         RecyclerView recyclerView1 = findViewById(R.id.recycle);
-        recyclerView1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                lottieAnimationView.cancelAnimation();
-                lottieAnimationView.setVisibility(View.GONE);
-                return false;
-            }
-        });
+//        recyclerView1.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                lottieAnimationView.cancelAnimation();
+//                lottieAnimationView.setVisibility(View.GONE);
+//                return false;
+//            }
+//        });
 //        mAdView = findViewById(R.id.adView_small);
 //        mAdView1 = findViewById(R.id.adView_large);
 
@@ -152,20 +151,20 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         // Obtain the FirebaseAnalytics instance.
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        CollectionReference apiCollection = FirebaseFirestore.getInstance().collection("cleaner");
-        apiCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (queryDocumentSnapshots != null) {
-                    for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
-                        showfestival = documentChange.getDocument().getBoolean("festival");
-                        if (!showfestival) {
-                            lottieAnimationView.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-        });
+//        CollectionReference apiCollection = FirebaseFirestore.getInstance().collection("cleaner");
+//        apiCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+//                if (queryDocumentSnapshots != null) {
+//                    for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
+//                        showfestival = documentChange.getDocument().getBoolean("festival");
+//                        if (!showfestival) {
+//                            lottieAnimationView.setVisibility(View.GONE);
+//                        }
+//                    }
+//                }
+//            }
+//        });
 
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(recyclerView));
@@ -1317,7 +1316,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onNonDefaultClicked(String path) {
         if (mInterstitialAd_nondefault.isLoaded() && mInterstitialAd_nondefault != null) {
             mInterstitialAd_nondefault.show();
-            intenttodefault = true;
+            Boolean intenttodefault = true;
 
         } else {
             Log.e("TAG", "Not loaded");
