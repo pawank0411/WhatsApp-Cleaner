@@ -29,4 +29,12 @@
     <string name="logo_designer">Logo Designer</string>
     <string name="download_selected_items_0b">Descargar los item seleccionados (0B)</string>
     <string name="share_delete">Compartir o borrar los archivos seleccionados (0B)</string>
+    <string name="images">Imágenes</string>
+    <string name="documents">Documentos</string>
+    <string name="statues">Statuses</string>
+    <string name="videos">Vídeos</string>
+    <string name="audio_files">Audios</string>
+    <string name="wallapapers">Fondos de pantalla</string>
+    <string name="voice_files">Notas de voz</string>
+
 </resources>
