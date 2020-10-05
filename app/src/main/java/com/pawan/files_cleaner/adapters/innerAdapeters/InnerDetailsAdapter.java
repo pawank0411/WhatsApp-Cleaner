@@ -1,16 +1,11 @@
 package com.pawan.files_cleaner.adapters.innerAdapeters;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,18 +16,26 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.pawan.files_cleaner.datas.FileDetails;
 import com.pawan.files_cleaner.R;
-
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+import com.pawan.files_cleaner.datas.FileDetails;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -84,7 +87,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (viewType == VOICE) {
             View view = LayoutInflater.from(ctx).inflate(R.layout.doc_content, parent, false);
             return new InnerDataViewHolderDoc(view);
-        } else{
+        } else {
             View view = LayoutInflater.from(ctx).inflate(R.layout.doc_content, parent, false);
             return new InnerDataViewHolderDoc(view);
         }
@@ -109,28 +112,30 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             innerDataViewHolderMultimedia.imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    File a = new File(String.valueOf(Uri.parse(details.getPath())));
 
-                    Uri uri = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() +
-                            ".my.package.name.provider", a);
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
-                    String mime = "*/*";
-                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                    if (mimeTypeMap.hasExtension(
-                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx);
 
-                        mime = mimeTypeMap.getMimeTypeFromExtension(
-                                MimeTypeMap.getFileExtensionFromUrl(uri.toString()));
+                    View inflate = ((LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.image_alert_dialog_layout, null);
 
-                    }
-                    try {
-                        Log.e("Mime", mime);
-                        intent.setDataAndType(uri, mime);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        ctx.startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(ctx, "Couldn't find app that open this file ", Toast.LENGTH_SHORT).show();
-                    }
+                    alertDialogBuilder.setView(inflate);
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    alertDialog.setCancelable(true);
+
+                    Glide.with(ctx)
+                            .load(details.getPath())
+                            .centerCrop()
+                            .into((ImageView) inflate.findViewById(R.id.imageDialogImageVIew));
+
+                    inflate.findViewById(R.id.imageDialogCancelButton).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
 
                     return true;
                 }
@@ -194,28 +199,30 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             innerDataViewHolderVideos.imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    File a = new File(String.valueOf(Uri.parse(details.getPath())));
 
-                    Uri uri = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() +
-                            ".my.package.name.provider", a);
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
-                    String mime = "*/*";
-                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                    if (mimeTypeMap.hasExtension(
-                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx);
 
-                        mime = mimeTypeMap.getMimeTypeFromExtension(
-                                MimeTypeMap.getFileExtensionFromUrl(uri.toString()));
+                    View inflate = ((LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.video_alert_dialog_layout, null);
 
-                    }
-                    try {
-                        Log.e("Mime", mime);
-                        intent.setDataAndType(uri, mime);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        ctx.startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(ctx, "Couldn't find app that open this file ", Toast.LENGTH_SHORT).show();
-                    }
+                    alertDialogBuilder.setView(inflate);
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    alertDialog.setCancelable(true);
+
+                    VideoView videoView = inflate.findViewById(R.id.videoDialogVideoView);
+                    videoView.setVideoURI(Uri.parse(details.getPath()));
+                    videoView.requestFocus();
+                    videoView.start();
+
+                    inflate.findViewById(R.id.videoDialogCancelButton).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
 
                     return true;
                 }
@@ -493,6 +500,7 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ext = itemView.findViewById(R.id.extension);
         }
     }
+
     public interface OnCheckboxListener {
         void oncheckboxlistener(View view, List<FileDetails> updatedFiles);
     }
