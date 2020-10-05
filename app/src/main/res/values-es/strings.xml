@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">WhatsApp Cleaner</string>
+    <string name="title_activity_tab1">Tab1Activity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="section_format">Hello World de la sección: %1$d</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="no_ads">Lo siento por los anuncios, pero como estudiante satisfará mis necesidades diarias.</string>
+    <string name="delete_items_blank">Borrar los archivos seleccionados (0B)</string>
+    <string name="_0b">0B</string>
+    <string name="files">Archivos</string>
+    <string name="no_files">sin archivos</string>
+    <string name="recents">Recientes</string>
+    <string name="logo">logo</string>
+    <string name="privacy">Política de Privacidad</string>
+    <string name="about">Sobre el desarrolador</string>
+    <string name="feedback">FeedBack</string>
+    <string name="whatsapp_cleaner">Limpiador de Archivos</string>
+    <string name="rate_us">CALIFÍCANOS</string>
+    <string name="remind">RECORDÁRMELO MÁS TARDE</string>
+    <string name="thanks">NO GRACIAS</string>
+    <string name="desp">Si le gusta usar el Whats-App Cleaner, tómate un momento para calificarlo. ¡Gracias por su apoyo!</string>
+    <string name="select_all">Seleccioanr todo</string>
+    <string name="date">Fecha</string>
+    <string name="name">Nombre</string>
+    <string name="size">Tamaño</string>
+    <string name="logo_designer">Logo Designer</string>
+    <string name="download_selected_items_0b">Descargar los item seleccionados (0B)</string>
+    <string name="share_delete">Compartir o borrar los archivos seleccionados (0B)</string>
+</resources>
