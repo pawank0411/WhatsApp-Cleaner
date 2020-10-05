@@ -26,7 +26,7 @@ This app is the powerful tool to clean and backup received and sent media via Wh
 <img src="./screenshots/status.png" width=30%>
 
 ## Contribution Guidelines
-Any kind of contribution to the project is highly welcomed, as this project is selected for KWoC, we encourage all participants new to open source to give it a try. Any one willing to contribute to this particular project must follow the contribution for cleanliness, easy to read and smooth working of the project,</br>
+Any kind of contribution to the project is highly welcomed, we encourage all participants new to open source to give it a try. Any one willing to contribute to this particular project must follow the contribution for cleanliness, easy to read and smooth working of the project,</br>
 1. Raise an issue before you make a pr.</br>
 2. Changes should be pushed in the **development** branch.</br>
 3. Squash all your commits in to a single commit before creating a pull request.</br>
