@@ -165,7 +165,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(innerDetailsAdapter);
 
-        settings = Objects.requireNonNull(getContext()).getSharedPreferences(PREFS, MODE_PRIVATE);
+        settings = requireContext().getSharedPreferences(PREFS, MODE_PRIVATE);
 
 
 
@@ -176,10 +176,10 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             recordRunTime();
 
         Log.v(TAG, "Starting CheckRecentRun service...");
-        getContext().startService(new Intent(getContext(), CheckRecentRun.class));
+        requireContext().startService(new Intent(getContext(), CheckRecentRun.class));
 
 
-        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("Network", 0);
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("Network", 0);
         boolean status = sharedPreferences.getBoolean("Status", false);
 
         if (status) {
@@ -220,7 +220,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
         Log.e("TEST", "" + path);
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
 
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(recyclerView));
@@ -540,8 +540,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                         fileDetails.setMod(file.lastModified());
                                         String mime = "*/*";
                                         File a = new File(file.getPath());
-                                        Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                        Uri uri = FileProvider.getUriForFile(filesFragmentWeakReference.get().requireContext(),
+                                                filesFragmentWeakReference.get().requireContext().getApplicationContext().getPackageName() +
                                                         ".my.package.name.provider", a);
                                         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                                         if (mimeTypeMap.hasExtension(
@@ -596,8 +596,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
                                                     String mime = "*/*";
                                                     File a = new File(re.getPath());
-                                                    Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                            Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                    Uri uri = FileProvider.getUriForFile(filesFragmentWeakReference.get().requireContext(),
+                                                            filesFragmentWeakReference.get().requireContext().getApplicationContext().getPackageName() +
                                                                     ".my.package.name.provider", a);
                                                     MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                                                     if (mimeTypeMap.hasExtension(
@@ -706,8 +706,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                         extension = FilenameUtils.getExtension((file.getPath()));
                                         String mime = "*/*";
                                         File a = new File(file.getPath());
-                                        Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                        Uri uri = FileProvider.getUriForFile(filesFragmentWeakReference.get().requireContext(),
+                                                filesFragmentWeakReference.get().requireContext().getApplicationContext().getPackageName() +
                                                         ".my.package.name.provider", a);
                                         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                                         if (mimeTypeMap.hasExtension(
@@ -763,8 +763,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
                                                     String mime = "*/*";
                                                     File a = new File(re.getPath());
-                                                    Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                            Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                    Uri uri = FileProvider.getUriForFile(filesFragmentWeakReference.get().requireContext(),
+                                                            filesFragmentWeakReference.get().requireContext().getApplicationContext().getPackageName() +
                                                                     ".my.package.name.provider", a);
                                                     MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                                                     if (mimeTypeMap.hasExtension(
@@ -876,8 +876,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
                                                     String mime = "*/*";
                                                     File a = new File(re.getPath());
-                                                    Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                            Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                                    Uri uri = FileProvider.getUriForFile(filesFragmentWeakReference.get().requireContext(),
+                                                            filesFragmentWeakReference.get().requireContext().getApplicationContext().getPackageName() +
                                                                     ".my.package.name.provider", a);
                                                     MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                                                     if (mimeTypeMap.hasExtension(
@@ -931,8 +931,8 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                                         extension = FilenameUtils.getExtension((file.getPath()));
                                         String mime = "*/*";
                                         File a = new File(file.getPath());
-                                        Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference.get().getContext()),
-                                                Objects.requireNonNull(filesFragmentWeakReference.get().getContext()).getApplicationContext().getPackageName() +
+                                        Uri uri = FileProvider.getUriForFile(filesFragmentWeakReference.get().requireContext(),
+                                                filesFragmentWeakReference.get().requireContext().getApplicationContext().getPackageName() +
                                                         ".my.package.name.provider", a);
                                         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                                         if (mimeTypeMap.hasExtension(
@@ -1008,12 +1008,9 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                 } else {
                     Log.e("Files", "No files found in " + directory.getName());
                 }
-                Collections.sort(files, new Comparator<FileDetails>() {
-                    @Override
-                    public int compare(FileDetails o1, FileDetails o2) {
-                        filesFragmentWeakReference.get().flag_d = false;
-                        return -o1.getMod().compareTo(o2.getMod());
-                    }
+                Collections.sort(files, (o1, o2) -> {
+                    filesFragmentWeakReference.get().flag_d = false;
+                    return -o1.getMod().compareTo(o2.getMod());
                 });
             } else {
                 Log.e("Files", "Path is empty");
