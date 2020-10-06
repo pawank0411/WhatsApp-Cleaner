@@ -722,7 +722,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private static class FetchFiles extends AsyncTask<Void, Void, String> {
+    private class FetchFiles extends AsyncTask<Void, Void, String> {
 
         private WeakReference<MainActivity> mainActivityWeakReference;
 
@@ -1052,22 +1052,22 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             //For Images,documents and Videos
             mainActivityWeakReference.get().dataList1.clear();
             mainActivityWeakReference.get().dataList1.add(new Details(
-                    "Images",
+                    getString(R.string.images),
                     mainActivityWeakReference.get().data_img, DataHolder.imagesReceivedPath,
                     R.drawable.ic_image,
                     R.color.green));
             mainActivityWeakReference.get().dataList1.add(new Details(
-                    "Documents",
+                    getString(R.string.documents),
                     mainActivityWeakReference.get().data_doc, DataHolder.documentsReceivedPath,
                     R.drawable.ic_folder,
                     R.color.orange));
             mainActivityWeakReference.get().dataList1.add(new Details(
-                    "Videos",
+                    getString(R.string.videos),
                     mainActivityWeakReference.get().data_vid, DataHolder.videosReceivedPath,
                     R.drawable.ic_video,
                     R.color.blue));
             mainActivityWeakReference.get().dataList1.add(new Details(
-                    "Statuses",
+                    getString(R.string.statues),
                     mainActivityWeakReference.get().data_status, DataHolder.statuscache,
                     R.drawable.ic_status,
                     R.color.orange
@@ -1075,17 +1075,17 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
             mainActivityWeakReference.get().dataList.clear();
             mainActivityWeakReference.get().dataList.add(new Details(
-                    "Audio files",
+                    getString(R.string.audio_files),
                     mainActivityWeakReference.get().data_aud, DataHolder.audiosReceivedPath,
                     R.drawable.ic_library_music_black,
                     R.color.purple));
             mainActivityWeakReference.get().dataList.add(new Details(
-                    "Voice files",
+                    getString(R.string.voice_files),
                     mainActivityWeakReference.get().data_voice, DataHolder.voiceReceivedPath,
                     R.drawable.ic_queue_music_black,
                     R.color.lightblue));
             mainActivityWeakReference.get().dataList.add(new Details(
-                    "Wallpapers",
+                    getString(R.string.wallapapers),
                     mainActivityWeakReference.get().data_wall, DataHolder.wallReceivedPath,
                     R.drawable.ic_image,
                     R.color.maroon));
