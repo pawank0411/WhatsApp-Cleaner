@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @SuppressWarnings("FieldCanBeLocal")
     private long sum = 0, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
     private ArrayList<File> defaultList = new ArrayList<>();
-//    private boolean showfestival;
+    //    private boolean showfestival;
     LottieAnimationView lottieAnimationView;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -1032,7 +1032,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 mainActivityWeakReference.get().data_voice = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_voice);
             }
             /*Size for status*/
-            mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Status Download";
+            mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Statuses";
             File status = new File(mainActivityWeakReference.get().path);
             if (!status.exists()) {
                 if (!status.mkdir()) {
