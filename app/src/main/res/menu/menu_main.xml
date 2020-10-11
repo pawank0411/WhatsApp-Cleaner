@@ -4,21 +4,9 @@
     tools:context="com.pawan.files_cleaner.MainActivity">
 
     <item
-        android:id="@+id/privacy"
-        android:title="@string/privacy"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/logo"
-        android:title="@string/logo_designer"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/about"
+        android:id="@+id/menu_about"
         android:title="@string/about"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/feedback"
-        android:title="@string/feedback"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_info"
+        app:showAsAction="ifRoom" />
 
 </menu>

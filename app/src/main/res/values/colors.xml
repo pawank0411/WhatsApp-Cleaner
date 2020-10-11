@@ -21,4 +21,7 @@
     <color name="ds">#03A9F4</color>
     <color name="lightpink">#DD336F</color>
     <color name="tblack">#AE161616</color>
+
+    <color name="aboutPageAccentColor">#D81B60</color>
+    <color name="aboutPageSpacerColor">#BDBDBD</color>
 </resources>

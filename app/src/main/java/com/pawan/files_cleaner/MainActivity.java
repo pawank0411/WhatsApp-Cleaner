@@ -54,7 +54,11 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
+    public final static String PREFS = "PrefsFile";
     private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
+    private final static String TAG = "MainActivity";
+    //    private boolean showfestival;
+    LottieAnimationView lottieAnimationView;
     private ArrayList<Details> dataList1 = new ArrayList<>();
     private ArrayList<Details> dataList = new ArrayList<>();
     private TextView total_data;
@@ -70,18 +74,13 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private Boolean intenttowall;
     private Boolean intenttovoice;
     private Boolean intenttostatus;
-
     private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
             mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status, mInterstitialAd_nondefault;
     private String sent = "Sent";
-
-    private final static String TAG = "MainActivity";
-    public final static String PREFS = "PrefsFile";
     @SuppressWarnings("FieldCanBeLocal")
     private SharedPreferences settings = null;
     @SuppressWarnings("FieldCanBeLocal")
     private SharedPreferences.Editor editor = null;
-
     @SuppressWarnings("FieldCanBeLocal")
     private String path;
     @SuppressWarnings("FieldCanBeLocal")
@@ -89,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     @SuppressWarnings("FieldCanBeLocal")
     private long sum = 0, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
     private ArrayList<File> defaultList = new ArrayList<>();
-    //    private boolean showfestival;
-    LottieAnimationView lottieAnimationView;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -608,29 +605,23 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.privacy:
-                Uri uri = Uri.parse("https://whats-app-cleaner.flycricket.io/privacy.html");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
+        if (item.getItemId() == R.id.menu_about) {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                getSupportFragmentManager().beginTransaction().add(R.id.mainLayout, AboutFragment.newInstance()).addToBackStack(null).commit();
+                Objects.requireNonNull(getSupportActionBar()).hide();
                 return (true);
-            case R.id.about:
-                Uri uri1 = Uri.parse("https://pawan0411.github.io/");
-                Intent intent1 = new Intent(Intent.ACTION_VIEW, uri1);
-                startActivity(intent1);
-                return (true);
-            case R.id.feedback:
-                Uri uri2 = Uri.parse("https://forms.gle/gsxE4QaqvAM6D3xJ9");
-                Intent intent2 = new Intent(Intent.ACTION_VIEW, uri2);
-                startActivity(intent2);
-                return (true);
-            case R.id.logo:
-                Uri uri3 = Uri.parse("https://www.behance.net/vizdash1998");
-                Intent intent3 = new Intent(Intent.ACTION_VIEW, uri3);
-                startActivity(intent3);
-                return (true);
+            }
         }
         return (super.onOptionsItemSelected(item));
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (!Objects.requireNonNull(getSupportActionBar()).isShowing())
+            Objects.requireNonNull(getSupportActionBar()).show();
+
+        super.onBackPressed();
     }
 
     private void askPermission() {
@@ -720,6 +711,217 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private boolean hasPermission() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void onIntenttoImages() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.IMAGE);
+        startActivity(intent);
+    }
+
+    public void onIntenttoVideos() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.VIDEO);
+        startActivity(intent);
+    }
+
+    public void onIntenttoDoc() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.DOCUMENT);
+        startActivity(intent);
+    }
+
+    public void onIntenttoAudio() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.AUDIO);
+        startActivity(intent);
+    }
+
+    public void onIntenttoGif() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.GIF);
+        startActivity(intent);
+    }
+
+    public void onIntenttoWall() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.WALLPAPER);
+        startActivity(intent);
+    }
+
+    public void onIntenttoVoice() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.VOICE);
+        startActivity(intent);
+    }
+
+    public void onIntenttostatus() {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity_test.class);
+        intent.putExtra("category", DataHolder.STATUS);
+        startActivity(intent);
+    }
+
+    public void onIntenttoNonDefault(String path) {
+        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
+        intent.putExtra("category", DataHolder.NONDEFAULT);
+        intent.putExtra("pathname", path);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onImagesClicked() {
+        if (mInterstitialAd_images.isLoaded() && mInterstitialAd_images != null) {
+            mInterstitialAd_images.show();
+            intenttoimages = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoImages();
+            } else {
+                askPermission();
+            }
+
+        }
+    }
+
+    @Override
+    public void onDocumentsClicked() {
+        if (mInterstitialAd_doc.isLoaded() && mInterstitialAd_doc != null) {
+            mInterstitialAd_doc.show();
+            intenttodocuments = true;
+
+        } else {
+            Log.e("Tag", "Not Loaded");
+            if (hasPermission()) {
+                onIntenttoDoc();
+            } else {
+                askPermission();
+            }
+
+        }
+    }
+
+    @Override
+    public void onVideosClicked() {
+        if (mInterstitialAd_videos.isLoaded() && mInterstitialAd_videos != null) {
+            mInterstitialAd_videos.show();
+            intenttovideos = true;
+
+        } else {
+            Log.e("TAG", "Not Loaded");
+            if (hasPermission()) {
+                onIntenttoVideos();
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onAudiosClicked() {
+        if (mInterstitialAd_audio.isLoaded() && mInterstitialAd_audio != null) {
+            mInterstitialAd_audio.show();
+            intenttoaudios = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoAudio();
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onGifsClicked() {
+        if (mInterstitialAd_gif.isLoaded() && mInterstitialAd_gif != null) {
+            mInterstitialAd_gif.show();
+            intenttogifs = true;
+
+        } else {
+            Log.e("Tag", "NotLoaded");
+            if (hasPermission()) {
+                onIntenttoGif();
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onWallpapersClicked() {
+        if (mInterstitialAd_wall.isLoaded() && mInterstitialAd_wall != null) {
+            mInterstitialAd_wall.show();
+            intenttowall = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoWall();
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onVoiceClicked() {
+        if (mInterstitialAd_voice.isLoaded() && mInterstitialAd_voice != null) {
+            mInterstitialAd_voice.show();
+            intenttovoice = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoVoice();
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onStatusClicked() {
+        if (mInterstitialAd_status.isLoaded() && mInterstitialAd_status != null) {
+            mInterstitialAd_status.show();
+            intenttostatus = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttostatus();
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onNonDefaultClicked(String path) {
+        if (mInterstitialAd_nondefault.isLoaded() && mInterstitialAd_nondefault != null) {
+            mInterstitialAd_nondefault.show();
+            Boolean intenttodefault = true;
+
+        } else {
+            Log.e("TAG", "Not loaded");
+            if (hasPermission()) {
+                onIntenttoNonDefault(path);
+            } else {
+                askPermission();
+            }
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = null;
+        if (connectivityManager != null) {
+            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        }
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private static class FetchFiles extends AsyncTask<Void, Void, String> {
@@ -1125,217 +1327,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             mainActivityWeakReference.get().detailsAdaptercustom.notifyDataSetChanged();
             mainActivityWeakReference.get().progressDialog.dismiss();
         }
-    }
-
-    public void onIntenttoImages() {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-        intent.putExtra("category", DataHolder.IMAGE);
-        startActivity(intent);
-    }
-
-    public void onIntenttoVideos() {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-        intent.putExtra("category", DataHolder.VIDEO);
-        startActivity(intent);
-    }
-
-    public void onIntenttoDoc() {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-        intent.putExtra("category", DataHolder.DOCUMENT);
-        startActivity(intent);
-    }
-
-    public void onIntenttoAudio() {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-        intent.putExtra("category", DataHolder.AUDIO);
-        startActivity(intent);
-    }
-
-    public void onIntenttoGif() {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-        intent.putExtra("category", DataHolder.GIF);
-        startActivity(intent);
-    }
-
-    public void onIntenttoWall() {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-        intent.putExtra("category", DataHolder.WALLPAPER);
-        startActivity(intent);
-    }
-
-    public void onIntenttoVoice() {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-        intent.putExtra("category", DataHolder.VOICE);
-        startActivity(intent);
-    }
-
-    public void onIntenttostatus() {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity_test.class);
-        intent.putExtra("category", DataHolder.STATUS);
-        startActivity(intent);
-    }
-
-    public void onIntenttoNonDefault(String path) {
-        Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
-        intent.putExtra("category", DataHolder.NONDEFAULT);
-        intent.putExtra("pathname", path);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onImagesClicked() {
-        if (mInterstitialAd_images.isLoaded() && mInterstitialAd_images != null) {
-            mInterstitialAd_images.show();
-            intenttoimages = true;
-
-        } else {
-            Log.e("TAG", "Not loaded");
-            if (hasPermission()) {
-                onIntenttoImages();
-            } else {
-                askPermission();
-            }
-
-        }
-    }
-
-    @Override
-    public void onDocumentsClicked() {
-        if (mInterstitialAd_doc.isLoaded() && mInterstitialAd_doc != null) {
-            mInterstitialAd_doc.show();
-            intenttodocuments = true;
-
-        } else {
-            Log.e("Tag", "Not Loaded");
-            if (hasPermission()) {
-                onIntenttoDoc();
-            } else {
-                askPermission();
-            }
-
-        }
-    }
-
-    @Override
-    public void onVideosClicked() {
-        if (mInterstitialAd_videos.isLoaded() && mInterstitialAd_videos != null) {
-            mInterstitialAd_videos.show();
-            intenttovideos = true;
-
-        } else {
-            Log.e("TAG", "Not Loaded");
-            if (hasPermission()) {
-                onIntenttoVideos();
-            } else {
-                askPermission();
-            }
-        }
-    }
-
-    @Override
-    public void onAudiosClicked() {
-        if (mInterstitialAd_audio.isLoaded() && mInterstitialAd_audio != null) {
-            mInterstitialAd_audio.show();
-            intenttoaudios = true;
-
-        } else {
-            Log.e("TAG", "Not loaded");
-            if (hasPermission()) {
-                onIntenttoAudio();
-            } else {
-                askPermission();
-            }
-        }
-    }
-
-    @Override
-    public void onGifsClicked() {
-        if (mInterstitialAd_gif.isLoaded() && mInterstitialAd_gif != null) {
-            mInterstitialAd_gif.show();
-            intenttogifs = true;
-
-        } else {
-            Log.e("Tag", "NotLoaded");
-            if (hasPermission()) {
-                onIntenttoGif();
-            } else {
-                askPermission();
-            }
-        }
-    }
-
-    @Override
-    public void onWallpapersClicked() {
-        if (mInterstitialAd_wall.isLoaded() && mInterstitialAd_wall != null) {
-            mInterstitialAd_wall.show();
-            intenttowall = true;
-
-        } else {
-            Log.e("TAG", "Not loaded");
-            if (hasPermission()) {
-                onIntenttoWall();
-            } else {
-                askPermission();
-            }
-        }
-    }
-
-    @Override
-    public void onVoiceClicked() {
-        if (mInterstitialAd_voice.isLoaded() && mInterstitialAd_voice != null) {
-            mInterstitialAd_voice.show();
-            intenttovoice = true;
-
-        } else {
-            Log.e("TAG", "Not loaded");
-            if (hasPermission()) {
-                onIntenttoVoice();
-            } else {
-                askPermission();
-            }
-        }
-    }
-
-    @Override
-    public void onStatusClicked() {
-        if (mInterstitialAd_status.isLoaded() && mInterstitialAd_status != null) {
-            mInterstitialAd_status.show();
-            intenttostatus = true;
-
-        } else {
-            Log.e("TAG", "Not loaded");
-            if (hasPermission()) {
-                onIntenttostatus();
-            } else {
-                askPermission();
-            }
-        }
-    }
-
-    @Override
-    public void onNonDefaultClicked(String path) {
-        if (mInterstitialAd_nondefault.isLoaded() && mInterstitialAd_nondefault != null) {
-            mInterstitialAd_nondefault.show();
-            Boolean intenttodefault = true;
-
-        } else {
-            Log.e("TAG", "Not loaded");
-            if (hasPermission()) {
-                onIntenttoNonDefault(path);
-            } else {
-                askPermission();
-            }
-        }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = null;
-        if (connectivityManager != null) {
-            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        }
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 
