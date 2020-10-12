@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -16,7 +18,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.text.SpannableString;
 import android.text.format.Formatter;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +40,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -1322,10 +1332,69 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         @Override
         protected void onPostExecute(String s) {
+
+            setUpPieChart();
+
             mainActivityWeakReference.get().total_data.setText(s);
             mainActivityWeakReference.get().detailsAdapter1.notifyDataSetChanged();
             mainActivityWeakReference.get().detailsAdaptercustom.notifyDataSetChanged();
             mainActivityWeakReference.get().progressDialog.dismiss();
+        }
+
+        private void setUpPieChart() {
+            ArrayList<PieEntry> pieEntries = new ArrayList<>();
+
+            int power = 1000000;
+
+            if ((mainActivityWeakReference.get().size_status / power) != 0)
+                pieEntries.add(new PieEntry(mainActivityWeakReference.get().size_status / power, "Status", R.drawable.ic_status));
+            if ((mainActivityWeakReference.get().size_voice / power) != 0)
+                pieEntries.add(new PieEntry(mainActivityWeakReference.get().size_voice / power, "Voice", R.drawable.ic_queue_music_black));
+            if ((mainActivityWeakReference.get().size_gif / power) != 0)
+                pieEntries.add(new PieEntry(mainActivityWeakReference.get().size_gif / power, "GIF", R.drawable.camera_iris));
+            if ((mainActivityWeakReference.get().size_wall / power) != 0)
+                pieEntries.add(new PieEntry(mainActivityWeakReference.get().size_wall / power, "Wallpaper", R.drawable.ic_image));
+            if ((mainActivityWeakReference.get().size_aud / power) != 0)
+                pieEntries.add(new PieEntry(mainActivityWeakReference.get().size_aud / power, "Audio", R.drawable.ic_library_music_black));
+            if ((mainActivityWeakReference.get().size_vid / power) != 0)
+                pieEntries.add(new PieEntry(mainActivityWeakReference.get().size_vid / power, "Video", R.drawable.video));
+            if ((mainActivityWeakReference.get().size_doc / power) != 0)
+                pieEntries.add(new PieEntry(mainActivityWeakReference.get().size_doc / power, "Document", R.drawable.ic_folder));
+            if ((mainActivityWeakReference.get().size_img / power) != 0)
+                pieEntries.add(new PieEntry(mainActivityWeakReference.get().size_img / power, "Image", R.drawable.ic_image));
+
+            PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+            pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+            pieDataSet.setValueTextColor(Color.BLACK);
+            pieDataSet.setValueTextSize(10f);
+
+            PieData data = new PieData(pieDataSet);
+
+            PieChart pieChart = mainActivityWeakReference.get().findViewById(R.id.chart);
+
+            pieChart.setEntryLabelColor(Color.TRANSPARENT);
+//            pieChart.setUsePercentValues(true);
+
+            pieChart.setData(data);
+            pieChart.setVisibility(View.VISIBLE);
+
+//            Legend l = ;
+//            l.setTextSize(14f);
+//            l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+//            l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+//            l.setOrientation(Legend.LegendOrientation.VERTICAL);
+//            l.setDrawInside(false);
+//            l.setTextColor(Color.BLACK);
+            pieChart.getLegend().setEnabled(false);
+
+            SpannableString s = new SpannableString("In MB");
+            s.setSpan(new RelativeSizeSpan(2f), 0, s.length(), 0);
+            s.setSpan(new StyleSpan(Typeface.BOLD), 0, s.length(), 0);
+
+            pieChart.setCenterText(s);
+            pieChart.getDescription().setEnabled(false);
+            pieChart.animateY(1000);
+            pieChart.setEntryLabelColor(Color.BLACK);
         }
     }
 }

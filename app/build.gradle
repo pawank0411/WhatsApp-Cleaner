@@ -38,6 +38,8 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'
 
     implementation 'org.parceler:parceler-api:1.1.12'
