@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -30,6 +29,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:backgroundTint="@color/white"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorPrimary"
+            android:max="100"
+            android:scaleY="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
             android:layout_width="325dp"
@@ -43,9 +56,8 @@
             ads:adUnitId="ca-app-pub-7255339257613393/5143250272"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintHorizontal_bias="0.555"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            ads:layout_constraintTop_toBottomOf="@id/progressBar"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <View
             android:id="@+id/view"
@@ -173,8 +185,8 @@
             android:singleLine="false"
             android:text="@string/date"
             android:textAllCaps="false"
-            android:textSize="15sp"
             android:textColor="#C103A9F4"
+            android:textSize="15sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/select"
             app:layout_constraintStart_toStartOf="@+id/ads_not_loaded"
             app:layout_constraintTop_toBottomOf="@+id/adView" />
