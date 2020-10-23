@@ -3,7 +3,6 @@ package com.pawan.files_cleaner;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     private TextView total_data;
     private DetailsAdapterCustom detailsAdaptercustom;
     private DetailsAdapter detailsAdapter1;
-    private ProgressDialog progressDialog;
-    //    private AdView mAdView, mAdView1;
+    public ProgressBar progressBar;
+    //   private AdView mAdView, mAdView1;
     private Boolean intenttoimages;
     private Boolean intenttovideos;
     private Boolean intenttoaudios;
@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
 
         total_data = findViewById(R.id.data);
+        progressBar = findViewById(R.id.progressBar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 //        recyclerView.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
@@ -575,17 +576,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             startActivity(intent);
         } else {
             askPermission();
-
-            progressDialog = new ProgressDialog(this);
-            //The line of code below will set the progress to look like the Material Design version
-            progressDialog.setProgressStyle(R.style.Widget_AppCompat_ProgressBar_Horizontal/*style/Widget.ProgressBar.Horizontal*/);
-            progressDialog.setMessage("Please Wait");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
             fetchFiles();
-
         }
-
     }
 
     public void recordRunTime() {
@@ -1338,7 +1330,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             mainActivityWeakReference.get().total_data.setText(s);
             mainActivityWeakReference.get().detailsAdapter1.notifyDataSetChanged();
             mainActivityWeakReference.get().detailsAdaptercustom.notifyDataSetChanged();
-            mainActivityWeakReference.get().progressDialog.dismiss();
+            mainActivityWeakReference.get().progressBar.setVisibility(View.INVISIBLE);
         }
 
         private void setUpPieChart() {

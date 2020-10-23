@@ -1,7 +1,6 @@
 package com.pawan.files_cleaner.tabs;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,6 +16,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +46,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,7 +60,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
     private InnerDetailsAdapter innerDetailsAdapter;
     private ArrayList<FileDetails> innerDataList = new ArrayList<>();
     private ArrayList<FileDetails> filesToDelete = new ArrayList<>();
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
     private AdView mAdView;
     private CheckBox selectall;
     private boolean flag_d = true, flag_n = true, flag_s = true;
@@ -152,6 +151,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
         //Switch toggle = rootView.findViewById(R.id.switch1);
         no_ads = rootView.findViewById(R.id.ads_not_loaded);
+        progressBar = rootView.findViewById(R.id.progressBar);
 
         button = rootView.findViewById(R.id.delete);
         date = rootView.findViewById(R.id.date);
@@ -161,13 +161,10 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
         mAdView = rootView.findViewById(R.id.adView);
         selectall = rootView.findViewById(R.id.selectall);
 
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(innerDetailsAdapter);
 
         settings = requireContext().getSharedPreferences(PREFS, MODE_PRIVATE);
-
-
 
         // First time running app?
         if (!settings.contains("lastRun"))
@@ -234,11 +231,12 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             if (fileDetails != null && !fileDetails.isEmpty()) {
                 innerDataList.addAll(fileDetails);
                 innerDetailsAdapter.notifyDataSetChanged();
-                progressDialog.dismiss();
                 no_files.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
             } else {
-                progressDialog.dismiss();
                 Log.e("Nofiles", "NO Files Found");
+
+                progressBar.setVisibility(View.INVISIBLE);
                 no_files.setVisibility(View.VISIBLE);
                 no_files.setImageResource(R.drawable.file);
             }
@@ -443,13 +441,6 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
         @Override
         protected void onPreExecute() {
-            // display a progress dialog for good user experiance
-            filesFragmentWeakReference.get().progressDialog = new ProgressDialog(filesFragmentWeakReference.get().getContext());
-            filesFragmentWeakReference.get().progressDialog.setMessage("Please Wait");
-            filesFragmentWeakReference.get().progressDialog.setCancelable(false);
-            if (!filesFragmentWeakReference.get().progressDialog.isShowing()) {
-                filesFragmentWeakReference.get().progressDialog.show();
-            }
         }
 
         @Override
