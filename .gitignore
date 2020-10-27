@@ -11,3 +11,4 @@
 .externalNativeBuild
 ./app/WhatsAppnew.jks
 ./app/google-services.json
+.idea/

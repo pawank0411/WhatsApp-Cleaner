@@ -39,7 +39,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -64,49 +63,40 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
-    public final static String PREFS = "PrefsFile";
-    private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
-    private final static String TAG = "MainActivity";
-    //    private boolean showfestival;
-    LottieAnimationView lottieAnimationView;
-    private ArrayList<Details> dataList1 = new ArrayList<>();
-    private ArrayList<Details> dataList = new ArrayList<>();
-    private TextView total_data;
-    private DetailsAdapterCustom detailsAdaptercustom;
-    private DetailsAdapter detailsAdapter1;
-    public ProgressBar progressBar;
-    //   private AdView mAdView, mAdView1;
-    private Boolean intenttoimages;
-    private Boolean intenttovideos;
-    private Boolean intenttoaudios;
-    private Boolean intenttodocuments;
-    private Boolean intenttogifs;
-    private Boolean intenttowall;
-    private Boolean intenttovoice;
-    private Boolean intenttostatus;
-    private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
-            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos, mInterstitialAd_status, mInterstitialAd_nondefault;
-    private String sent = "Sent";
-    @SuppressWarnings("FieldCanBeLocal")
     private SharedPreferences settings = null;
-    @SuppressWarnings("FieldCanBeLocal")
     private SharedPreferences.Editor editor = null;
-    @SuppressWarnings("FieldCanBeLocal")
-    private String path;
-    @SuppressWarnings("FieldCanBeLocal")
-    private String data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, data_status, tot_dat;
-    @SuppressWarnings("FieldCanBeLocal")
-    private long sum = 0, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
+
+    private TextView total_data;
+    public ProgressBar progressBar;
+
+    private ArrayList<Details> dataList = new ArrayList<>();
     private ArrayList<File> defaultList = new ArrayList<>();
+    private ArrayList<Details> dataList1 = new ArrayList<>();
+
+    private DetailsAdapter detailsAdapter1;
+    private DetailsAdapterCustom detailsAdaptercustom;
+
+    private final String sent = "Sent";
+    public final static String PREFS = "PrefsFile";
+    private final static String TAG = "MainActivity";
+    private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
+
+    private Boolean intentToImages, intentToVideos, intentToAudios, intentToDocuments, intentToGifs,
+        intentToWall, intentToVoice, intentToStatus;
+
+    private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
+            mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos,
+            mInterstitialAd_status, mInterstitialAd_nondefault;
+
+    private long sum = 0, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
+    private String path, data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, data_status, tot_dat;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        lottieAnimationView = findViewById(R.id.lav_actionBar);
         //Create list of filepath of default folders
         defaultList.add(new File(DataHolder.imagesReceivedPath));
         defaultList.add(new File(DataHolder.documentsReceivedPath));
@@ -118,34 +108,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         defaultList.add(new File(DataHolder.wallReceivedPath));
         defaultList.add(new File(DataHolder.gifReceivedPath));
 
-
         total_data = findViewById(R.id.data);
         progressBar = findViewById(R.id.progressBar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-//        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                lottieAnimationView.cancelAnimation();
-//                lottieAnimationView.setVisibility(View.GONE);
-//                return false;
-//            }
-//        });
-        RecyclerView recyclerView1 = findViewById(R.id.recycle);
-//        recyclerView1.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                lottieAnimationView.cancelAnimation();
-//                lottieAnimationView.setVisibility(View.GONE);
-//                return false;
-//            }
-//        });
-//        mAdView = findViewById(R.id.adView_small);
-//        mAdView1 = findViewById(R.id.adView_large);
 
+        RecyclerView recyclerView1 = findViewById(R.id.recycle);
         AppRater.app_launched(MainActivity.this);
 
         settings = getSharedPreferences(PREFS, MODE_PRIVATE);
-
 
         // First time running app?
         if (!settings.contains("lastRun"))
@@ -159,21 +129,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         // Obtain the FirebaseAnalytics instance.
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-//        CollectionReference apiCollection = FirebaseFirestore.getInstance().collection("cleaner");
-//        apiCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-//                if (queryDocumentSnapshots != null) {
-//                    for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
-//                        showfestival = documentChange.getDocument().getBoolean("festival");
-//                        if (!showfestival) {
-//                            lottieAnimationView.setVisibility(View.GONE);
-//                        }
-//                    }
-//                }
-//            }
-//        });
-
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(recyclerView));
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, String.valueOf(recyclerView));
@@ -182,69 +137,12 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Network", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putBoolean("Status", isNetworkAvailable());
         editor.apply();
-
-//        if (isNetworkAvailable()) {
-//            if (height <= 1920 && height > 1280) {
-//
-//                mAdView.loadAd(new AdRequest.Builder()
-////                        .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
-//                        .build());
-//
-//                mAdView.setAdListener(new AdListener() {
-//                    @Override
-//                    public void onAdClosed() {
-//                        if (!mAdView.isLoading()) {
-//                            mAdView.loadAd(new AdRequest.Builder()
-////                                    .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
-//                                    .build());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onAdLoaded() {
-//                        Log.e("Banner", "Loaded");
-//                    }
-//
-//                    @Override
-//                    public void onAdFailedToLoad(int i) {
-//                        Log.e("Bannercode", String.valueOf(i));
-//                    }
-//                });
-//            } else if (height > 1920) {
-//
-//                mAdView1.loadAd(new AdRequest.Builder()
-////                        .addTestDevice("623B1B7759D51209294A77125459D9B7")
-//                        .build());
-//                mAdView1.setAdListener(new AdListener() {
-//                    @Override
-//                    public void onAdClosed() {
-//                        if (!mAdView1.isLoading()) {
-//                            mAdView1.loadAd(new AdRequest.Builder()
-////                                    .addTestDevice("623B1B7759D51209294A77125459D9B7")
-//                                    .build());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onAdLoaded() {
-//                        Log.e("Banner", "Loaded");
-//                    }
-//
-//                    @Override
-//                    public void onAdFailedToLoad(int i) {
-//                        Log.e("Bannercode", String.valueOf(i));
-//                    }
-//                });
-//            }
-//        }
-
 
         mInterstitialAd_doc = new InterstitialAd(this);
         mInterstitialAd_images = new InterstitialAd(this);
@@ -256,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_status = new InterstitialAd(this);
         mInterstitialAd_nondefault = new InterstitialAd(this);
 
-
         mInterstitialAd_doc.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
         mInterstitialAd_doc.loadAd(new AdRequest.Builder()
 //                .addTestDevice("623B1B7759D51209294A77125459D9B7")
@@ -267,9 +164,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_doc.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (intenttodocuments) {
-                    intenttodocuments = false;
-                    onIntenttoDoc();
+                if (intentToDocuments) {
+                    intentToDocuments = false;
+                    onIntentToDoc();
                 }
                 if (!mInterstitialAd_doc.isLoaded() && !mInterstitialAd_doc.isLoading()) {
                     mInterstitialAd_doc.loadAd(new AdRequest.Builder()
@@ -287,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             public void onAdLoaded() {
                 Log.e("Interstitial_doc", "Loaded");
             }
-
         });
 
         mInterstitialAd_images.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
@@ -301,16 +197,15 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             @Override
             public void onAdClosed() {
 
-                if (intenttoimages) {
-                    intenttoimages = false;
-                    onIntenttoImages();
+                if (intentToImages) {
+                    intentToImages = false;
+                    onIntentToImages();
                 }
                 if (!mInterstitialAd_images.isLoaded() && !mInterstitialAd_images.isLoading()) {
                     mInterstitialAd_images.loadAd(new AdRequest.Builder()
 //                            .addTestDevice("623B1B7759D51209294A77125459D9B7").addTestDevice("C07AF1687B80C3A74C718498EF9B938A")
                             .build());
                 }
-
             }
 
             @Override
@@ -334,9 +229,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_videos.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (intenttovideos) {
-                    intenttovideos = false;
-                    onIntenttoVideos();
+                if (intentToVideos) {
+                    intentToVideos = false;
+                    onIntentToVideos();
                 }
                 if (!mInterstitialAd_videos.isLoaded() && !mInterstitialAd_videos.isLoading()) {
                     mInterstitialAd_videos.loadAd(new AdRequest.Builder()
@@ -367,9 +262,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_audio.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (intenttoaudios) {
-                    intenttoaudios = false;
-                    onIntenttoAudio();
+                if (intentToAudios) {
+                    intentToAudios = false;
+                    onIntentToAudio();
                 }
                 if (!mInterstitialAd_audio.isLoaded() && !mInterstitialAd_audio.isLoading()) {
                     mInterstitialAd_audio.loadAd(new AdRequest.Builder()
@@ -387,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             public void onAdLoaded() {
                 Log.e("Interstitial_audio", "Loaded");
             }
-
         });
 
         mInterstitialAd_voice.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
@@ -400,9 +294,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_voice.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (intenttovoice) {
-                    intenttovoice = false;
-                    onIntenttoVoice();
+                if (intentToVoice) {
+                    intentToVoice = false;
+                    onIntentToVoice();
                 }
                 if (!mInterstitialAd_voice.isLoaded() && !mInterstitialAd_voice.isLoading()) {
                     mInterstitialAd_doc.loadAd(new AdRequest.Builder()
@@ -420,7 +314,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             public void onAdLoaded() {
                 Log.e("Interstitial_voice", "Loaded");
             }
-
         });
 
         mInterstitialAd_wall.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
@@ -433,9 +326,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_wall.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (intenttowall) {
-                    intenttowall = false;
-                    onIntenttoWall();
+                if (intentToWall) {
+                    intentToWall = false;
+                    onIntentToWall();
                 }
                 if (!mInterstitialAd_wall.isLoaded() && !mInterstitialAd_wall.isLoading()) {
                     mInterstitialAd_wall.loadAd(new AdRequest.Builder()
@@ -453,7 +346,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             public void onAdLoaded() {
                 Log.e("Interstitial_wall", "Loaded");
             }
-
         });
 
         mInterstitialAd_gif.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
@@ -466,9 +358,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_gif.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (intenttogifs) {
-                    intenttogifs = false;
-                    onIntenttoGif();
+                if (intentToGifs) {
+                    intentToGifs = false;
+                    onIntentToGif();
                 }
                 if (!mInterstitialAd_gif.isLoaded() && !mInterstitialAd_gif.isLoading()) {
                     mInterstitialAd_gif.loadAd(new AdRequest.Builder()
@@ -499,9 +391,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_status.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (intenttostatus) {
-                    intenttostatus = false;
-                    onIntenttostatus();
+                if (intentToStatus) {
+                    intentToStatus = false;
+                    onIntentToStatus();
                 }
                 if (!mInterstitialAd_status.isLoaded() && !mInterstitialAd_status.isLoading()) {
                     mInterstitialAd_status.loadAd(new AdRequest.Builder()
@@ -519,7 +411,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             public void onAdLoaded() {
                 Log.e("Interstitial_gif", "Loaded");
             }
-
         });
 
         mInterstitialAd_nondefault.setAdUnitId("ca-app-pub-7255339257613393/8699351909");
@@ -532,9 +423,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         mInterstitialAd_nondefault.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                if (intenttostatus) {
-                    intenttostatus = false;
-                    onIntenttostatus();
+                if (intentToStatus) {
+                    intentToStatus = false;
+                    onIntentToStatus();
                 }
                 if (!mInterstitialAd_nondefault.isLoaded() && !mInterstitialAd_nondefault.isLoading()) {
                     mInterstitialAd_nondefault.loadAd(new AdRequest.Builder()
@@ -552,7 +443,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             public void onAdLoaded() {
                 Log.e("Interstitial_gif", "Loaded");
             }
-
         });
 
         detailsAdapter1 = new DetailsAdapter(this, dataList1, this);
@@ -561,7 +451,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(detailsAdapter1);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         recyclerView1.setHasFixedSize(true);
         recyclerView1.setAdapter(detailsAdaptercustom);
@@ -648,7 +537,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_CODE);
                 }
             }
-
         }
     }
 
@@ -679,8 +567,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                                 dialog.dismiss();
                                 finish();
                             }).create().show();
-
-
                 } else {
 
                     new AlertDialog.Builder(this)
@@ -715,55 +601,55 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public void onIntenttoImages() {
+    public void onIntentToImages() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.IMAGE);
         startActivity(intent);
     }
 
-    public void onIntenttoVideos() {
+    public void onIntentToVideos() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.VIDEO);
         startActivity(intent);
     }
 
-    public void onIntenttoDoc() {
+    public void onIntentToDoc() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.DOCUMENT);
         startActivity(intent);
     }
 
-    public void onIntenttoAudio() {
+    public void onIntentToAudio() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.AUDIO);
         startActivity(intent);
     }
 
-    public void onIntenttoGif() {
+    public void onIntentToGif() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.GIF);
         startActivity(intent);
     }
 
-    public void onIntenttoWall() {
+    public void onIntentToWall() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.WALLPAPER);
         startActivity(intent);
     }
 
-    public void onIntenttoVoice() {
+    public void onIntentToVoice() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.VOICE);
         startActivity(intent);
     }
 
-    public void onIntenttostatus() {
+    public void onIntentToStatus() {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity_test.class);
         intent.putExtra("category", DataHolder.STATUS);
         startActivity(intent);
     }
 
-    public void onIntenttoNonDefault(String path) {
+    public void onIntentToNonDefault(String path) {
         Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
         intent.putExtra("category", DataHolder.NONDEFAULT);
         intent.putExtra("pathname", path);
@@ -774,16 +660,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onImagesClicked() {
         if (mInterstitialAd_images.isLoaded() && mInterstitialAd_images != null) {
             mInterstitialAd_images.show();
-            intenttoimages = true;
-
+            intentToImages = true;
         } else {
             Log.e("TAG", "Not loaded");
             if (hasPermission()) {
-                onIntenttoImages();
+                onIntentToImages();
             } else {
                 askPermission();
             }
-
         }
     }
 
@@ -791,16 +675,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onDocumentsClicked() {
         if (mInterstitialAd_doc.isLoaded() && mInterstitialAd_doc != null) {
             mInterstitialAd_doc.show();
-            intenttodocuments = true;
-
+            intentToDocuments = true;
         } else {
             Log.e("Tag", "Not Loaded");
             if (hasPermission()) {
-                onIntenttoDoc();
+                onIntentToDoc();
             } else {
                 askPermission();
             }
-
         }
     }
 
@@ -808,12 +690,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onVideosClicked() {
         if (mInterstitialAd_videos.isLoaded() && mInterstitialAd_videos != null) {
             mInterstitialAd_videos.show();
-            intenttovideos = true;
-
+            intentToVideos = true;
         } else {
             Log.e("TAG", "Not Loaded");
             if (hasPermission()) {
-                onIntenttoVideos();
+                onIntentToVideos();
             } else {
                 askPermission();
             }
@@ -824,12 +705,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onAudiosClicked() {
         if (mInterstitialAd_audio.isLoaded() && mInterstitialAd_audio != null) {
             mInterstitialAd_audio.show();
-            intenttoaudios = true;
-
+            intentToAudios = true;
         } else {
             Log.e("TAG", "Not loaded");
             if (hasPermission()) {
-                onIntenttoAudio();
+                onIntentToAudio();
             } else {
                 askPermission();
             }
@@ -840,12 +720,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onGifsClicked() {
         if (mInterstitialAd_gif.isLoaded() && mInterstitialAd_gif != null) {
             mInterstitialAd_gif.show();
-            intenttogifs = true;
-
+            intentToGifs = true;
         } else {
             Log.e("Tag", "NotLoaded");
             if (hasPermission()) {
-                onIntenttoGif();
+                onIntentToGif();
             } else {
                 askPermission();
             }
@@ -856,12 +735,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onWallpapersClicked() {
         if (mInterstitialAd_wall.isLoaded() && mInterstitialAd_wall != null) {
             mInterstitialAd_wall.show();
-            intenttowall = true;
-
+            intentToWall = true;
         } else {
             Log.e("TAG", "Not loaded");
             if (hasPermission()) {
-                onIntenttoWall();
+                onIntentToWall();
             } else {
                 askPermission();
             }
@@ -872,12 +750,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onVoiceClicked() {
         if (mInterstitialAd_voice.isLoaded() && mInterstitialAd_voice != null) {
             mInterstitialAd_voice.show();
-            intenttovoice = true;
-
+            intentToVoice = true;
         } else {
             Log.e("TAG", "Not loaded");
             if (hasPermission()) {
-                onIntenttoVoice();
+                onIntentToVoice();
             } else {
                 askPermission();
             }
@@ -888,12 +765,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onStatusClicked() {
         if (mInterstitialAd_status.isLoaded() && mInterstitialAd_status != null) {
             mInterstitialAd_status.show();
-            intenttostatus = true;
-
+            intentToStatus = true;
         } else {
             Log.e("TAG", "Not loaded");
             if (hasPermission()) {
-                onIntenttostatus();
+                onIntentToStatus();
             } else {
                 askPermission();
             }
@@ -904,12 +780,10 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
     public void onNonDefaultClicked(String path) {
         if (mInterstitialAd_nondefault.isLoaded() && mInterstitialAd_nondefault != null) {
             mInterstitialAd_nondefault.show();
-            Boolean intenttodefault = true;
-
         } else {
             Log.e("TAG", "Not loaded");
             if (hasPermission()) {
-                onIntenttoNonDefault(path);
+                onIntentToNonDefault(path);
             } else {
                 askPermission();
             }
@@ -928,7 +802,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     private static class FetchFiles extends AsyncTask<Void, Void, String> {
 
-        private WeakReference<MainActivity> mainActivityWeakReference;
+        private final WeakReference<MainActivity> mainActivityWeakReference;
 
         FetchFiles(MainActivity mainActivity) {
             this.mainActivityWeakReference = new WeakReference<>(mainActivity);
@@ -942,9 +816,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             File[] listOfFiles = root.listFiles();
             long tot_size = 0;
             if (listOfFiles != null) {
-                for (int i = 0; i < listOfFiles.length; i++) {
-                    long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
-                    Log.d(TAG, listOfFiles[i].getPath());
+                for (File listOfFile : listOfFiles) {
+                    long size = FileUtils.sizeOfDirectory(listOfFile);
+                    Log.d(TAG, listOfFile.getPath());
                     tot_size += size;
                 }
             }
@@ -1154,6 +1028,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 mainActivityWeakReference.get().size_wall = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
                 mainActivityWeakReference.get().data_wall = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_wall);
             }
+
             /*Size for Gifs folder*/
             mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Animated Gifs";
             File gif = new File(mainActivityWeakReference.get().path);
@@ -1194,6 +1069,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 mainActivityWeakReference.get().size_gif = FileUtils.sizeOfDirectory(new File(DataHolder.gifReceivedPath));
                 mainActivityWeakReference.get().data_gif = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_gif);
             }
+
             /*Size for Voice Notes folder*/
             mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/WhatsApp Voice Notes";
             File vo = new File(mainActivityWeakReference.get().path);
@@ -1235,6 +1111,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 mainActivityWeakReference.get().size_voice = FileUtils.sizeOfDirectory(new File(mainActivityWeakReference.get().path));
                 mainActivityWeakReference.get().data_voice = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_voice);
             }
+
             /*Size for status*/
             mainActivityWeakReference.get().path = Environment.getExternalStorageDirectory().toString() + "/WhatsApp/Media/.Statuses";
             File status = new File(mainActivityWeakReference.get().path);
@@ -1249,9 +1126,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                 mainActivityWeakReference.get().data_status = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().size_status);
             }
 
-
             mainActivityWeakReference.get().tot_dat = Formatter.formatShortFileSize(mainActivityWeakReference.get(), mainActivityWeakReference.get().sum);
-
 
             //For Images,documents and Videos
             mainActivityWeakReference.get().dataList1.clear();
@@ -1301,14 +1176,16 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
             //Adding the files not present in the default files list
             if (listOfFiles != null) {
-                for (int i = 0; i < listOfFiles.length; i++) {
-                    if (!mainActivityWeakReference.get().defaultList.contains(listOfFiles[i])) {
-                        long size = FileUtils.sizeOfDirectory(listOfFiles[i]);
-                        String pathName = listOfFiles[i].getPath();
+                for (File listOfFile : listOfFiles) {
+                    if (!mainActivityWeakReference.get().defaultList.contains(listOfFile)) {
+                        long size = FileUtils.sizeOfDirectory(listOfFile);
+                        String pathName = listOfFile.getPath();
                         String folderName = pathName.substring(pathName.indexOf("a/") + 2);
+
                         if (folderName.startsWith("WhatsApp ")) {
                             folderName = folderName.substring(9);
                         }
+
                         String data = Formatter.formatShortFileSize(mainActivityWeakReference.get(), size);
                         mainActivityWeakReference.get().dataList.add(new Details(
                                 folderName,
@@ -1318,8 +1195,8 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     }
                 }
             }
-            return mainActivityWeakReference.get().tot_dat;
 
+            return mainActivityWeakReference.get().tot_dat;
         }
 
         @Override
@@ -1361,22 +1238,11 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             pieDataSet.setValueTextSize(10f);
 
             PieData data = new PieData(pieDataSet);
-
             PieChart pieChart = mainActivityWeakReference.get().findViewById(R.id.chart);
 
             pieChart.setEntryLabelColor(Color.TRANSPARENT);
-//            pieChart.setUsePercentValues(true);
-
             pieChart.setData(data);
             pieChart.setVisibility(View.VISIBLE);
-
-//            Legend l = ;
-//            l.setTextSize(14f);
-//            l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-//            l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-//            l.setOrientation(Legend.LegendOrientation.VERTICAL);
-//            l.setDrawInside(false);
-//            l.setTextColor(Color.BLACK);
             pieChart.getLegend().setEnabled(false);
 
             SpannableString s = new SpannableString("In MB");
