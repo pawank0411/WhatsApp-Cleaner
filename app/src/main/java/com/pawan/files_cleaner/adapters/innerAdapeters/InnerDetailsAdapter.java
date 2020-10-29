@@ -45,10 +45,10 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final int AUDIOS = 3;
     private final int FILE = 4;
     private final int VOICE = 6;
-    private final Context ctx;
-    private final ArrayList<FileDetails> innerDataList;
-    private final OnCheckboxListener onCheckboxListener;
-    private final int type;
+    private Context ctx;
+    private ArrayList<FileDetails> innerDataList;
+    private OnCheckboxListener onCheckboxListener;
+    private int type;
 
 
     public InnerDetailsAdapter(int type, Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxListener) {
@@ -171,7 +171,11 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-            innerDataViewHolderMultimedia.checkBox.setChecked(details.isSelected());
+            if (details.isSelected()) {
+                innerDataViewHolderMultimedia.checkBox.setChecked(true);
+            } else {
+                innerDataViewHolderMultimedia.checkBox.setChecked(false);
+            }
 
         } else if (getItemViewType(positions) == VIDEOS) {
             final InnerDataViewHolderVideos innerDataViewHolderVideos = (InnerDataViewHolderVideos) viewHolder;
@@ -253,7 +257,11 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-            innerDataViewHolderVideos.checkBox.setChecked(details.isSelected());
+            if (details.isSelected()) {
+                innerDataViewHolderVideos.checkBox.setChecked(true);
+            } else {
+                innerDataViewHolderVideos.checkBox.setChecked(false);
+            }
 
         } else if (getItemViewType(positions) == AUDIOS) {
             final InnerDataViewHolderDoc innerDataViewHolder = (InnerDataViewHolderDoc) viewHolder;
@@ -279,7 +287,11 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             });
-            innerDataViewHolder.checkBox.setChecked(details.isSelected());
+            if (details.isSelected()) {
+                innerDataViewHolder.checkBox.setChecked(true);
+            } else {
+                innerDataViewHolder.checkBox.setChecked(false);
+            }
 
             innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -333,7 +345,11 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-            innerDataViewHolder.checkBox.setChecked(details.isSelected());
+            if (details.isSelected()) {
+                innerDataViewHolder.checkBox.setChecked(true);
+            } else {
+                innerDataViewHolder.checkBox.setChecked(false);
+            }
 
             innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -390,7 +406,11 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-            innerDataViewHolder.checkBox.setChecked(details.isSelected());
+            if (details.isSelected()) {
+                innerDataViewHolder.checkBox.setChecked(true);
+            } else {
+                innerDataViewHolder.checkBox.setChecked(false);
+            }
 
             innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
