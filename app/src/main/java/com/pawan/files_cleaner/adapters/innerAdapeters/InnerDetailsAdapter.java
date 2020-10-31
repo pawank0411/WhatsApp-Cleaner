@@ -40,15 +40,15 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context ctx;
-    private ArrayList<FileDetails> innerDataList;
-    private OnCheckboxListener onCheckboxListener;
-    private int type;
     private final int IMAGES = 1;
     private final int VIDEOS = 2;
     private final int AUDIOS = 3;
     private final int FILE = 4;
     private final int VOICE = 6;
+    private Context ctx;
+    private ArrayList<FileDetails> innerDataList;
+    private OnCheckboxListener onCheckboxListener;
+    private int type;
 
 
     public InnerDetailsAdapter(int type, Context ctx, ArrayList<FileDetails> innerDataList, OnCheckboxListener onCheckboxListener) {
@@ -415,27 +415,64 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             innerDataViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    File a = new File(String.valueOf(Uri.parse(details.getPath())));
 
-                    Uri uri = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() +
-                            ".my.package.name.provider", a);
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
-                    String mime = "*/*";
-                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-                    if (mimeTypeMap.hasExtension(
-                            MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+                    if ((details.getPath()).endsWith("webp")) {
+//                    if (false) {
 
-                        mime = mimeTypeMap.getMimeTypeFromExtension(
-                                MimeTypeMap.getFileExtensionFromUrl(uri.toString()));
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx);
 
-                    }
-                    try {
-                        Log.e("Mime", mime);
-                        intent.setDataAndType(uri, mime);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        ctx.startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(ctx, "Couldn't find app that open this file ", Toast.LENGTH_SHORT).show();
+                        View inflate = ((LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.image_alert_dialog_layout, null);
+
+                        alertDialogBuilder.setView(inflate);
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        alertDialog.setCancelable(true);
+
+                        /*
+                        inflate.findViewById(R.id.imageDialogImageVIew).setLayoutParams(
+                                new ConstraintLayout.LayoutParams(512, 512)
+                        );
+                        */
+
+                        Glide.with(ctx)
+                                .load(details.getPath())
+                                .centerCrop()
+                                .into((ImageView) inflate.findViewById(R.id.imageDialogImageVIew));
+
+                        inflate.findViewById(R.id.imageDialogCancelButton).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialog.dismiss();
+                            }
+                        });
+
+                        alertDialog.show();
+
+                    } else {
+
+                        File a = new File(String.valueOf(Uri.parse(details.getPath())));
+
+                        Uri uri = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() +
+                                ".my.package.name.provider", a);
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                        String mime = "*/*";
+                        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                        if (mimeTypeMap.hasExtension(
+                                MimeTypeMap.getFileExtensionFromUrl(uri.toString()))) {
+
+                            mime = mimeTypeMap.getMimeTypeFromExtension(
+                                    MimeTypeMap.getFileExtensionFromUrl(uri.toString()));
+
+                        }
+                        try {
+                            Log.e("Mime", mime);
+                            intent.setDataAndType(uri, mime);
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            ctx.startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(ctx, "Couldn't find app that open this file ", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -447,6 +484,10 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return innerDataList.size();
     }
 
+
+    public interface OnCheckboxListener {
+        void oncheckboxlistener(View view, List<FileDetails> updatedFiles);
+    }
 
     public class InnerDataViewHolderMultimedia extends RecyclerView.ViewHolder {
 
@@ -499,10 +540,6 @@ public class InnerDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             imageView = itemView.findViewById(R.id.image);
             ext = itemView.findViewById(R.id.extension);
         }
-    }
-
-    public interface OnCheckboxListener {
-        void oncheckboxlistener(View view, List<FileDetails> updatedFiles);
     }
 
 }
