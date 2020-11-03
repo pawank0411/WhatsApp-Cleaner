@@ -35,7 +35,7 @@
                     android:fontFamily="@font/changa_medium"
                     android:gravity="center"
                     android:text="@string/_0b"
-                    android:textColor="@color/white"
+                    android:textColor="@color/colorBG"
                     android:textSize="40sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/changa_medium"
                     android:text="@string/files"
-                    android:textColor="@color/white"
+                    android:textColor="@color/colorBG"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/data"
@@ -72,7 +72,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/colorBG"
                 android:indeterminate="true"
                 android:indeterminateTint="@color/colorPrimary"
                 android:max="100"
@@ -161,19 +161,12 @@
                 android:fontFamily="sans-serif-light"
                 android:gravity="center"
                 android:textAllCaps="false"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/textColor"
                 android:textSize="15sp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/adView_small" />
-
-            <include
-                layout="@layout/festival"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ads_not_loaded" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

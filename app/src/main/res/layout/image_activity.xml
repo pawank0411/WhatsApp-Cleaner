@@ -5,7 +5,7 @@
     android:id="@+id/relativeLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/colorBG">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="83dp"
         android:layout_marginBottom="54dp"
-        android:background="@color/white"
+        android:background="@color/colorBG"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
         tools:listitem="@layout/image_content" />
@@ -35,7 +35,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/colorBG"
             android:indeterminate="true"
             android:indeterminateTint="@color/colorPrimary"
             android:max="100"
@@ -111,6 +111,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:background="@color/colorBG"
             android:button="@drawable/check_box_1"
             android:textSize="15sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/select"
@@ -204,6 +205,7 @@
             android:singleLine="false"
             android:text="@string/name"
             android:textAllCaps="false"
+            android:textColor="@color/textColor"
             android:textSize="15sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/date"
             app:layout_constraintStart_toStartOf="@+id/date"
@@ -221,6 +223,7 @@
             android:singleLine="false"
             android:text="@string/size"
             android:textAllCaps="false"
+            android:textColor="@color/textColor"
             android:textSize="15sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/name"
             app:layout_constraintStart_toStartOf="@+id/name"

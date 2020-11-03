@@ -246,19 +246,19 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             if (!flag_n || !flag_s) {
                 flag_n = true;
                 flag_s = true;
-                name.setTextColor(Color.parseColor("#FF161616"));
-                size.setTextColor(Color.parseColor("#FF161616"));
+                name.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
+                size.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
             }
             if (flag_d) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                 flag_d = false;
-                date.setTextColor(Color.parseColor("#C103A9F4"));
+                date.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
                 Collections.sort(innerDataList, (o1, o2) -> -o1.getMod().compareTo(o2.getMod()));
                 innerDetailsAdapter.notifyDataSetChanged();
             } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                 flag_d = true;
-                date.setTextColor(Color.parseColor("#FF161616"));
+                date.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                 Collections.sort(innerDataList, (o1, o2) -> o1.getMod().compareTo(o2.getMod()));
                 Log.e("State", "Disabled");
                 innerDetailsAdapter.notifyDataSetChanged();
@@ -269,20 +269,20 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             if (!flag_d || !flag_s) {
                 flag_d = true;
                 flag_s = true;
-                date.setTextColor(Color.parseColor("#FF161616"));
-                size.setTextColor(Color.parseColor("#FF161616"));
+                date.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
+                size.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
             }
             if (flag_n) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                 flag_n = false;
-                name.setTextColor(Color.parseColor("#C103A9F4"));
+                name.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
                 Collections.sort(innerDataList, (o1, o2) -> o1.getName().compareTo(o2.getName()));
                 Log.e("State", "Toggled");
                 innerDetailsAdapter.notifyDataSetChanged();
             } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                 flag_n = true;
-                name.setTextColor(Color.parseColor("#FF161616"));
+                name.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                 Collections.sort(innerDataList, (o1, o2) -> -o1.getName().compareTo(o2.getName()));
                 Log.e("State", "Disabled");
                 innerDetailsAdapter.notifyDataSetChanged();
@@ -292,20 +292,20 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
             if (!flag_d || !flag_n) {
                 flag_d = true;
                 flag_n = true;
-                date.setTextColor(Color.parseColor("#FF161616"));
-                name.setTextColor(Color.parseColor("#FF161616"));
+                date.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
+                name.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
             }
             if (flag_s) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                 flag_s = false;
-                size.setTextColor(Color.parseColor("#C103A9F4"));
+                size.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
                 Collections.sort(innerDataList, (o1, o2) -> -o1.getS().compareTo(o2.getS()));
                 Log.e("State", "Toggled");
                 innerDetailsAdapter.notifyDataSetChanged();
             } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                 flag_s = true;
-                size.setTextColor(Color.parseColor("#FF161616"));
+                size.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                 Collections.sort(innerDataList, (o1, o2) -> o1.getS().compareTo(o2.getS()));
                 Log.e("State", "Disabled");
                 innerDetailsAdapter.notifyDataSetChanged();
@@ -420,7 +420,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
 
             String size = Formatter.formatShortFileSize(getActivity(), totalFileSize);
             button.setText("Delete Selected Items (" + size + ")");
-            button.setTextColor(Color.parseColor("#C103A9F4"));
+            button.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
         } else {
             button.setText(R.string.delete_items_blank);
             button.setTextColor(Color.parseColor("#A9A9A9"));

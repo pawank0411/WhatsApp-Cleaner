@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/colorBG"
     tools:context=".AboutFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,7 +100,7 @@
             android:focusable="true"
             android:padding="16dp"
             android:text="@string/send_feedback_to_developer"
-            android:textColor="@android:color/background_dark"
+            android:textColor="@color/textColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aboutPageLinksTextView" />
 
@@ -114,7 +114,7 @@
             android:focusable="true"
             android:padding="16dp"
             android:text="@string/view_source_code_at_github"
-            android:textColor="@android:color/background_dark"
+            android:textColor="@color/textColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aboutPageFeedbackTextView" />
 
@@ -128,7 +128,7 @@
             android:focusable="true"
             android:padding="16dp"
             android:text="@string/about_dev"
-            android:textColor="@android:color/background_dark"
+            android:textColor="@color/textColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aboutPageViewSourceCodeTextView" />
 
@@ -142,7 +142,7 @@
             android:focusable="true"
             android:padding="16dp"
             android:text="@string/privacy"
-            android:textColor="@android:color/background_dark"
+            android:textColor="@color/textColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aboutPageAboutDeveloperTextView" />
 
@@ -166,7 +166,7 @@
             android:background="?attr/selectableItemBackground"
             android:padding="16dp"
             android:text="Vijeta Dash - Logo Designer"
-            android:textColor="@android:color/background_dark"
+            android:textColor="@color/textColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aboutPageCreditsTextView"
