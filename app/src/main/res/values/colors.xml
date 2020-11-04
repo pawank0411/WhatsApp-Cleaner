@@ -31,4 +31,6 @@
 
     <color name="sortSelectorTextColor">#FF161616</color>
     <color name="sortSelectorActiveColor">#C103A9F4</color>
+
+    <color name="navBGColor">#FFFFFF</color>
 </resources>
