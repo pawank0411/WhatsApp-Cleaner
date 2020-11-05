@@ -528,13 +528,14 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         drawerSwitch.setChecked(settings.getBoolean("isNightMode", false));
 
         drawerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Toast.makeText(this, "Applying Changes...", Toast.LENGTH_SHORT).show();
             if (isChecked) {
                 editor.putBoolean("isNightMode", true).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 editor.putBoolean("isNightMode", false).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
             }
-            Toast.makeText(this, "Applying Changes...", Toast.LENGTH_SHORT).show();
-            MainActivity.this.recreate();
         });
     }
 
