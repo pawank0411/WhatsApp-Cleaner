@@ -37,4 +37,8 @@
     <string name="links">Links</string>
     <string name="reset_settings">Reset Settings</string>
     <string name="thanks_to">Thanks To:</string>
+
+
+    <string name="close">Close</string>
+    <string name="open">Open</string>
 </resources>

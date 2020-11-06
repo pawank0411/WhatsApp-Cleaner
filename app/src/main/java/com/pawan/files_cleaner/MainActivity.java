@@ -2,7 +2,7 @@ package com.pawan.files_cleaner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,18 +23,22 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +51,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.pawan.files_cleaner.adapters.DetailsAdapter;
 import com.pawan.files_cleaner.adapters.DetailsAdapterCustom;
@@ -63,26 +68,21 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DetailsAdapter.OnItemClickListener, DetailsAdapterCustom.OnItemClickListener {
 
-    private SharedPreferences settings = null;
-    private SharedPreferences.Editor editor = null;
-
-    private TextView total_data;
-    public ProgressBar progressBar;
-
-    private ArrayList<Details> dataList = new ArrayList<>();
-    private ArrayList<File> defaultList = new ArrayList<>();
-    private ArrayList<Details> dataList1 = new ArrayList<>();
-
-    private DetailsAdapter detailsAdapter1;
-    private DetailsAdapterCustom detailsAdaptercustom;
-
-    private final String sent = "Sent";
     public final static String PREFS = "PrefsFile";
     private final static String TAG = "MainActivity";
     private static final int EXTERNAL_STORAGE_PERMISSION_CODE = 1002;
-
+    private final String sent = "Sent";
+    public ProgressBar progressBar;
+    private SharedPreferences settings = null;
+    private SharedPreferences.Editor editor = null;
+    private TextView total_data;
+    private ArrayList<Details> dataList = new ArrayList<>();
+    private ArrayList<File> defaultList = new ArrayList<>();
+    private ArrayList<Details> dataList1 = new ArrayList<>();
+    private DetailsAdapter detailsAdapter1;
+    private DetailsAdapterCustom detailsAdaptercustom;
     private Boolean intentToImages, intentToVideos, intentToAudios, intentToDocuments, intentToGifs,
-        intentToWall, intentToVoice, intentToStatus;
+            intentToWall, intentToVoice, intentToStatus;
 
     private InterstitialAd mInterstitialAd_doc, mInterstitialAd_images, mInterstitialAd_audio,
             mInterstitialAd_gif, mInterstitialAd_voice, mInterstitialAd_wall, mInterstitialAd_videos,
@@ -90,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     private long sum = 0, size_img, size_doc, size_vid, size_wall, size_aud, size_gif, size_voice, size_status;
     private String path, data_img, data_doc, data_vid, data_aud, data_gif, data_wall, data_voice, data_status, tot_dat;
+
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -110,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         total_data = findViewById(R.id.data);
         progressBar = findViewById(R.id.progressBar);
+
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         RecyclerView recyclerView1 = findViewById(R.id.recycle);
@@ -122,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
             enableNotification(null);
         else
             recordRunTime();
+
+        checkDarkMode();
+        initNavigationDrawer();
 
         Log.v(TAG, "Starting CheckRecentRun service...");
         startService(new Intent(this, CheckRecentRun.class));
@@ -469,6 +477,77 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         }
     }
 
+    private void checkDarkMode() {
+        if (settings.getBoolean("isNightMode", false)) {
+//            ((UiModeManager) getSystemService(UI_MODE_SERVICE)).setNightMode(UiModeManager.MODE_NIGHT_YES);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+    }
+
+    private void initNavigationDrawer() {
+        setSupportActionBar(findViewById(R.id.toolbar));
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        navigationView = findViewById(R.id.nav_view);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_home) {
+                if (getSupportFragmentManager().getBackStackEntryCount() != 0)
+                    for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                        getSupportFragmentManager().beginTransaction().remove(fragment);
+                    }
+                drawerLayout.closeDrawers();
+
+            } else if (id == R.id.nav_about) {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    getSupportFragmentManager().beginTransaction().add(R.id.mainLayout, AboutFragment.newInstance()).addToBackStack(null).commit();
+                    Objects.requireNonNull(getSupportActionBar()).hide();
+                    drawerLayout.closeDrawers();
+                    return (true);
+                }
+            } else if (id == R.id.nav_switch) {
+                ((SwitchCompat) item.getActionView()).toggle();
+                drawerLayout.closeDrawers();
+            }
+            return true;
+        });
+
+        SwitchCompat drawerSwitch = (SwitchCompat) (navigationView.getMenu().findItem(R.id.nav_switch).getActionView());
+
+        drawerSwitch.setChecked(settings.getBoolean("isNightMode", false));
+
+        drawerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Toast.makeText(this, "Applying Changes...", Toast.LENGTH_SHORT).show();
+            if (isChecked) {
+                editor.putBoolean("isNightMode", true).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                editor.putBoolean("isNightMode", false).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (actionBarDrawerToggle.onOptionsItemSelected(item))
+            return true;
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public void recordRunTime() {
         editor = settings.edit();
         editor.putLong("lastRun", System.currentTimeMillis());
@@ -481,29 +560,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         editor.putBoolean("enabled", true);
         editor.apply();
         Log.v(TAG, "Notifications enabled");
-    }
-
-    @SuppressLint("WrongConstant")
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.actionbar);
-        MenuCompat.setGroupDividerEnabled(menu, true);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_about) {
-            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                getSupportFragmentManager().beginTransaction().add(R.id.mainLayout, AboutFragment.newInstance()).addToBackStack(null).commit();
-                Objects.requireNonNull(getSupportActionBar()).hide();
-                return (true);
-            }
-        }
-        return (super.onOptionsItemSelected(item));
     }
 
     @Override
@@ -1204,7 +1260,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
             setUpPieChart();
 
-            mainActivityWeakReference.get().total_data.setText(s);
+            mainActivityWeakReference.get().total_data.setText(String.format("%s Files", s));
             mainActivityWeakReference.get().detailsAdapter1.notifyDataSetChanged();
             mainActivityWeakReference.get().detailsAdaptercustom.notifyDataSetChanged();
             mainActivityWeakReference.get().progressBar.setVisibility(View.INVISIBLE);

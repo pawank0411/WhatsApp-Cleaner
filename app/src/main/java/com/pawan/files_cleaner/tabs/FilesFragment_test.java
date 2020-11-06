@@ -59,6 +59,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.OnCheckboxListener {
 
+    public final static String PREFS = "PrefsFile";
+    private final static String TAG = "MainActivity";
     private Button button, date, name, size;
     private TextView no_ads;
     private ImageView no_files;
@@ -78,8 +80,6 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
     private SharedPreferences settings = null;
     @SuppressWarnings("FieldCanBeLocal")
     private SharedPreferences.Editor editor = null;
-    private final static String TAG = "MainActivity";
-    public final static String PREFS = "PrefsFile";
     @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -90,6 +90,13 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
         bundle.putString("category", category);
         filesFragment_test.setArguments(bundle);
         return filesFragment_test;
+    }
+
+    private static long getFileSize(File file) {
+        if (file != null && file.isFile()) {
+            return file.length();
+        }
+        return 0;
     }
 
     @Nullable
@@ -128,7 +135,6 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 break;
         }
         settings = getContext().getSharedPreferences(PREFS, MODE_PRIVATE);
-
 
 
         // First time running app?
@@ -246,13 +252,13 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 if (!flag_n || !flag_s) {
                     flag_n = true;
                     flag_s = true;
-                    name.setTextColor(Color.parseColor("#FF161616"));
-                    size.setTextColor(Color.parseColor("#FF161616"));
+                    name.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
+                    size.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                 }
                 if (flag_d) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_d = false;
-                    date.setTextColor(Color.parseColor("#C103A9F4"));
+                    date.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
                         @Override
                         public int compare(FileDetails o1, FileDetails o2) {
@@ -263,7 +269,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_d = true;
-                    date.setTextColor(Color.parseColor("#FF161616"));
+                    date.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
                         @Override
                         public int compare(FileDetails o1, FileDetails o2) {
@@ -282,13 +288,13 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 if (!flag_d || !flag_s) {
                     flag_d = true;
                     flag_s = true;
-                    date.setTextColor(Color.parseColor("#FF161616"));
-                    size.setTextColor(Color.parseColor("#FF161616"));
+                    date.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
+                    size.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                 }
                 if (flag_n) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_n = false;
-                    name.setTextColor(Color.parseColor("#C103A9F4"));
+                    name.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
                         @Override
                         public int compare(FileDetails o1, FileDetails o2) {
@@ -300,7 +306,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_n = true;
-                    name.setTextColor(Color.parseColor("#FF161616"));
+                    name.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
                         @Override
                         public int compare(FileDetails o1, FileDetails o2) {
@@ -318,13 +324,13 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 if (!flag_d || !flag_n) {
                     flag_d = true;
                     flag_n = true;
-                    date.setTextColor(Color.parseColor("#FF161616"));
-                    name.setTextColor(Color.parseColor("#FF161616"));
+                    date.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
+                    name.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                 }
                 if (flag_s) {
 //                    Toast.makeText(getContext(), "sorted", Toast.LENGTH_SHORT).show();
                     flag_s = false;
-                    size.setTextColor(Color.parseColor("#C103A9F4"));
+                    size.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
                         @Override
                         public int compare(FileDetails o1, FileDetails o2) {
@@ -336,7 +342,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                 } else {
 //                    Toast.makeText(getContext(), "Unsorted", Toast.LENGTH_SHORT).show();
                     flag_s = true;
-                    size.setTextColor(Color.parseColor("#FF161616"));
+                    size.setTextColor(getResources().getColor(R.color.sortSelectorTextColor));
                     Collections.sort(innerDataList, new Comparator<FileDetails>() {
                         @Override
                         public int compare(FileDetails o1, FileDetails o2) {
@@ -394,7 +400,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                         }
                     }
                     filesToDelete.clear();
-                    if (selectall.isChecked()){
+                    if (selectall.isChecked()) {
                         Intent intent = new Intent(getContext(), MainActivity.class);
                         startActivity(intent);
                     }
@@ -472,7 +478,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                                             }
 
                                             filesToDelete.clear();
-                                            if (selectall.isChecked()){
+                                            if (selectall.isChecked()) {
                                                 Intent intent = new Intent(getContext(), MainActivity.class);
                                                 startActivity(intent);
                                             }
@@ -536,13 +542,6 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
         Log.v(TAG, "Notifications enabled");
     }
 
-    private static long getFileSize(File file) {
-        if (file != null && file.isFile()) {
-            return file.length();
-        }
-        return 0;
-    }
-
     @Override
     public void oncheckboxlistener(View view, List<FileDetails> updatedFiles) {
 
@@ -565,7 +564,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
 
                 String size = Formatter.formatShortFileSize(getActivity(), totalFileSize);
                 button.setText("Share or Delete Selected Items (" + size + ")");
-                button.setTextColor(Color.parseColor("#C103A9F4"));
+                button.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
             } else {
                 button.setText(R.string.share_delete);
                 button.setTextColor(Color.parseColor("#A9A9A9"));
@@ -582,7 +581,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
 
                 String size = Formatter.formatShortFileSize(getActivity(), totalFileSize);
                 button.setText("Download Selected Items (" + size + ")");
-                button.setTextColor(Color.parseColor("#C103A9F4"));
+                button.setTextColor(getResources().getColor(R.color.sortSelectorActiveColor));
             } else {
                 button.setText(R.string.download_selected_items_0b);
                 button.setTextColor(Color.parseColor("#A9A9A9"));
@@ -719,11 +718,11 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
             if (results != null) {
                 //Still verify if the file is an image in whatsapp preferred format(jpg)
                 for (File file : results) {
-                        if (file.isFile()) {
-                            FileDetails fileDetails = new FileDetails();
-                            fileDetails.setName(file.getName());
-                            fileDetails.setPath(file.getPath());
-                            fileDetails.setMod(file.lastModified());
+                    if (file.isFile()) {
+                        FileDetails fileDetails = new FileDetails();
+                        fileDetails.setName(file.getName());
+                        fileDetails.setPath(file.getPath());
+                        fileDetails.setMod(file.lastModified());
 //                            String mime = "*/*";
 //                            File a = new File(file.getPath());
 //                            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(filesFragmentWeakReference_tab.get().getContext()),
@@ -737,12 +736,12 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
 //                                        MimeTypeMap.getFileExtensionFromUrl(uri.toString()))).split("/")[0];
 //                            }
 
-                            fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference_tab.get().
-                                            getContext(),
-                                    getFileSize(file)));
-                            fileDetails.setS(getFileSize(file));
-                            files.add(fileDetails);
-                        }
+                        fileDetails.setSize(Formatter.formatShortFileSize(filesFragmentWeakReference_tab.get().
+                                        getContext(),
+                                getFileSize(file)));
+                        fileDetails.setS(getFileSize(file));
+                        files.add(fileDetails);
+                    }
                 }
             } else {
                 Log.e("Files", "No files found in " + directory.getName());

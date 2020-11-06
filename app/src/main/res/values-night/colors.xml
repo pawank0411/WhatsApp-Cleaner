@@ -5,13 +5,13 @@
     <color name="colorAccent">#147703</color>
     <color name="green">#12921F</color>
     <color name="lgreen">#3FB34A</color>
-    <color name="gray">#ece4e4</color>
+    <color name="gray">#D05C5C5C</color>
     <color name="dgray">#9B9999</color>
     <color name="white1">#A3FFFFFF</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="black">#FF161616</color>
-    <color name="lblack">#504D4D</color>
+    <color name="lblack">#C6C6C6</color>
     <color name="orange">#f5ab0b</color>
     <color name="blue">#3F51B5</color>
     <color name="purple">#FF9C27B0</color>
@@ -19,18 +19,18 @@
     <color name="red">#E2E6250B</color>
     <color name="lightblue">#FF009688</color>
     <color name="ds">#03A9F4</color>
-    <color name="lightpink">#FF9800</color>
+    <color name="lightpink">#DD336F</color>
     <color name="tblack">#AE161616</color>
 
     <color name="aboutPageAccentColor">#D81B60</color>
     <color name="aboutPageSpacerColor">#BDBDBD</color>
 
-    <color name="colorBG">#FFFFFF</color>
-    <color name="textColor">#000000</color>
-    <color name="textColorSecondary">#4E4E4E</color>
+    <color name="colorBG">#000000</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="textColorSecondary">#E4E4E4</color>
 
-    <color name="sortSelectorTextColor">#FF161616</color>
+    <color name="sortSelectorTextColor">#E4E4E4</color>
     <color name="sortSelectorActiveColor">#C103A9F4</color>
 
-    <color name="navBGColor">#FFFFFF</color>
+    <color name="navBGColor">#000000</color>
 </resources>
