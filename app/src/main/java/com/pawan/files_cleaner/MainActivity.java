@@ -2,7 +2,6 @@ package com.pawan.files_cleaner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +37,6 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -479,7 +477,6 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
     private void checkDarkMode() {
         if (settings.getBoolean("isNightMode", false)) {
-//            ((UiModeManager) getSystemService(UI_MODE_SERVICE)).setNightMode(UiModeManager.MODE_NIGHT_YES);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
@@ -501,24 +498,20 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-
+            drawerLayout.closeDrawers();
             if (id == R.id.nav_home) {
                 if (getSupportFragmentManager().getBackStackEntryCount() != 0)
-                    for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                        getSupportFragmentManager().beginTransaction().remove(fragment);
-                    }
-                drawerLayout.closeDrawers();
-
+                    onBackPressed();
+                return (true);
             } else if (id == R.id.nav_about) {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     getSupportFragmentManager().beginTransaction().add(R.id.mainLayout, AboutFragment.newInstance()).addToBackStack(null).commit();
                     Objects.requireNonNull(getSupportActionBar()).hide();
-                    drawerLayout.closeDrawers();
                     return (true);
                 }
             } else if (id == R.id.nav_switch) {
                 ((SwitchCompat) item.getActionView()).toggle();
-                drawerLayout.closeDrawers();
+                return (true);
             }
             return true;
         });
@@ -528,6 +521,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         drawerSwitch.setChecked(settings.getBoolean("isNightMode", false));
 
         drawerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            drawerLayout.closeDrawers();
             Toast.makeText(this, "Applying Changes...", Toast.LENGTH_SHORT).show();
             if (isChecked) {
                 editor.putBoolean("isNightMode", true).apply();
