@@ -7,10 +7,11 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class SplashScreen extends AppCompatActivity {
-    private final static String TAG = "MainActivity";
     public final static String PREFS = "PrefsFile";
+    private final static String TAG = "MainActivity";
     @SuppressWarnings("FieldCanBeLocal")
     private SharedPreferences settings = null;
     @SuppressWarnings("FieldCanBeLocal")
@@ -21,6 +22,8 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(R.style.SplashTheme);
         settings = getSharedPreferences(PREFS, MODE_PRIVATE);
+
+        checkDarkMode();
 
         if (!settings.contains("lastRun"))
             enableNotification(null);
@@ -33,6 +36,14 @@ public class SplashScreen extends AppCompatActivity {
         Intent intent = new Intent(SplashScreen.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void checkDarkMode() {
+        if (settings.getBoolean("isNightMode", false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
     }
 
     public void recordRunTime() {
