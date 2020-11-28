@@ -401,8 +401,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                     }
                     filesToDelete.clear();
                     if (selectall.isChecked()) {
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        startActivity(intent);
+                        requireActivity().onBackPressed();
                     }
                     for (FileDetails deletedFile : deletedFiles) {
                         innerDataList.remove(deletedFile);
@@ -479,8 +478,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
 
                                             filesToDelete.clear();
                                             if (selectall.isChecked()) {
-                                                Intent intent = new Intent(getContext(), MainActivity.class);
-                                                startActivity(intent);
+                                                requireActivity().onBackPressed();
                                             }
                                             for (FileDetails deletedFile : deletedFiles) {
                                                 innerDataList.remove(deletedFile);
