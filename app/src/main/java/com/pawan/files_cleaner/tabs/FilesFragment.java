@@ -360,8 +360,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                             }
                             innerDetailsAdapter.notifyDataSetChanged();
                             if (selectall.isChecked()) {
-                                Intent intent = new Intent(getContext(), MainActivity.class);
-                                startActivity(intent);
+                                requireActivity().onBackPressed();
                             }
                             if (success == 0) {
                                 Toast.makeText(getContext(), "Couldn't delete some files", Toast.LENGTH_SHORT).show();
