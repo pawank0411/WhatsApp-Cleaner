@@ -356,6 +356,7 @@ public class FilesFragment extends Fragment implements InnerDetailsAdapter.OnChe
                             filesToDelete.clear();
 
                             for (FileDetails deletedFile : deletedFiles) {
+                                requireContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(deletedFile.getPath()))));
                                 innerDataList.remove(deletedFile);
                             }
                             innerDetailsAdapter.notifyDataSetChanged();

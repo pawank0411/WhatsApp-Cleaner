@@ -481,6 +481,7 @@ public class FilesFragment_test extends Fragment implements InnerDetailsAdapter.
                                                 requireActivity().onBackPressed();
                                             }
                                             for (FileDetails deletedFile : deletedFiles) {
+                                                requireContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(deletedFile.getPath()))));
                                                 innerDataList.remove(deletedFile);
                                             }
                                             innerDetailsAdapter.notifyDataSetChanged();
