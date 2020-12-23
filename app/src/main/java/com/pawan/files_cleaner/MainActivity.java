@@ -24,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,9 +34,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -475,12 +476,13 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
         }
     }
 
+    private boolean isDarkMode() {
+        return settings.getBoolean("isNightMode", false);
+    }
+
     private void checkDarkMode() {
-        if (settings.getBoolean("isNightMode", false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        }
+        AppCompatDelegate.setDefaultNightMode(
+                isDarkMode() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
     private void initNavigationDrawer() {
@@ -498,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-            drawerLayout.closeDrawers();
+            drawerLayout.closeDrawer(GravityCompat.START);
             if (id == R.id.nav_home) {
                 if (getSupportFragmentManager().getBackStackEntryCount() != 0)
                     onBackPressed();
@@ -509,27 +511,19 @@ public class MainActivity extends AppCompatActivity implements DetailsAdapter.On
                     Objects.requireNonNull(getSupportActionBar()).hide();
                     return (true);
                 }
-            } else if (id == R.id.nav_switch) {
-                ((SwitchCompat) item.getActionView()).toggle();
-                return (true);
             }
             return true;
         });
 
-        SwitchCompat drawerSwitch = (SwitchCompat) (navigationView.getMenu().findItem(R.id.nav_switch).getActionView());
-
-        drawerSwitch.setChecked(settings.getBoolean("isNightMode", false));
-
-        drawerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            drawerLayout.closeDrawers();
-            Toast.makeText(this, "Applying Changes...", Toast.LENGTH_SHORT).show();
-            if (isChecked) {
-                editor.putBoolean("isNightMode", true).apply();
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                editor.putBoolean("isNightMode", false).apply();
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            }
+        View headerView = navigationView.getHeaderView(0);
+        ImageView toggleIV = headerView.findViewById(R.id.drawerDarkModeToggle);
+        toggleIV.setColorFilter(getResources().getColor(R.color.textColor));
+        toggleIV.setOnClickListener(v -> {
+            toggleIV.setColorFilter(getResources().getColor(R.color.textColor));
+            Toast.makeText(MainActivity.this, "Applying Changes...", Toast.LENGTH_SHORT).show();
+            editor.putBoolean("isNightMode", !isDarkMode()).apply();
+            checkDarkMode();
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
     }
 
