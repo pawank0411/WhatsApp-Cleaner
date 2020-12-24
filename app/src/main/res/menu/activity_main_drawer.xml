@@ -19,12 +19,4 @@
             android:orderInCategory="200"
             android:title="About" />
     </group>
-
-    <item
-        android:id="@+id/nav_switch"
-        android:icon="@drawable/ic_night"
-        android:orderInCategory="300"
-        android:title="Dark Mode"
-        app:actionLayout="@layout/switch_item" />
-
 </menu>
